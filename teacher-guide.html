@@ -113,9 +113,46 @@ tr:hover td{background:var(--light)}
 /* PRINT */
 @media print{body{font-size:12px}.toc{display:none}section{padding:1.5rem 1rem}h2.section-title{font-size:1.2rem}}
 @media(max-width:700px){.day-body{grid-template-columns:1fr}}
+
+/* AUTH GATE */
+#tg-auth-gate{position:fixed;inset:0;background:linear-gradient(135deg,#0F172A 0%,#1E293B 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+.tg-auth-box{background:#1E293B;border:1px solid #334155;border-radius:16px;padding:48px 40px;width:100%;max-width:440px;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,.5)}
+.tg-logo{font-size:1.8rem;font-weight:800;color:#F1F5F9;margin-bottom:4px}.tg-logo span{color:#6366F1}
+.tg-sub{color:#94A3B8;font-size:.82rem;margin-bottom:6px}
+.tg-badge{display:inline-block;background:rgba(99,102,241,.15);color:#818CF8;border:1px solid rgba(99,102,241,.3);border-radius:20px;padding:4px 14px;font-size:.72rem;font-weight:700;margin-bottom:28px;letter-spacing:.06em}
+.tg-auth-box h2{font-size:1.2rem;font-weight:700;color:#F1F5F9;margin-bottom:6px}
+.tg-auth-box p.hint{color:#94A3B8;font-size:.8rem;margin-bottom:24px}
+.tg-field{margin-bottom:14px;text-align:left}
+.tg-field label{display:block;font-size:.72rem;font-weight:700;color:#94A3B8;margin-bottom:5px;letter-spacing:.07em;text-transform:uppercase}
+.tg-field input{width:100%;background:#0F172A;border:1px solid #334155;border-radius:8px;padding:11px 13px;color:#F1F5F9;font-family:'Inter',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s}
+.tg-field input:focus{border-color:#6366F1}
+.tg-btn{width:100%;background:#6366F1;color:#fff;border:none;border-radius:8px;padding:12px;font-family:'Inter',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;margin-top:6px;transition:opacity .2s}
+.tg-btn:hover{opacity:.85}
+#tg-err{display:none;color:#FCA5A5;background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);border-radius:6px;padding:9px 13px;font-size:.8rem;margin-top:12px}
+.tg-contact{margin-top:24px;padding-top:20px;border-top:1px solid #334155;font-size:.75rem;color:#94A3B8}
+.tg-contact a{color:#818CF8;text-decoration:none}
+.tg-contact a:hover{text-decoration:underline}
+#tg-content{display:none}
 </style>
 </head>
 <body>
+
+<div id="tg-auth-gate">
+  <div class="tg-auth-box">
+    <div class="tg-logo">Nex<span>Gen</span> AI</div>
+    <div class="tg-sub">School of Computers, Srikakulam</div>
+    <div class="tg-badge">🔒 TRAINER GUIDE — RESTRICTED ACCESS</div>
+    <h2>Sign In to Continue</h2>
+    <p class="hint">This guide is for authorised NexGen trainers only.</p>
+    <div class="tg-field"><label>Username</label><input type="text" id="tg-user" placeholder="Enter username" autocomplete="username" /></div>
+    <div class="tg-field"><label>Password / Access Code</label><input type="password" id="tg-pass" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter') tgLogin()" /></div>
+    <button class="tg-btn" onclick="tgLogin()">Sign In →</button>
+    <div id="tg-err">Incorrect credentials. Contact Vamsi Chapa for access.</div>
+    <div class="tg-contact">Don't have access? Contact<br><strong>Vamsi Chapa</strong> — <a href="mailto:chapavamsi1731@gmail.com">chapavamsi1731@gmail.com</a></div>
+  </div>
+</div>
+
+<div id="tg-content">
 
 <!-- COVER -->
 <div class="cover">
@@ -1441,5 +1478,36 @@ print(f"Your grade: {grade}")</div>
   </div>
 </section>
 
+</div><!-- /#tg-content -->
+
+<script>
+const TG_USERS = {
+  [btoa('nexgen')]:   btoa('Train@2024'),
+  [btoa('trainer1')]: btoa('NexGen@001'),
+  [btoa('vamsi')]:    btoa('Admin@NexGen2024'),
+};
+const TG_MASTER = btoa('NXGN@Master24');
+
+function tgLogin() {
+  const u = document.getElementById('tg-user').value.trim();
+  const p = document.getElementById('tg-pass').value;
+  if (!u || !p) { document.getElementById('tg-err').style.display = 'block'; return; }
+  const eu = btoa(u), ep = btoa(p);
+  if ((TG_USERS[eu] && TG_USERS[eu] === ep) || ep === TG_MASTER) {
+    sessionStorage.setItem('ng_auth', '1');
+    sessionStorage.setItem('ng_user', u);
+    document.getElementById('tg-auth-gate').style.display = 'none';
+    document.getElementById('tg-content').style.display = 'block';
+  } else {
+    document.getElementById('tg-err').style.display = 'block';
+    document.getElementById('tg-pass').value = '';
+  }
+}
+
+if (sessionStorage.getItem('ng_auth') === '1') {
+  document.getElementById('tg-auth-gate').style.display = 'none';
+  document.getElementById('tg-content').style.display = 'block';
+}
+</script>
 </body>
 </html>

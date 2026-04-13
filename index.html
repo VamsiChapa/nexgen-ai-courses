@@ -3,1335 +3,971 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NexGen Computers — AI Learning Platform</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <title>NexGen AI Trainer Portal — Staff Access Only</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --navy-950: #050a1a;
-      --navy-900: #080f24;
-      --navy-800: #0d1635;
-      --navy-700: #111d45;
-      --navy-600: #162254;
-      --blue-500: #2563eb;
-      --blue-400: #3b82f6;
-      --blue-300: #60a5fa;
-      --blue-glow: #1d4ed8;
-      --purple-500: #7c3aed;
-      --purple-400: #8b5cf6;
-      --purple-300: #a78bfa;
-      --cyan-400: #22d3ee;
-      --cyan-300: #67e8f9;
-      --green-400: #4ade80;
-      --amber-400: #fbbf24;
-      --rose-400: #fb7185;
-      --white: #ffffff;
-      --gray-100: #f1f5f9;
-      --gray-300: #cbd5e1;
-      --gray-400: #94a3b8;
-      --gray-500: #64748b;
-      --track1-start: #2563eb;
-      --track1-end: #06b6d4;
-      --track2-start: #7c3aed;
-      --track2-end: #ec4899;
-      --track3-start: #f59e0b;
-      --track3-end: #ef4444;
+      --bg: #0F172A; --card: #1E293B; --border: #334155; --accent: #6366F1;
+      --accent2: #22D3EE; --text: #F1F5F9; --muted: #94A3B8;
+      --t1: #4F46E5; --t2: #7C3AED; --t3: #DC2626;
+      --green: #22C55E; --amber: #F59E0B;
     }
-
     html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    body {
-      font-family: 'Poppins', system-ui, sans-serif;
-      background-color: var(--navy-950);
-      color: var(--white);
-      line-height: 1.6;
-      overflow-x: hidden;
+    /* ── AUTH GATE ── */
+    #auth-gate {
+      position: fixed; inset: 0; background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+      display: flex; align-items: center; justify-content: center; z-index: 9999;
     }
-
-    /* ─── NAV ─── */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 2rem;
-      background: rgba(5, 10, 26, 0.85);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+    .auth-box {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 48px 40px; width: 100%; max-width: 440px; text-align: center;
+      box-shadow: 0 25px 60px rgba(0,0,0,.5);
     }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
+    .auth-logo { font-size: 2rem; font-weight: 800; margin-bottom: 4px; }
+    .auth-logo span { color: var(--accent); }
+    .auth-subtitle { color: var(--muted); font-size: .85rem; margin-bottom: 8px; }
+    .auth-badge {
+      display: inline-block; background: rgba(99,102,241,.15); color: var(--accent);
+      border: 1px solid rgba(99,102,241,.3); border-radius: 20px;
+      padding: 4px 14px; font-size: .75rem; font-weight: 600; margin-bottom: 32px; letter-spacing: .05em;
     }
-
-    .nav-logo-icon {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, var(--blue-500), var(--purple-500));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      font-weight: 900;
-      color: white;
-      letter-spacing: -1px;
-      flex-shrink: 0;
+    .auth-box h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; }
+    .auth-box p.hint { color: var(--muted); font-size: .82rem; margin-bottom: 28px; }
+    .auth-field { margin-bottom: 16px; text-align: left; }
+    .auth-field label { display: block; font-size: .78rem; font-weight: 600; color: var(--muted); margin-bottom: 6px; letter-spacing: .05em; text-transform: uppercase; }
+    .auth-field input {
+      width: 100%; background: #0F172A; border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 14px; color: var(--text);
+      font-family: 'Poppins', sans-serif; font-size: .9rem; outline: none;
+      transition: border-color .2s;
     }
-
-    .nav-logo-text {
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--white);
-      line-height: 1.2;
+    .auth-field input:focus { border-color: var(--accent); }
+    .btn-login {
+      width: 100%; background: var(--accent); color: #fff; border: none;
+      border-radius: 8px; padding: 13px; font-family: 'Poppins', sans-serif;
+      font-size: .95rem; font-weight: 700; cursor: pointer; margin-top: 8px;
+      transition: opacity .2s;
     }
-
-    .nav-logo-text span {
-      display: block;
-      font-size: 0.65rem;
-      font-weight: 400;
-      color: var(--gray-400);
-      letter-spacing: 0.05em;
+    .btn-login:hover { opacity: .85; }
+    #auth-error {
+      display: none; color: #FCA5A5; background: rgba(220,38,38,.1);
+      border: 1px solid rgba(220,38,38,.3); border-radius: 6px;
+      padding: 10px 14px; font-size: .82rem; margin-top: 14px;
     }
-
-    .nav-links {
-      display: flex;
-      gap: 0.25rem;
-      list-style: none;
+    .auth-contact {
+      margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border);
+      font-size: .78rem; color: var(--muted);
     }
+    .auth-contact a { color: var(--accent); text-decoration: none; }
+    .auth-contact a:hover { text-decoration: underline; }
 
-    .nav-links a {
-      display: block;
-      padding: 0.4rem 0.85rem;
-      font-size: 0.8rem;
-      font-weight: 500;
-      color: var(--gray-300);
-      text-decoration: none;
-      border-radius: 6px;
-      transition: color 0.2s, background 0.2s;
+    /* ── PORTAL LAYOUT ── */
+    #portal { display: none; flex-direction: column; min-height: 100vh; }
+
+    /* header */
+    .p-header {
+      background: var(--card); border-bottom: 1px solid var(--border);
+      padding: 0 32px; display: flex; align-items: center; justify-content: space-between;
+      height: 64px; position: sticky; top: 0; z-index: 100;
     }
-
-    .nav-links a:hover {
-      color: var(--white);
-      background: rgba(255,255,255,0.07);
+    .p-header-logo { font-size: 1.2rem; font-weight: 800; }
+    .p-header-logo span { color: var(--accent); }
+    .p-header-right { display: flex; align-items: center; gap: 16px; }
+    #welcome-name { font-size: .82rem; color: var(--muted); }
+    .btn-logout {
+      background: transparent; border: 1px solid var(--border); border-radius: 6px;
+      padding: 6px 14px; color: var(--muted); font-family: 'Poppins', sans-serif;
+      font-size: .78rem; cursor: pointer; transition: all .2s;
     }
+    .btn-logout:hover { border-color: var(--accent); color: var(--text); }
 
-    /* ─── HERO ─── */
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 8rem 1.5rem 5rem;
-      overflow: hidden;
+    /* tabs */
+    .p-tabs {
+      background: var(--card); border-bottom: 1px solid var(--border);
+      display: flex; padding: 0 32px; gap: 4px; overflow-x: auto;
     }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(37,99,235,0.3) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 80% 80%, rgba(124,58,237,0.2) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 40% at 10% 70%, rgba(6,182,212,0.15) 0%, transparent 50%);
-      pointer-events: none;
+    .p-tab {
+      padding: 16px 20px; font-size: .85rem; font-weight: 600; color: var(--muted);
+      cursor: pointer; border-bottom: 3px solid transparent;
+      transition: all .2s; white-space: nowrap; background: none; border-top: none;
+      border-left: none; border-right: none; font-family: 'Poppins', sans-serif;
     }
+    .p-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .p-tab:hover:not(.active) { color: var(--text); }
 
-    .hero-grid {
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 48px 48px;
-      pointer-events: none;
-      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+    /* content */
+    .p-content { flex: 1; padding: 40px 32px; max-width: 1200px; margin: 0 auto; width: 100%; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* section titles */
+    .section-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; }
+    .section-sub { color: var(--muted); font-size: .9rem; margin-bottom: 32px; }
+
+    /* cards */
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px; margin-bottom: 20px;
     }
+    .card-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .card-body { color: var(--muted); font-size: .88rem; line-height: 1.7; }
 
-    .hero-content {
-      position: relative;
-      max-width: 860px;
-      margin: 0 auto;
-    }
+    /* grid */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
 
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.35rem 1rem;
-      background: rgba(37,99,235,0.15);
-      border: 1px solid rgba(37,99,235,0.35);
-      border-radius: 100px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--blue-300);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      margin-bottom: 1.75rem;
-    }
-
-    .hero-badge::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--cyan-400);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.85); }
-    }
-
-    .brand-logo {
-      margin-bottom: 1.25rem;
-    }
-
-    .brand-logo-mark {
-      font-size: 2.5rem;
-      font-weight: 900;
-      letter-spacing: -2px;
-      background: linear-gradient(135deg, var(--blue-300), var(--purple-300), var(--cyan-300));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 1;
-    }
-
-    .brand-logo-sub {
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gray-400);
-      margin-top: 0.25rem;
-    }
-
-    .hero-tagline {
-      font-size: clamp(2.25rem, 6vw, 4rem);
-      font-weight: 800;
-      line-height: 1.15;
-      letter-spacing: -1px;
-      margin-bottom: 1.25rem;
-    }
-
-    .hero-tagline .gradient-text {
-      background: linear-gradient(90deg, var(--blue-300), var(--purple-300), var(--cyan-300));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero-sub {
-      font-size: 1.1rem;
-      color: var(--gray-300);
-      max-width: 580px;
-      margin: 0 auto 2.5rem;
-      font-weight: 400;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.85rem 2rem;
-      background: linear-gradient(135deg, var(--blue-500), var(--purple-500));
-      color: white;
-      font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: 600;
-      border: none;
-      border-radius: 10px;
-      text-decoration: none;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 20px rgba(37,99,235,0.35);
-    }
-
-    .btn-primary:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(37,99,235,0.5);
-    }
-
-    .btn-outline {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.85rem 2rem;
-      background: transparent;
-      color: var(--gray-300);
-      font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: 600;
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 10px;
-      text-decoration: none;
-      cursor: pointer;
-      transition: color 0.2s, border-color 0.2s, background 0.2s, transform 0.2s;
-    }
-
-    .btn-outline:hover {
-      color: white;
-      border-color: rgba(255,255,255,0.35);
-      background: rgba(255,255,255,0.05);
-      transform: translateY(-2px);
-    }
-
-    /* ─── STAT STRIP ─── */
-    .stats-strip {
-      background: rgba(13,22,53,0.6);
-      border-top: 1px solid rgba(255,255,255,0.06);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      padding: 2rem 1.5rem;
-    }
-
-    .stats-inner {
-      max-width: 900px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: center;
-      gap: 0;
-      flex-wrap: wrap;
-    }
-
-    .stat-item {
-      flex: 1;
-      min-width: 140px;
-      text-align: center;
-      padding: 0.75rem 1.5rem;
-      position: relative;
-    }
-
-    .stat-item + .stat-item::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 15%;
-      height: 70%;
-      width: 1px;
-      background: rgba(255,255,255,0.08);
-    }
-
-    .stat-number {
-      font-size: 2.25rem;
-      font-weight: 800;
-      line-height: 1;
-      background: linear-gradient(135deg, var(--blue-300), var(--cyan-300));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .stat-label {
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: var(--gray-400);
-      margin-top: 0.35rem;
-      letter-spacing: 0.03em;
-    }
-
-    /* ─── SECTIONS SHARED ─── */
-    section {
-      padding: 5.5rem 1.5rem;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .section-eyebrow {
-      text-align: center;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--blue-400);
-      margin-bottom: 0.75rem;
-    }
-
-    .section-title {
-      text-align: center;
-      font-size: clamp(1.75rem, 4vw, 2.5rem);
-      font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: -0.5px;
-      margin-bottom: 1rem;
-    }
-
-    .section-desc {
-      text-align: center;
-      font-size: 1rem;
-      color: var(--gray-400);
-      max-width: 560px;
-      margin: 0 auto 3.5rem;
-    }
-
-    /* ─── COURSE TRACKS ─── */
-    .tracks-section {
-      background: var(--navy-900);
-    }
-
-    .tracks-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-      gap: 1.75rem;
-    }
-
+    /* track cards */
     .track-card {
-      position: relative;
-      background: rgba(13,22,53,0.7);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 20px;
-      padding: 2rem;
-      overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-      display: flex;
-      flex-direction: column;
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 28px; position: relative; overflow: hidden; transition: transform .2s, box-shadow .2s;
     }
-
-    .track-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      border-radius: 20px 20px 0 0;
+    .track-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,.4); }
+    .track-accent { position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 14px 14px 0 0; }
+    .track-badge {
+      display: inline-block; border-radius: 20px; padding: 4px 12px;
+      font-size: .72rem; font-weight: 700; margin-bottom: 14px; letter-spacing: .04em;
     }
-
-    .track-card.track-1::before { background: linear-gradient(90deg, var(--track1-start), var(--track1-end)); }
-    .track-card.track-2::before { background: linear-gradient(90deg, var(--track2-start), var(--track2-end)); }
-    .track-card.track-3::before { background: linear-gradient(90deg, var(--track3-start), var(--track3-end)); }
-
-    .track-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 20px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
+    .track-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+    .track-card p { color: var(--muted); font-size: .84rem; margin-bottom: 16px; line-height: 1.6; }
+    .track-links { display: flex; flex-direction: column; gap: 8px; }
+    .track-link {
+      display: flex; align-items: center; gap: 8px; padding: 9px 14px;
+      border-radius: 8px; font-size: .82rem; font-weight: 600;
+      text-decoration: none; transition: opacity .2s;
     }
+    .track-link:hover { opacity: .8; }
+    .track-link svg { flex-shrink: 0; }
 
-    .track-card.track-1::after { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37,99,235,0.08) 0%, transparent 70%); }
-    .track-card.track-2::after { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124,58,237,0.08) 0%, transparent 70%); }
-    .track-card.track-3::after { background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,158,11,0.08) 0%, transparent 70%); }
-
-    .track-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(255,255,255,0.14);
+    /* stat pills */
+    .stat-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+    .stat-pill {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 20px; display: flex; align-items: center; gap: 10px;
     }
+    .stat-pill .num { font-size: 1.4rem; font-weight: 800; }
+    .stat-pill .lbl { font-size: .75rem; color: var(--muted); line-height: 1.3; }
 
-    .track-card.track-1:hover { box-shadow: 0 20px 50px rgba(37,99,235,0.2); }
-    .track-card.track-2:hover { box-shadow: 0 20px 50px rgba(124,58,237,0.2); }
-    .track-card.track-3:hover { box-shadow: 0 20px 50px rgba(245,158,11,0.2); }
-
-    .track-card:hover::after { opacity: 1; }
-
-    .track-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 1.25rem;
-      gap: 1rem;
+    /* resource day accordion */
+    .res-day {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      margin-bottom: 10px; overflow: hidden;
     }
-
-    .track-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      flex-shrink: 0;
+    .res-day-header {
+      padding: 14px 20px; cursor: pointer; display: flex; align-items: center;
+      justify-content: space-between; font-weight: 600; font-size: .9rem;
+      transition: background .15s; user-select: none;
     }
-
-    .track-1 .track-icon { background: linear-gradient(135deg, rgba(37,99,235,0.25), rgba(6,182,212,0.25)); }
-    .track-2 .track-icon { background: linear-gradient(135deg, rgba(124,58,237,0.25), rgba(236,72,153,0.25)); }
-    .track-3 .track-icon { background: linear-gradient(135deg, rgba(245,158,11,0.25), rgba(239,68,68,0.25)); }
-
-    .difficulty-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      padding: 0.25rem 0.7rem;
-      border-radius: 100px;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      flex-shrink: 0;
+    .res-day-header:hover { background: rgba(255,255,255,.04); }
+    .res-day-header .day-label { display: flex; align-items: center; gap: 10px; }
+    .res-day-header .phase-tag {
+      font-size: .68rem; font-weight: 700; padding: 2px 8px; border-radius: 10px;
+      letter-spacing: .05em;
     }
-
-    .badge-beginner {
-      background: rgba(74,222,128,0.12);
-      color: var(--green-400);
-      border: 1px solid rgba(74,222,128,0.2);
+    .res-day-body { display: none; padding: 0 20px 16px; }
+    .res-day.open .res-day-body { display: block; }
+    .res-day.open .chevron { transform: rotate(180deg); }
+    .chevron { transition: transform .2s; flex-shrink: 0; }
+    .res-item {
+      display: flex; align-items: flex-start; gap: 12px; padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,.05);
     }
-
-    .badge-intermediate {
-      background: rgba(251,191,36,0.12);
-      color: var(--amber-400);
-      border: 1px solid rgba(251,191,36,0.2);
+    .res-item:last-child { border-bottom: none; }
+    .res-icon {
+      width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; font-size: .9rem; flex-shrink: 0; margin-top: 2px;
     }
+    .res-info { flex: 1; }
+    .res-title { font-size: .85rem; font-weight: 600; margin-bottom: 2px; }
+    .res-title a { color: var(--text); text-decoration: none; }
+    .res-title a:hover { color: var(--accent); }
+    .res-meta { font-size: .75rem; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; }
+    .badge-free { background: rgba(34,197,94,.15); color: #4ADE80; border: 1px solid rgba(34,197,94,.3); border-radius: 10px; padding: 1px 7px; }
+    .badge-paid { background: rgba(245,158,11,.15); color: #FCD34D; border: 1px solid rgba(245,158,11,.3); border-radius: 10px; padding: 1px 7px; }
 
-    .badge-advanced {
-      background: rgba(251,113,133,0.12);
-      color: var(--rose-400);
-      border: 1px solid rgba(251,113,133,0.2);
+    /* 15-day plan */
+    .plan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .plan-day {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 16px; cursor: pointer; transition: all .2s; position: relative;
     }
-
-    .track-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-      line-height: 1.25;
-      margin-bottom: 0.5rem;
+    .plan-day:hover { border-color: var(--accent); }
+    .plan-day.done { border-color: var(--green); }
+    .plan-day.done .pd-num { color: var(--green); }
+    .pd-num { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+    .pd-phase { font-size: .7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }
+    .pd-title { font-size: .82rem; font-weight: 600; margin-bottom: 6px; }
+    .pd-tasks { font-size: .75rem; color: var(--muted); line-height: 1.6; }
+    .pd-check {
+      position: absolute; top: 12px; right: 12px; width: 22px; height: 22px;
+      border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center;
+      justify-content: center; transition: all .2s; font-size: .7rem;
     }
+    .plan-day.done .pd-check { background: var(--green); border-color: var(--green); }
 
-    .track-audience {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.8rem;
-      color: var(--gray-400);
-      margin-bottom: 0.35rem;
+    /* teacher guide embed */
+    .guide-section { margin-bottom: 32px; }
+    .guide-section h3 {
+      font-size: 1.1rem; font-weight: 700; margin-bottom: 16px;
+      padding-bottom: 10px; border-bottom: 1px solid var(--border);
     }
-
-    .track-duration {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.8rem;
-      color: var(--gray-400);
-      margin-bottom: 1.5rem;
+    .guide-pattern {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 20px; margin-bottom: 12px;
     }
-
-    .track-meta-icon {
-      font-size: 0.85rem;
-      opacity: 0.7;
+    .guide-pattern h4 { font-size: .95rem; font-weight: 700; margin-bottom: 6px; color: var(--accent); }
+    .guide-pattern p { font-size: .85rem; color: var(--muted); line-height: 1.7; }
+    .guide-pattern ul { margin-top: 8px; padding-left: 18px; }
+    .guide-pattern ul li { font-size: .84rem; color: var(--muted); margin-bottom: 4px; line-height: 1.6; }
+    .guide-link-btn {
+      display: inline-flex; align-items: center; gap: 8px; background: var(--accent);
+      color: #fff; text-decoration: none; border-radius: 8px;
+      padding: 12px 24px; font-weight: 700; font-size: .9rem; transition: opacity .2s;
     }
+    .guide-link-btn:hover { opacity: .85; }
 
-    .topics-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--gray-500);
-      margin-bottom: 0.75rem;
+    /* overview hero */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(99,102,241,.15) 0%, rgba(34,211,238,.08) 100%);
+      border: 1px solid rgba(99,102,241,.25); border-radius: 16px;
+      padding: 36px 40px; margin-bottom: 32px;
     }
+    .hero-banner h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
+    .hero-banner p { color: var(--muted); font-size: .95rem; line-height: 1.7; max-width: 700px; }
 
-    .topics-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 1.75rem;
-      flex: 1;
+    /* contact bar */
+    .contact-bar {
+      background: rgba(99,102,241,.08); border: 1px solid rgba(99,102,241,.2);
+      border-radius: 10px; padding: 16px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap; margin-top: 32px;
     }
+    .contact-bar svg { color: var(--accent); flex-shrink: 0; }
+    .contact-bar p { font-size: .85rem; color: var(--muted); }
+    .contact-bar a { color: var(--accent); font-weight: 600; text-decoration: none; }
+    .contact-bar a:hover { text-decoration: underline; }
 
-    .topics-list li {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 0.85rem;
-      color: var(--gray-300);
+    /* phase headers */
+    .phase-header {
+      display: flex; align-items: center; gap: 12px; margin: 28px 0 16px;
     }
-
-    .topic-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      flex-shrink: 0;
+    .phase-header .ph-label {
+      font-size: .72rem; font-weight: 700; padding: 4px 12px; border-radius: 12px;
+      letter-spacing: .05em;
     }
+    .phase-header h3 { font-size: 1rem; font-weight: 700; }
 
-    .track-1 .topic-dot { background: var(--blue-400); }
-    .track-2 .topic-dot { background: var(--purple-400); }
-    .track-3 .topic-dot { background: var(--amber-400); }
-
-    .track-actions {
-      display: flex;
-      gap: 0.75rem;
-      margin-top: auto;
+    /* scrollable resource container */
+    .resource-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .rf-btn {
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      padding: 6px 16px; font-size: .78rem; font-weight: 600; cursor: pointer;
+      color: var(--muted); font-family: 'Poppins', sans-serif; transition: all .2s;
     }
+    .rf-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
 
-    .btn-track-prereq {
-      flex: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      padding: 0.65rem 1rem;
-      background: transparent;
-      color: var(--gray-300);
-      font-family: inherit;
-      font-size: 0.78rem;
-      font-weight: 600;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 8px;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.2s;
+    /* overview quick-access */
+    .quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 32px; }
+    .quick-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 18px 20px; cursor: pointer; transition: all .2s; text-decoration: none; color: var(--text);
+      display: flex; align-items: center; gap: 14px;
     }
-
-    .btn-track-prereq:hover {
-      border-color: rgba(255,255,255,0.28);
-      color: white;
-      background: rgba(255,255,255,0.04);
+    .quick-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .quick-icon {
+      width: 40px; height: 40px; border-radius: 10px; display: flex;
+      align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;
     }
+    .quick-info .qt { font-size: .82rem; font-weight: 700; }
+    .quick-info .qs { font-size: .75rem; color: var(--muted); }
 
-    .btn-track-go {
-      flex: 1;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      padding: 0.65rem 1rem;
-      color: white;
-      font-family: inherit;
-      font-size: 0.78rem;
-      font-weight: 600;
-      border: none;
-      border-radius: 8px;
-      text-decoration: none;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.2s;
+    @media (max-width: 640px) {
+      .p-content { padding: 24px 16px; }
+      .p-header { padding: 0 16px; }
+      .p-tabs { padding: 0 16px; }
+      .auth-box { padding: 32px 24px; }
+      .hero-banner { padding: 24px; }
     }
-
-    .track-1 .btn-track-go { background: linear-gradient(135deg, var(--track1-start), var(--track1-end)); }
-    .track-2 .btn-track-go { background: linear-gradient(135deg, var(--track2-start), var(--track2-end)); }
-    .track-3 .btn-track-go { background: linear-gradient(135deg, var(--track3-start), var(--track3-end)); }
-
-    .btn-track-go:hover {
-      opacity: 0.88;
-      transform: translateY(-1px);
-    }
-
-    /* ─── PREREQUISITES ─── */
-    .prereq-section {
-      background: var(--navy-800);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .prereq-section::before {
-      content: '';
-      position: absolute;
-      top: -60px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 700px;
-      height: 300px;
-      background: radial-gradient(ellipse, rgba(124,58,237,0.1) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .prereq-banner {
-      background: linear-gradient(135deg, rgba(37,99,235,0.08), rgba(124,58,237,0.08));
-      border: 1px solid rgba(124,58,237,0.2);
-      border-radius: 16px;
-      padding: 2.5rem 2rem;
-      max-width: 820px;
-      margin: 0 auto 2.5rem;
-      text-align: center;
-    }
-
-    .prereq-banner-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .prereq-banner h3 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin-bottom: 0.75rem;
-    }
-
-    .prereq-banner p {
-      font-size: 0.95rem;
-      color: var(--gray-300);
-      line-height: 1.7;
-      max-width: 580px;
-      margin: 0 auto;
-    }
-
-    .prereq-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.25rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .prereq-card {
-      background: rgba(8,15,36,0.7);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 14px;
-      padding: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .prereq-card:hover {
-      transform: translateY(-3px);
-      border-color: rgba(255,255,255,0.14);
-    }
-
-    .prereq-card-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
-      flex-shrink: 0;
-    }
-
-    .prereq-card:nth-child(1) .prereq-card-icon { background: rgba(37,99,235,0.15); }
-    .prereq-card:nth-child(2) .prereq-card-icon { background: rgba(124,58,237,0.15); }
-    .prereq-card:nth-child(3) .prereq-card-icon { background: rgba(245,158,11,0.15); }
-
-    .prereq-card-body h4 {
-      font-size: 0.9rem;
-      font-weight: 700;
-      margin-bottom: 0.2rem;
-    }
-
-    .prereq-card-body p {
-      font-size: 0.78rem;
-      color: var(--gray-400);
-    }
-
-    /* ─── WHAT YOU'LL LEARN ─── */
-    .learn-section {
-      background: var(--navy-950);
-    }
-
-    .learn-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem;
-    }
-
-    .learn-card {
-      background: rgba(13,22,53,0.6);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: 14px;
-      padding: 1.75rem 1.5rem;
-      text-align: center;
-      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-    }
-
-    .learn-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(255,255,255,0.13);
-      box-shadow: 0 12px 35px rgba(0,0,0,0.35);
-    }
-
-    .learn-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-      display: block;
-    }
-
-    .learn-card h4 {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    .learn-card p {
-      font-size: 0.78rem;
-      color: var(--gray-400);
-      line-height: 1.6;
-    }
-
-    /* ─── HOW IT WORKS ─── */
-    .how-section {
-      background: var(--navy-900);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .how-section::before {
-      content: '';
-      position: absolute;
-      bottom: -80px;
-      right: -80px;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(ellipse, rgba(37,99,235,0.07) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 0;
-      position: relative;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .steps-connector {
-      position: absolute;
-      top: 54px;
-      left: calc(12.5% + 28px);
-      right: calc(12.5% + 28px);
-      height: 2px;
-      background: linear-gradient(90deg, var(--blue-500), var(--purple-500));
-      opacity: 0.3;
-    }
-
-    @media (max-width: 768px) {
-      .steps-connector { display: none; }
-    }
-
-    .step-item {
-      text-align: center;
-      padding: 1.5rem 1.25rem;
-      position: relative;
-    }
-
-    .step-number {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      font-weight: 800;
-      margin: 0 auto 1.25rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .step-item:nth-child(1) .step-number { background: linear-gradient(135deg, #2563eb, #06b6d4); }
-    .step-item:nth-child(2) .step-number { background: linear-gradient(135deg, #4f46e5, #7c3aed); }
-    .step-item:nth-child(3) .step-number { background: linear-gradient(135deg, #7c3aed, #ec4899); }
-    .step-item:nth-child(4) .step-number { background: linear-gradient(135deg, #f59e0b, #ef4444); }
-
-    .step-emoji {
-      font-size: 1.5rem;
-      display: block;
-      margin-bottom: 0.75rem;
-    }
-
-    .step-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    .step-desc {
-      font-size: 0.78rem;
-      color: var(--gray-400);
-      line-height: 1.6;
-    }
-
-    /* ─── FOOTER ─── */
-    footer {
-      background: var(--navy-950);
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding: 2.5rem 1.5rem;
-    }
-
-    .footer-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.25rem;
-      text-align: center;
-    }
-
-    .footer-logo {
-      font-size: 1.2rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--blue-300), var(--purple-300));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: -0.5px;
-    }
-
-    .footer-tagline {
-      font-size: 0.8rem;
-      color: var(--gray-500);
-    }
-
-    .footer-tracks {
-      display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .footer-tracks a {
-      font-size: 0.8rem;
-      color: var(--gray-400);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .footer-tracks a:hover { color: var(--white); }
-
-    .footer-copy {
-      font-size: 0.75rem;
-      color: var(--gray-500);
-    }
-
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 900px) {
-      nav { padding: 0.85rem 1.25rem; }
-      .nav-links { display: none; }
-      .tracks-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; }
-      .prereq-cards { grid-template-columns: 1fr; max-width: 440px; margin: 0 auto; }
-      .learn-grid { grid-template-columns: repeat(2, 1fr); }
-      .steps-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-
-    @media (max-width: 560px) {
-      section { padding: 4rem 1.25rem; }
-      .hero { padding: 7rem 1.25rem 4rem; }
-      .hero-actions { flex-direction: column; align-items: center; }
-      .btn-primary, .btn-outline { width: 100%; max-width: 280px; justify-content: center; }
-      .stat-item + .stat-item::before { display: none; }
-      .learn-grid { grid-template-columns: 1fr; }
-      .steps-grid { grid-template-columns: 1fr; }
-      .track-actions { flex-direction: column; }
-    }
-
-    /* ─── SCROLL FADE IN ─── */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .fade-in-delay-1 { transition-delay: 0.1s; }
-    .fade-in-delay-2 { transition-delay: 0.2s; }
-    .fade-in-delay-3 { transition-delay: 0.3s; }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="#" class="nav-logo">
-      <div class="nav-logo-icon">NG</div>
-      <div class="nav-logo-text">
-        NexGen Computers
-        <span>AI Learning Platform</span>
-      </div>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#tracks">Tracks</a></li>
-      <li><a href="#prerequisites">Prerequisites</a></li>
-      <li><a href="#learn">What You'll Learn</a></li>
-      <li><a href="#how">How It Works</a></li>
-    </ul>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-bg"></div>
-    <div class="hero-grid"></div>
-    <div class="hero-content">
-      <div class="hero-badge">India's Next AI Generation</div>
-      <div class="brand-logo">
-        <div class="brand-logo-mark">NexGen Computers</div>
-        <div class="brand-logo-sub">Powered by Artificial Intelligence</div>
-      </div>
-      <h1 class="hero-tagline">
-        Shape the Future<br />
-        <span class="gradient-text">with AI</span>
-      </h1>
-      <p class="hero-sub">
-        Three structured 45-day tracks designed for every skill level — from your first line of Python to building production-ready AI agents. Start where you are. Go where you want.
-      </p>
-      <div class="hero-actions">
-        <a href="#tracks" class="btn-primary">
-          <span>Explore Tracks</span>
-          <span>&#8594;</span>
-        </a>
-        <a href="#how" class="btn-outline">
-          <span>How It Works</span>
-        </a>
-      </div>
+<!-- ═══════════════ AUTH GATE ═══════════════ -->
+<div id="auth-gate">
+  <div class="auth-box">
+    <div class="auth-logo">Nex<span>Gen</span> AI</div>
+    <div class="auth-subtitle">School of Computers, Srikakulam</div>
+    <div class="auth-badge">🔒 STAFF PORTAL — RESTRICTED ACCESS</div>
+    <h2>Trainer Sign In</h2>
+    <p class="hint">Enter your credentials to access course materials and the teacher guide.</p>
+    <div class="auth-field">
+      <label>Username</label>
+      <input type="text" id="auth-user" placeholder="Enter username" autocomplete="username" />
     </div>
-  </section>
-
-  <!-- STATS STRIP -->
-  <div class="stats-strip">
-    <div class="stats-inner">
-      <div class="stat-item">
-        <div class="stat-number">3</div>
-        <div class="stat-label">Learning Tracks</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">135</div>
-        <div class="stat-label">Total Learning Days</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">15+</div>
-        <div class="stat-label">Real-World Projects</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">45</div>
-        <div class="stat-label">Days per Track</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">100%</div>
-        <div class="stat-label">Practical Curriculum</div>
-      </div>
+    <div class="auth-field">
+      <label>Password / Access Code</label>
+      <input type="password" id="auth-pass" placeholder="Enter password" autocomplete="current-password"
+             onkeydown="if(event.key==='Enter') tryLogin()" />
+    </div>
+    <button class="btn-login" onclick="tryLogin()">Sign In →</button>
+    <div id="auth-error">Incorrect credentials. Contact Vamsi Chapa for access.</div>
+    <div class="auth-contact">
+      Don't have access? Contact<br>
+      <strong>Vamsi Chapa</strong> —
+      <a href="mailto:chapavamsi1731@gmail.com">chapavamsi1731@gmail.com</a>
     </div>
   </div>
+</div>
 
-  <!-- TRACKS -->
-  <section class="tracks-section" id="tracks">
-    <div class="container">
-      <p class="section-eyebrow">Choose Your Path</p>
-      <h2 class="section-title">Three Tracks. One Destination.</h2>
-      <p class="section-desc">Every track starts with a prerequisite module to ensure you hit the ground running. Pick the track that matches where you are today.</p>
+<!-- ═══════════════ PORTAL ═══════════════ -->
+<div id="portal">
+  <!-- Header -->
+  <header class="p-header">
+    <div class="p-header-logo">Nex<span>Gen</span> AI Trainer Portal</div>
+    <div class="p-header-right">
+      <span id="welcome-name"></span>
+      <button class="btn-logout" onclick="logout()">Sign Out</button>
+    </div>
+  </header>
 
-      <div class="tracks-grid">
+  <!-- Tabs -->
+  <nav class="p-tabs">
+    <button class="p-tab active" onclick="showTab('overview', this)">📊 Overview</button>
+    <button class="p-tab" onclick="showTab('courses', this)">📚 Course Access</button>
+    <button class="p-tab" onclick="showTab('resources', this)">🔗 Resource Library</button>
+    <button class="p-tab" onclick="showTab('plan', this)">📅 15-Day Plan</button>
+    <button class="p-tab" onclick="showTab('guide', this)">🎓 Teacher Guide</button>
+  </nav>
 
-        <!-- TRACK 1 -->
-        <div class="track-card track-1 fade-in">
-          <div class="track-header">
-            <div class="track-icon">&#128013;</div>
-            <span class="difficulty-badge badge-beginner">&#9679; Beginner</span>
-          </div>
-          <div class="track-title">Python &amp; AI Foundations</div>
-          <div class="track-audience">
-            <span class="track-meta-icon">&#127891;</span>
-            10th Completed &mdash; Age 15&ndash;16
-          </div>
-          <div class="track-duration">
-            <span class="track-meta-icon">&#128197;</span>
-            45 Days &nbsp;&#183;&nbsp; 1 Lesson per Day
-          </div>
-          <div class="topics-label">Key Topics</div>
-          <ul class="topics-list">
-            <li><span class="topic-dot"></span>Python programming fundamentals</li>
-            <li><span class="topic-dot"></span>Data types, logic &amp; control flow</li>
-            <li><span class="topic-dot"></span>Introduction to AI concepts &amp; tools</li>
-            <li><span class="topic-dot"></span>Mini-projects: chatbot, image classifier</li>
-          </ul>
-          <div class="track-actions">
-            <a href="./prerequisites/track-1-prereq.html" class="btn-track-prereq">
-              Start Prerequisites
-            </a>
-            <a href="./track-1/index.html" class="btn-track-go">
-              Go to Course &#8594;
-            </a>
+  <!-- Content -->
+  <main class="p-content">
+
+    <!-- ── OVERVIEW ── -->
+    <div id="tab-overview" class="tab-panel active">
+      <div class="hero-banner">
+        <h2>Welcome to the NexGen AI Trainer Portal</h2>
+        <p>This is your central command centre for delivering all three AI learning tracks. Access course materials, curated learning resources, your 15-day prep plan, and comprehensive teaching patterns — all in one place. Everything here is staff-only.</p>
+      </div>
+
+      <div class="section-title">Quick Access</div>
+      <div class="quick-grid">
+        <a class="quick-card" onclick="showTab('courses', document.querySelectorAll('.p-tab')[1])">
+          <div class="quick-icon" style="background:rgba(79,70,229,.15); color:#818CF8">📚</div>
+          <div class="quick-info"><div class="qt">Course Access</div><div class="qs">3 tracks · 45 days each</div></div>
+        </a>
+        <a class="quick-card" onclick="showTab('resources', document.querySelectorAll('.p-tab')[2])">
+          <div class="quick-icon" style="background:rgba(34,211,238,.12); color:#22D3EE">🔗</div>
+          <div class="quick-info"><div class="qt">Resource Library</div><div class="qs">Day-by-day learning links</div></div>
+        </a>
+        <a class="quick-card" onclick="showTab('plan', document.querySelectorAll('.p-tab')[3])">
+          <div class="quick-icon" style="background:rgba(34,197,94,.12); color:#4ADE80">📅</div>
+          <div class="quick-info"><div class="qt">15-Day Prep Plan</div><div class="qs">Track your study progress</div></div>
+        </a>
+        <a class="quick-card" onclick="showTab('guide', document.querySelectorAll('.p-tab')[4])">
+          <div class="quick-icon" style="background:rgba(245,158,11,.12); color:#FCD34D">🎓</div>
+          <div class="quick-info"><div class="qt">Teacher Guide</div><div class="qs">Patterns, analogies, lesson plans</div></div>
+        </a>
+      </div>
+
+      <div class="section-title">Platform at a Glance</div>
+      <div class="stat-row">
+        <div class="stat-pill"><div class="num" style="color:var(--accent)">3</div><div class="lbl">Learning<br>Tracks</div></div>
+        <div class="stat-pill"><div class="num" style="color:var(--t1)">135</div><div class="lbl">Total<br>Lessons</div></div>
+        <div class="stat-pill"><div class="num" style="color:var(--t2)">15</div><div class="lbl">Trainer Prep<br>Days</div></div>
+        <div class="stat-pill"><div class="num" style="color:var(--t3)">90+</div><div class="lbl">Curated<br>Resources</div></div>
+        <div class="stat-pill"><div class="num" style="color:var(--green)">3</div><div class="lbl">Prereq<br>Modules</div></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">📋 Platform Overview</div>
+          <div class="card-body">
+            NexGen AI Courses is a structured, in-person AI training program for three distinct learner cohorts: 10th-grade students (Python & AI Basics), Intermediate / 12th-grade students (Data Science & ML), and Engineering undergraduates (Advanced AI). Each 45-day track is self-contained, with progressive daily lessons, code examples grounded in local AP context, and built-in capstone projects. All courses are delivered by you — the trainer — in classroom sessions.
           </div>
         </div>
-
-        <!-- TRACK 2 -->
-        <div class="track-card track-2 fade-in fade-in-delay-1">
-          <div class="track-header">
-            <div class="track-icon">&#129302;</div>
-            <span class="difficulty-badge badge-intermediate">&#9679; Intermediate</span>
-          </div>
-          <div class="track-title">ML &amp; AI Tools Mastery</div>
-          <div class="track-audience">
-            <span class="track-meta-icon">&#127891;</span>
-            Intermediate / 12th Completed &mdash; Age 17&ndash;18
-          </div>
-          <div class="track-duration">
-            <span class="track-meta-icon">&#128197;</span>
-            45 Days &nbsp;&#183;&nbsp; 1 Lesson per Day
-          </div>
-          <div class="topics-label">Key Topics</div>
-          <ul class="topics-list">
-            <li><span class="topic-dot"></span>Machine Learning algorithms &amp; pipelines</li>
-            <li><span class="topic-dot"></span>Prompt engineering &amp; LLM integration</li>
-            <li><span class="topic-dot"></span>Data analysis with Pandas &amp; NumPy</li>
-            <li><span class="topic-dot"></span>Projects: sentiment analysis, recommendation</li>
-          </ul>
-          <div class="track-actions">
-            <a href="./prerequisites/track-2-prereq.html" class="btn-track-prereq">
-              Start Prerequisites
-            </a>
-            <a href="./track-2/index.html" class="btn-track-go">
-              Go to Course &#8594;
-            </a>
+        <div class="card">
+          <div class="card-title">🗺️ Your Role as Trainer</div>
+          <div class="card-body">
+            You are simultaneously preparing and teaching three cohorts. The 15-Day Prep Plan is your study roadmap — it front-loads the concepts you need to teach first, and layers in harder material as you go. Use the Teacher Guide tab for lesson patterns (3-Act, Error-First, Predict-Then-Run) and local analogies (kirana shop inventory, APSRTC bus data, Vizag property prices, AP SSC grading). You don't need to be an expert on Day 1. You need to be one step ahead of each class.
           </div>
         </div>
+      </div>
 
-        <!-- TRACK 3 -->
-        <div class="track-card track-3 fade-in fade-in-delay-2">
-          <div class="track-header">
-            <div class="track-icon">&#128640;</div>
-            <span class="difficulty-badge badge-advanced">&#9679; Advanced</span>
-          </div>
-          <div class="track-title">Advanced AI &amp; Agent Engineering</div>
-          <div class="track-audience">
-            <span class="track-meta-icon">&#127891;</span>
-            Engineering Students &mdash; Age 18&ndash;22
-          </div>
-          <div class="track-duration">
-            <span class="track-meta-icon">&#128197;</span>
-            45 Days &nbsp;&#183;&nbsp; 1 Lesson per Day
-          </div>
-          <div class="topics-label">Key Topics</div>
-          <ul class="topics-list">
-            <li><span class="topic-dot"></span>Deep Learning &amp; neural network architectures</li>
-            <li><span class="topic-dot"></span>Building autonomous AI agents with tools</li>
-            <li><span class="topic-dot"></span>RAG systems, vector databases &amp; fine-tuning</li>
-            <li><span class="topic-dot"></span>Capstone: deploy a production AI application</li>
-          </ul>
-          <div class="track-actions">
-            <a href="./prerequisites/track-3-prereq.html" class="btn-track-prereq">
-              Start Prerequisites
-            </a>
-            <a href="./track-3/index.html" class="btn-track-go">
-              Go to Course &#8594;
-            </a>
-          </div>
-        </div>
-
+      <div class="contact-bar">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        <p>Platform curated and maintained by <strong>Vamsi Chapa</strong>. For access requests or issues: <a href="mailto:chapavamsi1731@gmail.com">chapavamsi1731@gmail.com</a></p>
       </div>
     </div>
-  </section>
 
-  <!-- PREREQUISITES -->
-  <section class="prereq-section" id="prerequisites">
-    <div class="container">
-      <p class="section-eyebrow">Before You Begin</p>
-      <h2 class="section-title">The Prerequisites Module</h2>
-      <p class="section-desc">Each track begins with a focused 5&ndash;7 day prerequisite. It's not a wall — it's a launchpad.</p>
+    <!-- ── COURSE ACCESS ── -->
+    <div id="tab-courses" class="tab-panel">
+      <div class="section-title">Course Access</div>
+      <div class="section-sub">Three tracks, three cohorts. Each track is a standalone 45-day HTML course with localStorage progress tracking, daily code exercises, and module quizzes.</div>
 
-      <div class="prereq-banner fade-in">
-        <div class="prereq-banner-icon">&#127919;</div>
-        <h3>Why Prerequisites Matter</h3>
-        <p>
-          Jumping into a 45-day course without the right foundation wastes your time and kills motivation. Our prerequisite modules are tightly scoped — typically 5 to 7 days — and give you exactly the mental models and tool setup needed to thrive in the main course. Complete yours first, then unlock the full track.
-        </p>
-      </div>
-
-      <div class="prereq-cards">
-        <div class="prereq-card fade-in">
-          <div class="prereq-card-icon">&#128013;</div>
-          <div class="prereq-card-body">
-            <h4>Track 1 Prerequisites</h4>
-            <p>Computer basics, setting up Python, and your first 10 lines of code &mdash; 5 days</p>
+      <div class="grid-3">
+        <!-- Track 1 -->
+        <div class="track-card">
+          <div class="track-accent" style="background: linear-gradient(90deg, #4F46E5, #06B6D4)"></div>
+          <div class="track-badge" style="background:rgba(79,70,229,.15); color:#818CF8; border:1px solid rgba(79,70,229,.3)">TRACK 1</div>
+          <h3>Python & AI Basics</h3>
+          <p>For 10th-grade students. Covers Python fundamentals, intermediate Python for AI, AI introduction, and a beginner capstone project.</p>
+          <div style="font-size:.78rem; color:var(--muted); margin-bottom:16px">
+            📅 45 Days &nbsp;·&nbsp; 4 Modules &nbsp;·&nbsp; 🎯 10th Grade
+          </div>
+          <div class="track-links">
+            <a class="track-link" href="track-1/index.html" target="_blank" style="background:rgba(79,70,229,.15); color:#818CF8">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              Open Course
+            </a>
+            <a class="track-link" href="prerequisites/track-1-prereq.html" target="_blank" style="background:rgba(79,70,229,.08); color:#A5B4FC">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+              Prerequisite Module (7 Days)
+            </a>
+            <a class="track-link" href="docs/Track1-Python-AI-Basics.pdf" target="_blank" style="background:rgba(79,70,229,.08); color:#A5B4FC">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+              Course PDF
+            </a>
           </div>
         </div>
-        <div class="prereq-card fade-in fade-in-delay-1">
-          <div class="prereq-card-icon">&#129302;</div>
-          <div class="prereq-card-body">
-            <h4>Track 2 Prerequisites</h4>
-            <p>Python fluency review, environment setup, Jupyter notebooks &mdash; 6 days</p>
+
+        <!-- Track 2 -->
+        <div class="track-card">
+          <div class="track-accent" style="background: linear-gradient(90deg, #7C3AED, #EC4899)"></div>
+          <div class="track-badge" style="background:rgba(124,58,237,.15); color:#C084FC; border:1px solid rgba(124,58,237,.3)">TRACK 2</div>
+          <h3>Data Science & ML</h3>
+          <p>For Intermediate / 12th-grade students. Covers NumPy, Pandas, ML algorithms, model evaluation, and a data-driven capstone using AP datasets.</p>
+          <div style="font-size:.78rem; color:var(--muted); margin-bottom:16px">
+            📅 45 Days &nbsp;·&nbsp; 5 Modules &nbsp;·&nbsp; 🎯 Inter / 12th
+          </div>
+          <div class="track-links">
+            <a class="track-link" href="track-2/index.html" target="_blank" style="background:rgba(124,58,237,.15); color:#C084FC">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              Open Course
+            </a>
+            <a class="track-link" href="prerequisites/track-2-prereq.html" target="_blank" style="background:rgba(124,58,237,.08); color:#D8B4FE">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+              Prerequisite Module (7 Days)
+            </a>
+            <a class="track-link" href="docs/Track2-Data-Science-ML.pdf" target="_blank" style="background:rgba(124,58,237,.08); color:#D8B4FE">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+              Course PDF
+            </a>
           </div>
         </div>
-        <div class="prereq-card fade-in fade-in-delay-2">
-          <div class="prereq-card-icon">&#128640;</div>
-          <div class="prereq-card-body">
-            <h4>Track 3 Prerequisites</h4>
-            <p>Linear algebra refresher, ML intuition primer, cloud setup &mdash; 7 days</p>
+
+        <!-- Track 3 -->
+        <div class="track-card">
+          <div class="track-accent" style="background: linear-gradient(90deg, #DC2626, #F59E0B)"></div>
+          <div class="track-badge" style="background:rgba(220,38,38,.15); color:#FCA5A5; border:1px solid rgba(220,38,38,.3)">TRACK 3</div>
+          <h3>Advanced AI Engineering</h3>
+          <p>For Engineering students. Covers Advanced ML, Deep Learning, LLM engineering, Prompt Engineering, AI Agent architecture, and a production-grade capstone.</p>
+          <div style="font-size:.78rem; color:var(--muted); margin-bottom:16px">
+            📅 45 Days &nbsp;·&nbsp; 5 Modules &nbsp;·&nbsp; 🎯 B.Tech / Engineering
+          </div>
+          <div class="track-links">
+            <a class="track-link" href="track-3/index.html" target="_blank" style="background:rgba(220,38,38,.15); color:#FCA5A5">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              Open Course
+            </a>
+            <a class="track-link" href="prerequisites/track-3-prereq.html" target="_blank" style="background:rgba(220,38,38,.08); color:#FCA5A5">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+              Prerequisite Module (7 Days)
+            </a>
+            <a class="track-link" href="docs/Track3-Engineering-AI.pdf" target="_blank" style="background:rgba(220,38,38,.08); color:#FCA5A5">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+              Course PDF
+            </a>
           </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- WHAT YOU'LL LEARN -->
-  <section class="learn-section" id="learn">
-    <div class="container">
-      <p class="section-eyebrow">Across All Tracks</p>
-      <h2 class="section-title">What You'll Learn</h2>
-      <p class="section-desc">Skills that compound. Every topic taught in the context of real applications — not just theory.</p>
-
-      <div class="learn-grid">
-        <div class="learn-card fade-in">
-          <span class="learn-icon">&#128013;</span>
-          <h4>Python Programming</h4>
-          <p>From syntax basics to object-oriented design and pythonic patterns used in AI engineering.</p>
-        </div>
-        <div class="learn-card fade-in fade-in-delay-1">
-          <span class="learn-icon">&#129504;</span>
-          <h4>Machine Learning</h4>
-          <p>Supervised, unsupervised, and reinforcement learning — models that learn from data and improve.</p>
-        </div>
-        <div class="learn-card fade-in fade-in-delay-2">
-          <span class="learn-icon">&#127760;</span>
-          <h4>Deep Learning</h4>
-          <p>Neural networks, CNNs, transformers, and the architectures powering modern AI applications.</p>
-        </div>
-        <div class="learn-card fade-in">
-          <span class="learn-icon">&#128172;</span>
-          <h4>Prompt Engineering</h4>
-          <p>Craft effective prompts, build chains, and control large language model behavior reliably.</p>
-        </div>
-        <div class="learn-card fade-in fade-in-delay-1">
-          <span class="learn-icon">&#129302;</span>
-          <h4>Building AI Agents</h4>
-          <p>Design autonomous agents with tools, memory, and reasoning loops using modern frameworks.</p>
-        </div>
-        <div class="learn-card fade-in fade-in-delay-2">
-          <span class="learn-icon">&#128295;</span>
-          <h4>Real Projects</h4>
-          <p>Ship 15+ hands-on projects — chatbots, classifiers, recommendation systems, and full AI apps.</p>
+      <div class="card" style="margin-top:24px">
+        <div class="card-title">📖 How the Courses Work</div>
+        <div class="card-body">
+          Each track is a single self-contained HTML file. Open it in a browser — no install needed. Students navigate day-by-day using the sidebar. Progress is saved automatically to <code style="background:#0F172A; padding:2px 6px; border-radius:4px; font-size:.82rem">localStorage</code>. Each day has: learning objectives, concept explanation, code example, hands-on exercise, key terms, and links to external resources. The Prerequisite Module (7 days) is a separate HTML file — assign it the week before the main track begins.
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- HOW IT WORKS -->
-  <section class="how-section" id="how">
-    <div class="container">
-      <p class="section-eyebrow">The Journey</p>
-      <h2 class="section-title">How It Works</h2>
-      <p class="section-desc">A simple four-step path from zero to certified — built for students who learn by doing.</p>
-
-      <div class="steps-grid">
-        <div class="steps-connector"></div>
-
-        <div class="step-item fade-in">
-          <div class="step-number">1</div>
-          <span class="step-emoji">&#128218;</span>
-          <div class="step-title">Complete Prerequisites</div>
-          <p class="step-desc">5 to 7 days of focused setup and foundational concepts. Unlock your chosen track when done.</p>
-        </div>
-
-        <div class="step-item fade-in fade-in-delay-1">
-          <div class="step-number">2</div>
-          <span class="step-emoji">&#9889;</span>
-          <div class="step-title">Learn Daily</div>
-          <p class="step-desc">One structured lesson per day — video, reading, and hands-on coding. Consistency beats intensity.</p>
-        </div>
-
-        <div class="step-item fade-in fade-in-delay-2">
-          <div class="step-number">3</div>
-          <span class="step-emoji">&#128736;</span>
-          <div class="step-title">Build Projects</div>
-          <p class="step-desc">Apply every concept through real projects. Your portfolio grows with every track you complete.</p>
-        </div>
-
-        <div class="step-item fade-in fade-in-delay-3">
-          <div class="step-number">4</div>
-          <span class="step-emoji">&#127881;</span>
-          <div class="step-title">Get Certified</div>
-          <p class="step-desc">Complete the track and receive your NexGen Computers AI certification — shareable and verifiable.</p>
-        </div>
+      <div class="contact-bar">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        <p>Need access to additional course materials or want to request a new track? Contact <strong>Vamsi Chapa</strong>: <a href="mailto:chapavamsi1731@gmail.com">chapavamsi1731@gmail.com</a></p>
       </div>
     </div>
-  </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo">NexGen Computers</div>
-      <div class="footer-tagline">Empowering the next generation of Indian AI engineers</div>
-      <div class="footer-tracks">
-        <a href="./track-1/index.html">Track 1: Python &amp; AI Foundations</a>
-        <a href="./track-2/index.html">Track 2: ML &amp; AI Tools Mastery</a>
-        <a href="./track-3/index.html">Track 3: Advanced AI &amp; Agent Engineering</a>
+    <!-- ── RESOURCE LIBRARY ── -->
+    <div id="tab-resources" class="tab-panel">
+      <div class="section-title">Resource Library</div>
+      <div class="section-sub">Curated external learning resources mapped to each day of your 15-day trainer prep. 1–2 hours of focused study per day. Free resources prioritised.</div>
+
+      <div class="resource-filter" id="res-filter">
+        <button class="rf-btn active" onclick="filterRes('all', this)">All Resources</button>
+        <button class="rf-btn" onclick="filterRes('track1', this)">Track 1</button>
+        <button class="rf-btn" onclick="filterRes('track2', this)">Track 2</button>
+        <button class="rf-btn" onclick="filterRes('track3', this)">Track 3</button>
+        <button class="rf-btn" onclick="filterRes('free', this)">Free Only</button>
       </div>
-      <div class="footer-tracks">
-        <a href="./prerequisites/track-1-prereq.html">Prereq: Track 1</a>
-        <a href="./prerequisites/track-2-prereq.html">Prereq: Track 2</a>
-        <a href="./prerequisites/track-3-prereq.html">Prereq: Track 3</a>
+
+      <div id="res-container"></div>
+
+      <div class="contact-bar" style="margin-top:24px">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <p>All YouTube links open free content. DeepLearning.AI short courses are free to audit. Kaggle Learn is 100% free. Contact <a href="mailto:chapavamsi1731@gmail.com">chapavamsi1731@gmail.com</a> for paid resource access.</p>
       </div>
-      <div class="footer-copy">&copy; 2025 NexGen Computers. All rights reserved.</div>
     </div>
-  </footer>
 
-  <script>
-    // Scroll-based fade-in using IntersectionObserver
-    const fadeEls = document.querySelectorAll('.fade-in');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    fadeEls.forEach(el => observer.observe(el));
+    <!-- ── 15-DAY PLAN ── -->
+    <div id="tab-plan" class="tab-panel">
+      <div class="section-title">15-Day Trainer Preparation Plan</div>
+      <div class="section-sub">Click a day card to mark it complete. Progress is saved in your browser. Study 4–5 hours/day. Teaching prep is built into each day — you learn it, then immediately prep to teach it.</div>
 
-    // Smooth active nav highlight on scroll
-    const sections = document.querySelectorAll('section[id], div[id]');
-    const navLinks = document.querySelectorAll('.nav-links a');
-    const scrollSpy = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          navLinks.forEach(link => {
-            link.style.color = '';
-            if (link.getAttribute('href') === '#' + entry.target.id) {
-              link.style.color = 'white';
-            }
-          });
-        }
-      });
-    }, { threshold: 0.4 });
-    sections.forEach(s => scrollSpy.observe(s));
+      <div id="plan-progress-bar" style="margin-bottom:28px">
+        <div style="display:flex; justify-content:space-between; font-size:.82rem; color:var(--muted); margin-bottom:8px">
+          <span>Study Progress</span>
+          <span id="plan-pct">0 / 15 days complete</span>
+        </div>
+        <div style="background:var(--border); border-radius:6px; height:8px; overflow:hidden">
+          <div id="plan-bar" style="background:linear-gradient(90deg, var(--accent), var(--accent2)); height:100%; width:0%; transition:width .4s; border-radius:6px"></div>
+        </div>
+      </div>
 
-    // Animated stat counters
-    function animateCounter(el, target, duration) {
-      let start = null;
-      const isPercent = el.textContent.includes('%');
-      const isPlus = el.textContent.includes('+');
-      const step = (timestamp) => {
-        if (!start) start = timestamp;
-        const progress = Math.min((timestamp - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const value = Math.round(eased * target);
-        el.textContent = value + (isPlus ? '+' : '') + (isPercent ? '%' : '');
-        if (progress < 1) requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    }
+      <div id="plan-grid-container"></div>
+    </div>
 
-    const statNums = document.querySelectorAll('.stat-number');
-    const targets = [3, 135, 15, 45, 100];
-    const counterObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const idx = Array.from(statNums).indexOf(entry.target);
-          if (idx !== -1) animateCounter(entry.target, targets[idx], 1200);
-          counterObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.5 });
-    statNums.forEach(el => counterObserver.observe(el));
-  </script>
+    <!-- ── TEACHER GUIDE ── -->
+    <div id="tab-guide" class="tab-panel">
+      <div class="section-title">Teacher Guide</div>
+      <div class="section-sub">Patterns, analogies, lesson structures, and classroom tactics. Everything you need to walk into the room with confidence.</div>
 
+      <div style="margin-bottom:24px">
+        <a href="teacher-guide.html" target="_blank" class="guide-link-btn">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          Open Full Teacher Guide (Detailed Version)
+        </a>
+      </div>
+
+      <div class="guide-section">
+        <h3>🎭 The 6 Core Teaching Patterns</h3>
+        <div class="guide-pattern">
+          <h4>1. 3-Act Lesson Structure</h4>
+          <p>Every lesson follows three acts. Act 1 — Hook (5 min): open with a local question (e.g., "How does APSRTC decide which bus route needs more buses?"). Act 2 — Teach & Code (30 min): explain concept → show code → students run it. Act 3 — Apply & Reflect (10 min): real-world task + Fist-to-Five confidence check.</p>
+        </div>
+        <div class="guide-pattern">
+          <h4>2. Error-First Teaching</h4>
+          <p>Start by showing broken code. Let students diagnose it. This builds debugging intuition faster than seeing correct code first. Example: show <code style="background:#0F172A; padding:1px 5px; border-radius:3px">print("hello"</code> (missing bracket) and ask "what's wrong?" before teaching print syntax.</p>
+        </div>
+        <div class="guide-pattern">
+          <h4>3. Predict-Then-Run</h4>
+          <p>Show a code block. Ask "what will this print?" — let students guess out loud. Then run it. Surprises create memory hooks. Works especially well for loops, conditionals, and list comprehensions.</p>
+        </div>
+        <div class="guide-pattern">
+          <h4>4. Fist-to-Five Check</h4>
+          <p>After every concept: ask students to hold up fingers (0 = lost, 5 = can explain it to someone else). Instant visual feedback. If more than 30% show 0–2, re-teach before moving on.</p>
+        </div>
+        <div class="guide-pattern">
+          <h4>5. Analogy-First Explanation</h4>
+          <p>Before any technical term, give the local analogy. "A variable is like a notebook page in the school register — it has a name and a value you can update." Students learn the concept, then the formal name, not the other way around.</p>
+        </div>
+        <div class="guide-pattern">
+          <h4>6. Opening Hook + Session Close</h4>
+          <p>Opening Hook: every session starts with a 2-sentence story or local problem. Session Close: every session ends with "Today you learned X. Tomorrow we'll use it to build Y." Consistency builds momentum.</p>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>🗺️ Local AP Analogy Bank</h3>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Track 1 Analogies (Python Basics)</div>
+            <div class="card-body">
+              <ul style="padding-left:16px; margin-top:4px">
+                <li><strong>Variables:</strong> School register notebook pages</li>
+                <li><strong>Lists:</strong> Kirana shop inventory list</li>
+                <li><strong>Loops:</strong> Checking each item on the ration list</li>
+                <li><strong>Functions:</strong> A recipe your amma follows every time</li>
+                <li><strong>If/Else:</strong> If AP SSC marks &gt; 60, proceed; else, repeat class</li>
+                <li><strong>Error handling:</strong> What the bus conductor does when the ticket machine jams</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Track 2 Analogies (Data Science)</div>
+            <div class="card-body">
+              <ul style="padding-left:16px; margin-top:4px">
+                <li><strong>DataFrames:</strong> APSRTC bus schedule spreadsheet</li>
+                <li><strong>Linear Regression:</strong> Predicting Vizag property prices from size</li>
+                <li><strong>Classification:</strong> AP SSC result — Pass / Fail / Distinction</li>
+                <li><strong>Clustering (K-Means):</strong> Grouping Srikakulam students by study hours</li>
+                <li><strong>Normalisation:</strong> Converting marks to percentages for fair comparison</li>
+                <li><strong>Train/Test split:</strong> Studying chapters 1–9, then writing exam on ch.10</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Track 3 Analogies (Advanced AI)</div>
+            <div class="card-body">
+              <ul style="padding-left:16px; margin-top:4px">
+                <li><strong>Neural networks:</strong> AP EAMCET rank predictor with 10K student data</li>
+                <li><strong>Transformers:</strong> A very attentive student who re-reads the full question paper before answering</li>
+                <li><strong>RAG:</strong> NexGen AI bot that reads all course PDFs before answering student questions</li>
+                <li><strong>Agents:</strong> Cricket score agent that checks the scoreboard, decides what to tweet, and posts it</li>
+                <li><strong>Prompt Engineering:</strong> How you phrase a question to get a better answer from the teacher</li>
+                <li><strong>Fine-tuning:</strong> Teaching a Hyderabad model to understand Srikakulam dialect</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Classroom Survival Tips</div>
+            <div class="card-body">
+              <ul style="padding-left:16px; margin-top:4px">
+                <li>Print the Day's code on paper as backup (power cuts happen)</li>
+                <li>"I'll verify and come back" beats a confident wrong answer</li>
+                <li>Keep a Telegram group for students to share code screenshots</li>
+                <li>Assign one "debug helper" student per row — peer learning</li>
+                <li>If a concept takes two sessions, that's fine. Depth beats speed.</li>
+                <li>End every Friday with "what surprised you this week?" — builds reflection habit</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-bar">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        <p>Questions about teaching methodology or course content? Reach <strong>Vamsi Chapa</strong>: <a href="mailto:chapavamsi1731@gmail.com">chapavamsi1731@gmail.com</a></p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ── AUTH ──
+const USERS = {
+  [btoa('nexgen')]:   btoa('Train@2024'),
+  [btoa('trainer1')]: btoa('NexGen@001'),
+  [btoa('vamsi')]:    btoa('Admin@NexGen2024'),
+};
+const MASTER = btoa('NXGN@Master24');
+
+function tryLogin() {
+  const u = document.getElementById('auth-user').value.trim();
+  const p = document.getElementById('auth-pass').value;
+  if (!u || !p) { document.getElementById('auth-error').style.display = 'block'; return; }
+  const eu = btoa(u), ep = btoa(p);
+  if ((USERS[eu] && USERS[eu] === ep) || ep === MASTER) {
+    sessionStorage.setItem('ng_auth', '1');
+    sessionStorage.setItem('ng_user', u);
+    showPortal(u);
+  } else {
+    document.getElementById('auth-error').style.display = 'block';
+    document.getElementById('auth-pass').value = '';
+  }
+}
+
+function showPortal(user) {
+  document.getElementById('auth-gate').style.display = 'none';
+  document.getElementById('portal').style.display = 'flex';
+  document.getElementById('welcome-name').textContent = 'Hello, ' + user + ' 👋';
+  buildResources();
+  buildPlan();
+}
+
+function logout() {
+  sessionStorage.clear();
+  location.reload();
+}
+
+if (sessionStorage.getItem('ng_auth') === '1') {
+  showPortal(sessionStorage.getItem('ng_user') || 'trainer');
+}
+
+// ── TABS ──
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.p-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ── RESOURCE DATA ──
+const RESOURCES = [
+  // Phase 1: Python Foundations (Days 1-3)
+  { day: 1, phase: 'P1', phaseLabel: 'Python Foundations', tracks: ['track1','track2','track3'],
+    title: 'Python for Everybody — Getting Started', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=8DvywoWv6fI', time: '60 min',
+    note: 'CS50P's first lecture — clean intro to Python. Watch at 1.25x.' },
+  { day: 1, phase: 'P1', phaseLabel: 'Python Foundations', tracks: ['track1'],
+    title: 'W3Schools Python Tutorial (Variables, Data Types)', type: 'docs', free: true,
+    url: 'https://www.w3schools.com/python/python_variables.asp', time: '30 min',
+    note: 'Work through Variables, Strings, Numbers — do every Try-It-Yourself.' },
+  { day: 2, phase: 'P1', phaseLabel: 'Python Foundations', tracks: ['track1','track2'],
+    title: 'CS50P — Functions, Conditionals, Loops', type: 'video', free: true,
+    url: 'https://cs50.harvard.edu/python/2022/', time: '90 min',
+    note: 'Lectures 1 & 2. Run every code snippet yourself in a .py file.' },
+  { day: 2, phase: 'P1', phaseLabel: 'Python Foundations', tracks: ['track1'],
+    title: 'Kaggle Intro to Programming (Python)', type: 'kaggle', free: true,
+    url: 'https://www.kaggle.com/learn/intro-to-programming', time: '60 min',
+    note: 'Interactive — all in the browser. Do lessons 1–3.' },
+  { day: 3, phase: 'P1', phaseLabel: 'Python Foundations', tracks: ['track1','track2','track3'],
+    title: 'Python Lists, Dicts, Functions — Corey Schafer', type: 'video', free: true,
+    url: 'https://www.youtube.com/playlist?list=PL-osiE80TeTskrapNbzXhwoFUiLCjGgY7', time: '75 min',
+    note: 'Watch tutorials 4–7. Corey is the clearest Python explainer on YouTube.' },
+  { day: 3, phase: 'P1', phaseLabel: 'Python Foundations', tracks: ['track1','track2'],
+    title: 'Real Python — Python Basics Tutorials', type: 'docs', free: true,
+    url: 'https://realpython.com/tutorials/basics/', time: '45 min',
+    note: 'Pick: "Python Variables", "Strings and Character Data", "Lists and Tuples".' },
+
+  // Phase 2: NumPy, Pandas, Data (Days 4-6)
+  { day: 4, phase: 'P2', phaseLabel: 'Data Science Essentials', tracks: ['track2','track3'],
+    title: 'NumPy Tutorial — Keith Galli', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=GB9ByFAIAH4', time: '60 min',
+    note: 'Full NumPy crash course. Pay attention to array slicing — used daily in ML.' },
+  { day: 4, phase: 'P2', phaseLabel: 'Data Science Essentials', tracks: ['track2'],
+    title: 'Kaggle Learn — Pandas', type: 'kaggle', free: true,
+    url: 'https://www.kaggle.com/learn/pandas', time: '90 min',
+    note: 'Do all 6 lessons. Use the AP dataset analogy (APSRTC bus schedule) while teaching.' },
+  { day: 5, phase: 'P2', phaseLabel: 'Data Science Essentials', tracks: ['track2','track3'],
+    title: '3Blue1Brown — But what is a neural network?', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=aircAruvnKk', time: '20 min',
+    note: 'Visual intuition for how NNs work. Watch twice. First as a learner, second taking notes for teaching.' },
+  { day: 5, phase: 'P2', phaseLabel: 'Data Science Essentials', tracks: ['track2'],
+    title: 'StatQuest — Linear Regression Clearly Explained', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=7ArmBVF2dCs', time: '30 min',
+    note: 'Josh Starmer is the GOAT for stats intuition. Watch with a pen. Map the Vizag property price analogy.' },
+  { day: 6, phase: 'P2', phaseLabel: 'Data Science Essentials', tracks: ['track2','track3'],
+    title: 'Kaggle Learn — Data Visualisation', type: 'kaggle', free: true,
+    url: 'https://www.kaggle.com/learn/data-visualization', time: '60 min',
+    note: 'Do lessons 1–4. Learn seaborn — it is the charting library used in Track 2.' },
+  { day: 6, phase: 'P2', phaseLabel: 'Data Science Essentials', tracks: ['track2'],
+    title: 'StatQuest — Logistic Regression', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=yIYKR4sgzI8', time: '25 min',
+    note: 'Essential for Track 2 classification lessons. Pair with AP SSC pass/fail analogy.' },
+
+  // Phase 3: ML Algorithms (Days 7-9)
+  { day: 7, phase: 'P3', phaseLabel: 'ML Algorithms', tracks: ['track2','track3'],
+    title: 'Kaggle Learn — Intro to Machine Learning', type: 'kaggle', free: true,
+    url: 'https://www.kaggle.com/learn/intro-to-machine-learning', time: '90 min',
+    note: 'All 7 lessons. Decision Trees and Random Forests explained with interactive code. Essential for Track 2.' },
+  { day: 7, phase: 'P3', phaseLabel: 'ML Algorithms', tracks: ['track3'],
+    title: 'StatQuest — Decision Trees', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=7VeUPuFGJHk', time: '20 min',
+    note: 'Josh's visual intuition. Shows you what the algorithm actually does step-by-step.' },
+  { day: 8, phase: 'P3', phaseLabel: 'ML Algorithms', tracks: ['track2','track3'],
+    title: 'StatQuest — Random Forests', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=J4Wdy0Wc_xQ', time: '20 min',
+    note: 'Bagging and variance explained visually. Follow with: K-Nearest Neighbours video.' },
+  { day: 8, phase: 'P3', phaseLabel: 'ML Algorithms', tracks: ['track2','track3'],
+    title: 'Kaggle Learn — Intermediate ML', type: 'kaggle', free: true,
+    url: 'https://www.kaggle.com/learn/intermediate-machine-learning', time: '60 min',
+    note: 'Missing values, pipelines, cross-validation. Real-world ML workflow.' },
+  { day: 9, phase: 'P3', phaseLabel: 'ML Algorithms', tracks: ['track2','track3'],
+    title: 'StatQuest — K-Means Clustering', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=4b5d3muPQmA', time: '15 min',
+    note: 'Use with student study-group clustering analogy (Srikakulam student hours data).' },
+  { day: 9, phase: 'P3', phaseLabel: 'ML Algorithms', tracks: ['track2','track3'],
+    title: 'Scikit-learn Docs — Getting Started', type: 'docs', free: true,
+    url: 'https://scikit-learn.org/stable/getting_started.html', time: '45 min',
+    note: 'Read the official intro. Learn: fit, predict, score. These 3 methods cover 80% of Track 2.' },
+
+  // Phase 4: Deep Learning & NLP (Days 10-12)
+  { day: 10, phase: 'P4', phaseLabel: 'Deep Learning & NLP', tracks: ['track3'],
+    title: '3Blue1Brown — Gradient Descent', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=IHZwWFHWa-w', time: '20 min',
+    note: 'Watch after the Neural Network video. These 4 episodes together are the best DL intro on the internet.' },
+  { day: 10, phase: 'P4', phaseLabel: 'Deep Learning & NLP', tracks: ['track3'],
+    title: 'DeepLearning.AI — Neural Networks and Deep Learning (Week 1)', type: 'video', free: true,
+    url: 'https://www.deeplearning.ai/courses/deep-learning-specialization/', time: '90 min',
+    note: 'Andrew Ng Week 1. Free to audit. Do the exercises — they appear almost verbatim in Track 3 lessons.' },
+  { day: 11, phase: 'P4', phaseLabel: 'Deep Learning & NLP', tracks: ['track3'],
+    title: 'Andrej Karpathy — micrograd from scratch', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=VMj-3S1tku0', time: '150 min',
+    note: 'Best backprop explanation ever made. Watch over 2 sessions if needed. Must-watch for Track 3 teaching.' },
+  { day: 11, phase: 'P4', phaseLabel: 'Deep Learning & NLP', tracks: ['track3'],
+    title: 'PyTorch Quickstart Tutorial', type: 'docs', free: true,
+    url: 'https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html', time: '45 min',
+    note: 'Official tutorial. Run every code block in Google Colab. Understand: Tensor → Dataset → Model → Train Loop.' },
+  { day: 12, phase: 'P4', phaseLabel: 'Deep Learning & NLP', tracks: ['track3'],
+    title: '3Blue1Brown — Attention in Transformers', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=eMlx5fFNoYc', time: '30 min',
+    note: 'Visual intuition for Transformers before touching the code. Map the "attentive exam student" analogy.' },
+  { day: 12, phase: 'P4', phaseLabel: 'Deep Learning & NLP', tracks: ['track3'],
+    title: 'Andrej Karpathy — Let\'s build GPT from scratch', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=kCc8FmEb1nY', time: '120 min',
+    note: 'Full transformer implementation in PyTorch. Landmark video. Watch at least the first 45 min.' },
+
+  // Phase 5: LLMs, Agents & Teaching Prep (Days 13-15)
+  { day: 13, phase: 'P5', phaseLabel: 'LLMs, Agents & Teaching Prep', tracks: ['track3'],
+    title: 'DeepLearning.AI — ChatGPT Prompt Engineering for Developers', type: 'video', free: true,
+    url: 'https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/', time: '90 min',
+    note: 'Free short course. Isa Fulford + Andrew Ng. Covers zero-shot, few-shot, chain-of-thought directly.' },
+  { day: 13, phase: 'P5', phaseLabel: 'LLMs, Agents & Teaching Prep', tracks: ['track3'],
+    title: 'DeepLearning.AI — Building Systems with the ChatGPT API', type: 'video', free: true,
+    url: 'https://www.deeplearning.ai/short-courses/building-systems-with-chatgpt/', time: '60 min',
+    note: 'Free. Chains, evaluations, and system design with LLMs. Directly maps to Track 3 Days 16–25.' },
+  { day: 14, phase: 'P5', phaseLabel: 'LLMs, Agents & Teaching Prep', tracks: ['track3'],
+    title: 'DeepLearning.AI — LangChain for LLM Application Development', type: 'video', free: true,
+    url: 'https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/', time: '90 min',
+    note: 'Free. Chains + memory + agents intro. Maps to Track 3 module 4 (Building AI Agents).' },
+  { day: 14, phase: 'P5', phaseLabel: 'LLMs, Agents & Teaching Prep', tracks: ['track3'],
+    title: 'OpenAI API Docs — Quickstart', type: 'docs', free: true,
+    url: 'https://platform.openai.com/docs/quickstart', time: '45 min',
+    note: 'Understand: API key, chat completions, tokens, system/user roles. You will demo this live in class.' },
+  { day: 15, phase: 'P5', phaseLabel: 'LLMs, Agents & Teaching Prep', tracks: ['track1','track2','track3'],
+    title: 'Google AI Studio — Try Gemini API Free', type: 'docs', free: true,
+    url: 'https://aistudio.google.com/app/prompts/new_chat', time: '30 min',
+    note: 'Free API key for Gemini. Set up today — use as backup demo tool if OpenAI rate limits hit in class.' },
+  { day: 15, phase: 'P5', phaseLabel: 'LLMs, Agents & Teaching Prep', tracks: ['track1','track2','track3'],
+    title: 'Teaching Strategies — Reading the Room', type: 'docs', free: true,
+    url: 'https://www.edutopia.org/article/formative-assessment-strategies-every-teacher-should-know', time: '20 min',
+    note: 'Quick read. Reinforces the Fist-to-Five, Exit Ticket, and Think-Pair-Share patterns in the teacher guide.' },
+];
+
+let currentFilter = 'all';
+
+function filterRes(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.rf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildResources();
+}
+
+function buildResources() {
+  const container = document.getElementById('res-container');
+  if (!container) return;
+
+  // Group by day
+  const byDay = {};
+  RESOURCES.forEach(r => {
+    let show = true;
+    if (currentFilter === 'track1') show = r.tracks.includes('track1');
+    else if (currentFilter === 'track2') show = r.tracks.includes('track2');
+    else if (currentFilter === 'track3') show = r.tracks.includes('track3');
+    else if (currentFilter === 'free') show = r.free;
+    if (!show) return;
+    if (!byDay[r.day]) byDay[r.day] = { phase: r.phase, phaseLabel: r.phaseLabel, items: [] };
+    byDay[r.day].items.push(r);
+  });
+
+  const phaseColors = { P1: '#4F46E5', P2: '#7C3AED', P3: '#DC2626', P4: '#D97706', P5: '#059669' };
+  const typeIcon = { video: '▶️', kaggle: '📊', docs: '📄' };
+
+  let html = '';
+  Object.keys(byDay).sort((a,b) => +a - +b).forEach(day => {
+    const d = byDay[day];
+    const color = phaseColors[d.phase] || '#6366F1';
+    html += `
+      <div class="res-day" id="rday-${day}">
+        <div class="res-day-header" onclick="toggleDay('rday-${day}')">
+          <div class="day-label">
+            <span style="font-weight:800; color:${color}">Day ${day}</span>
+            <span class="phase-tag" style="background:${color}22; color:${color}; border:1px solid ${color}44">${d.phaseLabel}</span>
+          </div>
+          <svg class="chevron" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="res-day-body">`;
+    d.items.forEach(r => {
+      const icon = typeIcon[r.type] || '🔗';
+      const iconBg = r.type === 'video' ? '#EF444422' : r.type === 'kaggle' ? '#20B2AA22' : '#6366F122';
+      html += `
+          <div class="res-item">
+            <div class="res-icon" style="background:${iconBg}">${icon}</div>
+            <div class="res-info">
+              <div class="res-title"><a href="${r.url}" target="_blank" rel="noopener">${r.title} ↗</a></div>
+              <div class="res-meta">
+                <span>⏱ ${r.time}</span>
+                ${r.free ? '<span class="badge-free">Free</span>' : '<span class="badge-paid">Paid</span>'}
+                <span style="font-size:.72rem; color:var(--muted)">${r.note}</span>
+              </div>
+            </div>
+          </div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  container.innerHTML = html || '<div class="card"><div class="card-body">No resources match the current filter.</div></div>';
+}
+
+function toggleDay(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+// ── 15-DAY PLAN ──
+const PLAN_DAYS = [
+  { day: 1, phase: 'P1', phaseColor: '#4F46E5', title: 'Python Core — Variables, Types, Operators',
+    tasks: '• W3Schools Python Variables\n• CS50P Lecture 0\n• Prep: 5 kirana shop examples' },
+  { day: 2, phase: 'P1', phaseColor: '#4F46E5', title: 'Control Flow — If/Else, Loops, Functions',
+    tasks: '• CS50P Lectures 1 & 2\n• Corey Schafer tutorials 4–5\n• Prep: APSRTC bus if/else demo' },
+  { day: 3, phase: 'P1', phaseColor: '#4F46E5', title: 'Data Structures — Lists, Dicts, Sets',
+    tasks: '• Corey Schafer tutorials 6–7\n• Kaggle Intro to Programming\n• Prep: Track 1 Day 4–6 lesson outlines' },
+  { day: 4, phase: 'P2', phaseColor: '#7C3AED', title: 'NumPy — Arrays, Operations, Indexing',
+    tasks: '• Keith Galli NumPy video (full)\n• Practice: 20 array exercises\n• Prep: Track 2 Day 1–5 outline' },
+  { day: 5, phase: 'P2', phaseColor: '#7C3AED', title: 'Pandas — DataFrames, GroupBy, Merge',
+    tasks: '• Kaggle Learn Pandas (all 6)\n• Load a real CSV (APSRTC data)\n• Prep: Track 2 Days 6–10' },
+  { day: 6, phase: 'P2', phaseColor: '#7C3AED', title: 'EDA & Visualisation — seaborn, matplotlib',
+    tasks: '• Kaggle Data Visualisation\n• Build 3 charts from local data\n• Prep: Capstone project brief' },
+  { day: 7, phase: 'P3', phaseColor: '#DC2626', title: 'ML Algorithms — Decision Trees, kNN',
+    tasks: '• Kaggle Intro to ML (all 7)\n• StatQuest Decision Trees\n• Prep: scikit-learn pipeline demo' },
+  { day: 8, phase: 'P3', phaseColor: '#DC2626', title: 'Ensemble & Clustering — RF, K-Means',
+    tasks: '• StatQuest Random Forests\n• StatQuest K-Means\n• Prep: Track 2 Days 21–30 lesson notes' },
+  { day: 9, phase: 'P3', phaseColor: '#DC2626', title: 'Model Evaluation — CV, Metrics, Pipelines',
+    tasks: '• Kaggle Intermediate ML\n• scikit-learn docs quickstart\n• Prep: Mock quiz for Track 2 Module 3' },
+  { day: 10, phase: 'P4', phaseColor: '#D97706', title: 'Neural Networks — Perceptron, Backprop',
+    tasks: '• 3Blue1Brown NN series (4 videos)\n• DeepLearning.AI DLS Week 1\n• Prep: micrograd teaching notes' },
+  { day: 11, phase: 'P4', phaseColor: '#D97706', title: 'Deep Learning — PyTorch, Training Loop',
+    tasks: '• Karpathy micrograd (first 90 min)\n• PyTorch Quickstart tutorial\n• Prep: Track 3 Days 1–15 outline' },
+  { day: 12, phase: 'P4', phaseColor: '#D97706', title: 'Transformers & Attention — Intuition',
+    tasks: '• 3Blue1Brown Attention video\n• Karpathy Build GPT (first 45 min)\n• Prep: LLM lesson hook stories' },
+  { day: 13, phase: 'P5', phaseColor: '#059669', title: 'LLMs & Prompt Engineering',
+    tasks: '• DeepLearning.AI Prompt Eng course\n• Build a few-shot prompt demo\n• Prep: Track 3 Days 26–30 slides' },
+  { day: 14, phase: 'P5', phaseColor: '#059669', title: 'AI Agents & API Integration',
+    tasks: '• DeepLearning.AI LangChain course\n• OpenAI API docs quickstart\n• Prep: Cricket agent demo code' },
+  { day: 15, phase: 'P5', phaseColor: '#059669', title: 'Full Dress Rehearsal — All 3 Tracks',
+    tasks: '• Set up Google AI Studio\n• Run Day 1 lesson for each track\n• Prepare emergency offline backups' },
+];
+
+function buildPlan() {
+  const container = document.getElementById('plan-grid-container');
+  if (!container) return;
+  const saved = JSON.parse(localStorage.getItem('ng_plan_done') || '{}');
+
+  let html = '<div class="plan-grid">';
+  PLAN_DAYS.forEach(d => {
+    const done = saved[d.day];
+    html += `
+      <div class="plan-day ${done ? 'done' : ''}" onclick="togglePlanDay(${d.day})" id="pd-${d.day}">
+        <div class="pd-phase" style="color:${d.phaseColor}">Phase ${d.phase.replace('P','')}</div>
+        <div class="pd-num">Day ${d.day}</div>
+        <div class="pd-title">${d.title}</div>
+        <div class="pd-tasks" style="white-space:pre-line">${d.tasks}</div>
+        <div class="pd-check">${done ? '✓' : ''}</div>
+      </div>`;
+  });
+  html += '</div>';
+  container.innerHTML = html;
+  updatePlanProgress();
+}
+
+function togglePlanDay(day) {
+  const saved = JSON.parse(localStorage.getItem('ng_plan_done') || '{}');
+  saved[day] = !saved[day];
+  localStorage.setItem('ng_plan_done', JSON.stringify(saved));
+  const el = document.getElementById('pd-' + day);
+  el.classList.toggle('done', !!saved[day]);
+  el.querySelector('.pd-check').textContent = saved[day] ? '✓' : '';
+  updatePlanProgress();
+}
+
+function updatePlanProgress() {
+  const saved = JSON.parse(localStorage.getItem('ng_plan_done') || '{}');
+  const done = Object.values(saved).filter(Boolean).length;
+  const pct = Math.round((done / 15) * 100);
+  const bar = document.getElementById('plan-bar');
+  const pctEl = document.getElementById('plan-pct');
+  if (bar) bar.style.width = pct + '%';
+  if (pctEl) pctEl.textContent = done + ' / 15 days complete';
+}
+</script>
 </body>
 </html>
