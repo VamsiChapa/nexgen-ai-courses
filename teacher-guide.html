@@ -1481,9 +1481,23 @@ print(f"Your grade: {grade}")</div>
 </div><!-- /#tg-content -->
 
 <script>
-// Credentials injected at build time — see inject_creds.py
-var TG_USERS  = (function(){ try { return JSON.parse(atob('%%USERS_B64%%')); } catch(e){ return {}; } })();
-var TG_MASTER = '%%MASTER_B64%%';
+// CI-injected credentials (%%PLACEHOLDERS%% replaced by inject_creds.py).
+// Fallback to hardcoded credentials when injection has not run.
+var TG_USERS = (function () {
+  var ub = '%%USERS_B64%%';
+  if (ub.indexOf('%%') === -1) {
+    try { return JSON.parse(atob(ub)); } catch (e) {}
+  }
+  var u = {};
+  u[btoa('nexgen')]   = btoa('Train@2024');
+  u[btoa('trainer1')] = btoa('NexGen@001');
+  u[btoa('vamsi')]    = btoa('Admin@NexGen2024');
+  return u;
+})();
+var TG_MASTER = (function () {
+  var mb = '%%MASTER_B64%%';
+  return mb.indexOf('%%') === -1 ? mb : btoa('NXGN@Master24');
+})();
 
 function tgLogin() {
   const u = document.getElementById('tg-user').value.trim();

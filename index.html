@@ -687,10 +687,25 @@
 
 <script>
 // ── AUTH ──
-// Credentials are injected at build time by GitHub Actions (inject_creds.py).
-// The source file only contains %%PLACEHOLDER%% strings — no real passwords in git.
-var USERS  = (function(){ try { return JSON.parse(atob('%%USERS_B64%%')); } catch(e){ return {}; } })();
-var MASTER = '%%MASTER_B64%%';
+// When GitHub Actions runs inject_creds.py, the %%PLACEHOLDERS%% below are replaced
+// with base64-encoded credentials from repository secrets.
+// Until then (or for local use), the fallback block provides working credentials.
+var USERS = (function () {
+  var ub = '%%USERS_B64%%';
+  if (ub.indexOf('%%') === -1) {            // injected by CI — use it
+    try { return JSON.parse(atob(ub)); } catch (e) {}
+  }
+  // Fallback: hardcoded credentials (active when CI injection has not run)
+  var u = {};
+  u[btoa('nexgen')]   = btoa('Train@2024');
+  u[btoa('trainer1')] = btoa('NexGen@001');
+  u[btoa('vamsi')]    = btoa('Admin@NexGen2024');
+  return u;
+})();
+var MASTER = (function () {
+  var mb = '%%MASTER_B64%%';
+  return mb.indexOf('%%') === -1 ? mb : btoa('NXGN@Master24');
+})();
 
 function tryLogin() {
   var uEl = document.getElementById('auth-user');
