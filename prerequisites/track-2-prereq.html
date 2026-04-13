@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track 2 Prerequisites – NexGen Computers AI Course</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #7C3AED;
+    --primary-light: #A78BFA;
+    --primary-dark: #5B21B6;
+    --accent: #F59E0B;
+    --accent-light: #FCD34D;
+    --accent-dark: #D97706;
+    --bg: #0A0F1E;
+    --bg-card: #111827;
+    --bg-sidebar: #0D1020;
+    --bg-elevated: #1A1F35;
+    --border: #1E293B;
+    --border-light: #2D3550;
+    --text-primary: #F1F5F9;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    --success: #10B981;
+    --success-bg: #064E3B;
+    --code-bg: #0D1117;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .site-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-shrink: 0;
+  }
+
+  .logo-block { display: flex; align-items: center; gap: 12px; }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 800; color: #fff;
+    letter-spacing: -1px;
+  }
+  .logo-text { display: flex; flex-direction: column; }
+  .logo-name { font-size: 15px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+  .logo-sub  { font-size: 11px; color: var(--accent); font-weight: 500; margin-top: 2px; letter-spacing: 0.5px; }
+
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .back-link {
+    display: flex; align-items: center; gap: 6px;
+    color: var(--text-secondary); text-decoration: none;
+    font-size: 13px; font-weight: 500;
+    padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px;
+    transition: all 0.2s;
+  }
+  .back-link:hover { color: var(--text-primary); border-color: var(--border-light); background: var(--bg-elevated); }
+  .track-badge {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: #fff; font-size: 11px; font-weight: 700;
+    padding: 4px 10px; border-radius: 20px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+
+  .app-body { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 64px); }
+
+  .sidebar {
+    width: 280px; background: var(--bg-sidebar);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0;
+  }
+  .sidebar-header { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+  .sidebar-title { font-size: 13px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .progress-bar-wrap { background: var(--bg-elevated); border-radius: 4px; height: 6px; overflow: hidden; margin-bottom: 8px; }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    border-radius: 4px; transition: width 0.5s ease; width: 0%;
+  }
+  .progress-text { font-size: 12px; color: var(--text-secondary); }
+  .progress-text span { color: var(--accent); font-weight: 600; }
+  .sidebar-nav { flex: 1; overflow-y: auto; padding: 12px; }
+  .sidebar-nav::-webkit-scrollbar { width: 4px; }
+  .sidebar-nav::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 2px; }
+
+  .day-btn {
+    width: 100%; display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border: none; background: transparent;
+    color: var(--text-secondary); cursor: pointer; border-radius: 8px;
+    font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500;
+    text-align: left; transition: all 0.2s; margin-bottom: 3px;
+  }
+  .day-btn:hover { background: var(--bg-elevated); color: var(--text-primary); }
+  .day-btn.active { background: rgba(124,58,237,0.18); color: var(--primary-light); border: 1px solid rgba(124,58,237,0.3); }
+  .day-btn.completed { color: var(--success); }
+  .day-check {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid var(--border-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex-shrink: 0; transition: all 0.2s;
+  }
+  .day-check.done { background: var(--success); border-color: var(--success); color: #fff; }
+  .day-label { flex: 1; line-height: 1.3; }
+  .day-num { font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 1px; }
+  .sidebar-footer { padding: 16px; border-top: 1px solid var(--border); }
+  .btn-course {
+    display: block; width: 100%; text-align: center;
+    padding: 11px 16px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: #fff; font-weight: 700; font-size: 13px;
+    border-radius: 8px; text-decoration: none;
+    transition: opacity 0.2s, transform 0.1s;
+    pointer-events: none; opacity: 0.35;
+  }
+  .btn-course.unlocked { pointer-events: auto; opacity: 1; }
+  .btn-course.unlocked:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .main-content { flex: 1; overflow-y: auto; padding: 40px 48px; }
+  .main-content::-webkit-scrollbar { width: 6px; }
+  .main-content::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+  .day-panel { display: none; max-width: 820px; }
+  .day-panel.active { display: block; }
+
+  .day-header { margin-bottom: 32px; }
+  .day-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.35);
+    color: var(--primary-light); font-size: 11px; font-weight: 700;
+    padding: 4px 12px; border-radius: 20px; margin-bottom: 14px;
+    text-transform: uppercase; letter-spacing: 0.8px;
+  }
+  .day-title { font-size: 28px; font-weight: 800; color: var(--text-primary); line-height: 1.2; margin-bottom: 10px; }
+  .day-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.7; max-width: 680px; }
+
+  .section { margin-bottom: 32px; }
+  .section-title {
+    font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--accent); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .content-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 22px 24px; margin-bottom: 14px;
+  }
+  .content-card h3 { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; }
+  .content-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 10px; }
+  .content-card p:last-child { margin-bottom: 0; }
+  .content-card ul, .content-card ol { padding-left: 18px; margin-bottom: 10px; }
+  .content-card li { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 4px; }
+  .content-card li strong { color: var(--text-primary); }
+
+  .highlight-box {
+    background: rgba(245,158,11,0.07); border: 1px solid rgba(245,158,11,0.2);
+    border-left: 3px solid var(--accent); border-radius: 8px;
+    padding: 14px 18px; margin: 14px 0;
+  }
+  .highlight-box p { font-size: 13.5px; color: var(--text-secondary); margin: 0; }
+  .highlight-box strong { color: var(--accent); }
+
+  .info-box {
+    background: rgba(124,58,237,0.07); border: 1px solid rgba(124,58,237,0.2);
+    border-left: 3px solid var(--primary-light); border-radius: 8px;
+    padding: 14px 18px; margin: 14px 0;
+  }
+  .info-box p { font-size: 13.5px; color: var(--text-secondary); margin: 0; }
+  .info-box strong { color: var(--primary-light); }
+
+  .resource-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 600px) { .resource-grid { grid-template-columns: 1fr; } }
+  .resource-card {
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .resource-icon {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: rgba(124,58,237,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .resource-body { flex: 1; min-width: 0; }
+  .resource-label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+  .resource-text { font-size: 13px; color: var(--text-primary); font-weight: 500; line-height: 1.4; }
+  .resource-hint { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+
+  .code-block { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 14px 0; }
+  .code-header {
+    background: var(--bg-elevated); padding: 8px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+  }
+  .code-lang { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .code-dots { display: flex; gap: 6px; }
+  .code-dots span { width: 10px; height: 10px; border-radius: 50%; }
+  .code-dots span:nth-child(1) { background: #FF5F57; }
+  .code-dots span:nth-child(2) { background: #FEBC2E; }
+  .code-dots span:nth-child(3) { background: #28C840; }
+  .code-body {
+    padding: 18px 20px; font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; line-height: 1.8; color: #E2E8F0; overflow-x: auto;
+  }
+  .code-body .comment { color: #6B7280; }
+  .code-body .keyword { color: #C084FC; }
+  .code-body .string  { color: #86EFAC; }
+  .code-body .func    { color: #60A5FA; }
+  .code-body .num     { color: #FB923C; }
+  .code-body .cls     { color: #FCD34D; }
+
+  .exercise-box {
+    background: rgba(124,58,237,0.08); border: 1px solid rgba(124,58,237,0.25);
+    border-radius: 12px; padding: 20px 22px;
+  }
+  .exercise-box h3 { font-size: 14px; font-weight: 700; color: var(--primary-light); margin-bottom: 10px; }
+  .exercise-box ul { padding-left: 18px; }
+  .exercise-box li { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 6px; }
+
+  .quiz-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  @media (max-width: 600px) { .quiz-grid { grid-template-columns: 1fr; } }
+  .quiz-item {
+    background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px 14px; font-size: 13px; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace;
+  }
+  .quiz-item strong { color: var(--accent); display: block; margin-bottom: 4px; font-size: 11px; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .complete-bar { margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
+  .btn-complete {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: #fff; font-weight: 700; font-size: 14px;
+    border: none; border-radius: 8px; cursor: pointer;
+    font-family: 'Inter', sans-serif; transition: opacity 0.2s, transform 0.1s;
+  }
+  .btn-complete:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-complete:disabled { background: var(--bg-elevated); color: var(--text-muted); cursor: default; transform: none; opacity: 1; }
+  .complete-msg { display: none; align-items: center; gap: 8px; color: var(--success); font-size: 14px; font-weight: 600; }
+  .complete-msg.show { display: flex; }
+
+  .welcome-panel { max-width: 600px; padding: 60px 0; }
+  .welcome-panel h1 { font-size: 36px; font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
+  .welcome-panel h1 span { background: linear-gradient(135deg, var(--primary-light), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .welcome-panel p { font-size: 16px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 12px; }
+  .start-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 28px; margin-top: 20px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: #fff; font-weight: 700; font-size: 15px;
+    border: none; border-radius: 8px; cursor: pointer;
+    font-family: 'Inter', sans-serif; transition: opacity 0.2s, transform 0.1s;
+  }
+  .start-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .celebration {
+    background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(124,58,237,0.1));
+    border: 1px solid rgba(16,185,129,0.3);
+    border-radius: 12px; padding: 22px 24px; text-align: center; margin-top: 14px;
+  }
+  .celebration h3 { font-size: 18px; font-weight: 800; color: var(--success); margin-bottom: 8px; }
+  .celebration p { font-size: 14px; color: var(--text-secondary); }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0; }
+  .stat-card {
+    background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px; text-align: center;
+  }
+  .stat-val { font-size: 22px; font-weight: 800; color: var(--accent); }
+  .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+  tag { display: inline; background: rgba(245,158,11,0.12); color: var(--accent-light); font-family: 'JetBrains Mono', monospace; font-size: 12.5px; padding: 1px 6px; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo-block">
+    <div class="logo-icon">N</div>
+    <div class="logo-text">
+      <span class="logo-name">NexGen Computers</span>
+      <span class="logo-sub">AI Course Platform</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <span class="track-badge">Track 2 — Intermediate</span>
+    <a href="../index.html" class="back-link">&#8592; Back to Home</a>
+  </div>
+</header>
+
+<div class="app-body">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Prerequisites</div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
+      <div class="progress-text"><span id="progressCount">0</span> / 7 days complete</div>
+    </div>
+    <nav class="sidebar-nav" id="sidebarNav"></nav>
+    <div class="sidebar-footer">
+      <a href="../track-2/index.html" class="btn-course" id="courseBtn">Start the ML Course &#8594;</a>
+    </div>
+  </aside>
+
+  <main class="main-content" id="mainContent">
+
+    <div id="welcome" class="welcome-panel">
+      <h1>Before You Begin:<br><span>Intermediate Track</span><br>Prerequisites</h1>
+      <p>This 7-day module confirms you have the Python foundations, mathematical intuition, and tooling needed to succeed in the machine learning track.</p>
+      <p>If you've written Python before but haven't touched data science libraries or version control, this is the right place to start. Work through each day, mark it complete, and unlock the main course.</p>
+      <button class="start-btn" onclick="showDay(0)">Begin Day P1 &#8594;</button>
+    </div>
+
+    <!-- Day 1 -->
+    <div class="day-panel" id="day-0">
+      <div class="day-header">
+        <div class="day-pill">Day P1</div>
+        <h2 class="day-title">Python Readiness Check</h2>
+        <p class="day-desc">Before learning machine learning, you need solid Python fundamentals. Today you self-assess your current level, identify gaps, and fill them before moving on.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">What You Need to Know</div>
+        <div class="content-card">
+          <h3>The Minimum Python Baseline</h3>
+          <p>The intermediate ML track assumes you can write Python without struggling with syntax. Here's what "ready" looks like — read through each item honestly:</p>
+          <ul>
+            <li><strong>Data types</strong> — integers, floats, strings, booleans, lists, tuples, dictionaries, sets. You know the difference and when to use each.</li>
+            <li><strong>Control flow</strong> — if/elif/else, for loops, while loops, break/continue. You can write nested loops without confusion.</li>
+            <li><strong>Functions</strong> — you can define functions, use parameters and return values, understand scope (local vs global), and write simple recursive functions.</li>
+            <li><strong>Basic OOP</strong> — you understand what a class is, can create objects, use <tag>__init__</tag>, and call methods on instances. You don't need advanced OOP — just the basics.</li>
+            <li><strong>List comprehensions</strong> — <tag>[x*2 for x in range(10) if x % 2 == 0]</tag> should make sense to you.</li>
+            <li><strong>File I/O</strong> — you can open a file, read its contents, and write to it using a <tag>with</tag> statement.</li>
+          </ul>
+        </div>
+
+        <div class="content-card">
+          <h3>Quick Python Refresher — Fill In Your Gaps</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="code-dots"><span></span><span></span><span></span></div>
+              <div class="code-lang">Python — Intermediate Baseline Review</div>
+            </div>
+            <div class="code-body">
+<span class="comment"># ── Data Types ──────────────────────────────────────────</span>
+numbers   = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>]
+scores    = {<span class="string">"Alice"</span>: <span class="num">92</span>, <span class="string">"Bob"</span>: <span class="num">78</span>, <span class="string">"Carol"</span>: <span class="num">88</span>}
+unique    = {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">2</span>, <span class="num">1</span>}  <span class="comment"># sets remove duplicates: {1, 2, 3}</span>
+
+<span class="comment"># ── List Comprehension ───────────────────────────────────</span>
+evens = [x <span class="keyword">for</span> x <span class="keyword">in</span> numbers <span class="keyword">if</span> x % <span class="num">2</span> == <span class="num">0</span>]  <span class="comment"># [2, 4]</span>
+squared = [x**<span class="num">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> numbers]            <span class="comment"># [1, 4, 9, 16, 25]</span>
+
+<span class="comment"># ── Functions with default arguments ────────────────────</span>
+<span class="keyword">def</span> <span class="func">describe_score</span>(name, score, passing=<span class="num">70</span>):
+    status = <span class="string">"pass"</span> <span class="keyword">if</span> score >= passing <span class="keyword">else</span> <span class="string">"fail"</span>
+    <span class="keyword">return</span> <span class="string">f"{name}: {score} ({status})"</span>
+
+<span class="func">print</span>(<span class="func">describe_score</span>(<span class="string">"Alice"</span>, <span class="num">92</span>))   <span class="comment"># Alice: 92 (pass)</span>
+<span class="func">print</span>(<span class="func">describe_score</span>(<span class="string">"Bob"</span>, <span class="num">65</span>))     <span class="comment"># Bob: 65 (fail)</span>
+
+<span class="comment"># ── Basic OOP ────────────────────────────────────────────</span>
+<span class="keyword">class</span> <span class="cls">Student</span>:
+    <span class="keyword">def</span> <span class="func">__init__</span>(self, name, grade):
+        self.name  = name
+        self.grade = grade
+
+    <span class="keyword">def</span> <span class="func">is_passing</span>(self):
+        <span class="keyword">return</span> self.grade >= <span class="num">70</span>
+
+alice = <span class="cls">Student</span>(<span class="string">"Alice"</span>, <span class="num">92</span>)
+<span class="func">print</span>(alice.is_passing())  <span class="comment"># True</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Self-Assessment Challenges</div>
+        <div class="content-card">
+          <h3>10 Python Challenges — Score Yourself</h3>
+          <p>Complete these in Colab or your editor. Aim for 7+ before moving on. If you score lower, spend extra time today revisiting the concepts you struggled with.</p>
+          <div class="quiz-grid">
+            <div class="quiz-item"><strong>Challenge 1</strong>Write a function that returns the factorial of n using recursion</div>
+            <div class="quiz-item"><strong>Challenge 2</strong>Given a list of numbers, return a new list with only the prime numbers</div>
+            <div class="quiz-item"><strong>Challenge 3</strong>Write a class called <tag>BankAccount</tag> with deposit, withdraw, and balance methods</div>
+            <div class="quiz-item"><strong>Challenge 4</strong>Use a dictionary comprehension to invert a dictionary (swap keys and values)</div>
+            <div class="quiz-item"><strong>Challenge 5</strong>Read a text file and count the frequency of each word</div>
+            <div class="quiz-item"><strong>Challenge 6</strong>Write a function that flattens a nested list: <tag>[[1,2],[3,[4,5]]]</tag> → <tag>[1,2,3,4,5]</tag></div>
+            <div class="quiz-item"><strong>Challenge 7</strong>Use <tag>*args</tag> and <tag>**kwargs</tag> in a function — explain what they do</div>
+            <div class="quiz-item"><strong>Challenge 8</strong>Implement bubble sort from scratch (no using sort())</div>
+            <div class="quiz-item"><strong>Challenge 9</strong>Use a <tag>lambda</tag> to sort a list of tuples by the second element</div>
+            <div class="quiz-item"><strong>Challenge 10</strong>Handle a ZeroDivisionError and a FileNotFoundError with try/except</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Resources</div>
+        <div class="resource-grid">
+          <div class="resource-card">
+            <div class="resource-icon">&#128218;</div>
+            <div class="resource-body">
+              <div class="resource-label">Search</div>
+              <div class="resource-text">Python refresher intermediate tutorial</div>
+              <div class="resource-hint">Real Python has an excellent intermediate series</div>
+            </div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-icon">&#9201;</div>
+            <div class="resource-body">
+              <div class="resource-label">Search</div>
+              <div class="resource-text">Python review 30 minutes freeCodeCamp</div>
+              <div class="resource-hint">Dense, fast review if you just need a refresher</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="complete-bar">
+        <button class="btn-complete" id="complete-0" onclick="markComplete(0)">&#10003; Mark Day P1 Complete</button>
+        <div class="complete-msg" id="msg-0">&#10003; Day P1 complete — Python confirmed!</div>
+      </div>
+    </div>
+
+    <!-- Day 2 -->
+    <div class="day-panel" id="day-1">
+      <div class="day-header">
+        <div class="day-pill">Day P2</div>
+        <h2 class="day-title">Mathematics for Data Science</h2>
+        <p class="day-desc">Machine learning is applied mathematics. You don't need to be a mathematician, but you do need to understand what the maths is doing — at a conceptual level. Today builds that foundation.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Statistics Fundamentals</div>
+        <div class="content-card">
+          <h3>Descriptive Statistics</h3>
+          <p>Before building models, you need to describe and understand your data. These are the tools:</p>
+          <ul>
+            <li><strong>Mean</strong> — average value. Sensitive to outliers. If your dataset is <tag>[1, 2, 3, 4, 100]</tag>, the mean is 22 — not representative of most values.</li>
+            <li><strong>Median</strong> — the middle value when sorted. Robust to outliers. For the same dataset: median is 3.</li>
+            <li><strong>Mode</strong> — the most frequent value. Useful for categorical data.</li>
+            <li><strong>Variance</strong> — average of squared differences from the mean. Measures how spread out values are.</li>
+            <li><strong>Standard Deviation</strong> — square root of variance. Same unit as your data. A low std dev means data is clustered near the mean; high means it's spread out.</li>
+            <li><strong>Percentiles</strong> — the p-th percentile is the value below which p% of data falls. The 50th percentile is the median. Used in ML to understand data distribution.</li>
+          </ul>
+          <div class="highlight-box">
+            <p><strong>Practical rule:</strong> always look at mean, median, and std dev together. If mean and median are very different, your data likely has outliers or a skewed distribution — which will affect your model.</p>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3>Probability Basics</h3>
+          <p>Probability is the language of uncertainty, and ML models output probabilities constantly. Core concepts:</p>
+          <ul>
+            <li><strong>Probability P(A)</strong> — a number between 0 and 1 expressing how likely event A is. P=0 means impossible, P=1 means certain.</li>
+            <li><strong>Conditional Probability P(A|B)</strong> — probability of A given that B has occurred. A spam filter computes P(spam | "buy now" in email).</li>
+            <li><strong>Independence</strong> — A and B are independent if knowing B tells you nothing about A. This assumption underlies Naive Bayes classifiers.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Linear Algebra Intuition</div>
+        <div class="content-card">
+          <h3>Vectors and Matrices</h3>
+          <p>Virtually all ML operations reduce to linear algebra. A <strong>vector</strong> is just a list of numbers (a row or column). A <strong>matrix</strong> is a 2D grid of numbers — like a spreadsheet.</p>
+          <p>In ML: a dataset with 1000 rows and 20 features is a matrix of shape (1000, 20). Each row is a data point. Each column is a feature. Your model parameters are also vectors and matrices.</p>
+          <p>The <strong>dot product</strong> of two vectors multiplies corresponding elements and sums them. It measures how "aligned" two vectors are — core to neural network forward passes.</p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="code-dots"><span></span><span></span><span></span></div>
+              <div class="code-lang">Python — Linear Algebra with NumPy</div>
+            </div>
+            <div class="code-body">
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+a = np.<span class="func">array</span>([<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>])
+b = np.<span class="func">array</span>([<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>])
+
+<span class="comment"># Dot product: 1*4 + 2*5 + 3*6 = 4+10+18 = 32</span>
+<span class="func">print</span>(np.<span class="func">dot</span>(a, b))   <span class="comment"># 32</span>
+
+<span class="comment"># Matrix multiplication</span>
+A = np.<span class="func">array</span>([[<span class="num">1</span>, <span class="num">2</span>], [<span class="num">3</span>, <span class="num">4</span>]])
+B = np.<span class="func">array</span>([[<span class="num">5</span>, <span class="num">6</span>], [<span class="num">7</span>, <span class="num">8</span>]])
+<span class="func">print</span>(A @ B)  <span class="comment"># [[19, 22], [43, 50]]</span>
+
+<span class="comment"># Statistics with NumPy</span>
+data = np.<span class="func">array</span>([<span class="num">4</span>, <span class="num">7</span>, <span class="num">13</span>, <span class="num">2</span>, <span class="num">1</span>, <span class="num">8</span>])
+<span class="func">print</span>(<span class="string">f"Mean:   {np.mean(data):.2f}"</span>)
+<span class="func">print</span>(<span class="string">f"Std:    {np.std(data):.2f}"</span>)
+<span class="func">print</span>(<span class="string">f"Median: {np.median(data):.2f}"</span>)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Calculus Intuition</div>
+        <div class="content-card">
+          <h3>Derivatives = Slope = Rate of Change</h3>
+          <p>You don't need to calculate derivatives by hand. You need to understand what a derivative <em>means</em>: the derivative of a function at a point tells you the slope of the function there — how fast it's changing, and in which direction.</p>
+          <p>This matters because <strong>gradient descent</strong> — the algorithm that trains virtually all ML models — uses derivatives to find the direction in which to adjust model parameters in order to reduce error. The derivative tells the model "if you increase this parameter slightly, does the error go up or down?"</p>
+          <div class="highlight-box">
+            <p><strong>Key intuition:</strong> if the derivative (slope) is positive, the function is going up — decrease the parameter to lower error. If it's negative, the function is going down — increase the parameter. Gradient descent follows the slope downhill.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Resources</div>
+        <div class="resource-grid">
+          <div class="resource-card">
+            <div class="resource-icon">&#128200;</div>
+            <div class="resource-body">
+              <div class="resource-label">Search</div>
+              <div class="resource-text">Statistics for data science Khan Academy</div>
+              <div class="resource-hint">Free, thorough, and well-paced</div>
+            </div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-icon">&#128291;</div>
+            <div class="resource-body">
+              <div class="resource-label">Search</div>
+              <div class="resource-text">Linear algebra for ML 3Blue1Brown</div>
+              <div class="resource-hint">"Essence of Linear Algebra" — visual and outstanding</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Today's Exercise</div>
+        <div class="exercise-box">
+          <h3>&#9997; Exercise: Statistics from Scratch and Python</h3>
+          <ul>
+            <li>Take this dataset: <tag>[14, 18, 11, 13, 6, 8, 2, 14, 9, 17]</tag></li>
+            <li>Calculate mean, median, mode, variance, and standard deviation <strong>by hand first</strong> — show your work.</li>
+            <li>Then verify with Python using NumPy: <tag>np.mean()</tag>, <tag>np.median()</tag>, <tag>np.std()</tag>, <tag>np.var()</tag>.</li>
+            <li>Create a 2x3 matrix and a 3x2 matrix in NumPy. Multiply them. What is the shape of the result? Why?</li>
+            <li>Plot the dataset as a histogram using matplotlib: <tag>import matplotlib.pyplot as plt</tag>, <tag>plt.hist(data)</tag>, <tag>plt.show()</tag>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="complete-bar">
+        <button class="btn-complete" id="complete-1" onclick="markComplete(1)">&#10003; Mark Day P2 Complete</button>
+        <div class="complete-msg" id="msg-1">&#10003; Day P2 complete — maths foundation solid!</div>
+      </div>
+    </div>
+
+    <!-- Day 3 -->
+    <div class="day-panel" id="day-2">
+      <div class="day-header">
+        <div class="day-pill">Day P3</div>
+        <h2 class="day-title">Data Science Tools Setup</h2>
+        <p class="day-desc">Data science has a standard toolkit. Today you set it up completely and learn how to work with it efficiently — specifically in Google Colab, which you'll use throughout the course.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Google Colab for Data Science</div>
+        <div class="content-card">
+          <h3>GPU Runtime — Free and Critical</h3>
+          <p>For the ML track, you need GPU acceleration. In Colab: go to <strong>Runtime → Change runtime type → Hardware accelerator → T4 GPU</strong>. This gives you a free GPU for running ML models. Without it, training that takes 1 minute would take 30+ minutes on CPU.</p>
+          <p>GPU hours are limited per day on the free tier. Don't waste them — only enable GPU when you're actually training models, not while writing code or exploring data.</p>
+        </div>
+
+        <div class="content-card">
+          <h3>Jupyter Notebook Best Practices</h3>
+          <ul>
+            <li><strong>Restart and Run All</strong> before submitting any notebook. This confirms your notebook runs top-to-bottom without errors. Hidden state from running cells out of order is the #1 source of notebook bugs.</li>
+            <li><strong>Use Markdown cells</strong> to document your thinking. Each major section should have a text cell explaining what it does and why.</li>
+            <li><strong>Keep cells short</strong>. One concept per cell. Long cells are hard to debug.</li>
+            <li><strong>Name your variables clearly</strong>. <tag>X_train</tag>, <tag>y_test</tag>, <tag>model</tag> are better than <tag>a</tag>, <tag>b</tag>, <tag>c</tag>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">The Core Data Science Stack</div>
+        <div class="content-card">
+          <h3>Libraries You Must Know</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="code-dots"><span></span><span></span><span></span></div>
+              <div class="code-lang">Python — Install & Import Verification</div>
+            </div>
+            <div class="code-body">
+<span class="comment"># In Colab, most are pre-installed. Verify with:</span>
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np           <span class="comment"># numerical computing, arrays</span>
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd          <span class="comment"># dataframes, data manipulation</span>
+<span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt  <span class="comment"># plotting and visualisation</span>
+<span class="keyword">import</span> seaborn <span class="keyword">as</span> sns         <span class="comment"># statistical visualisation</span>
+<span class="keyword">import</span> sklearn                <span class="comment"># machine learning algorithms</span>
+
+<span class="comment"># If any are missing, install in Colab with:</span>
+<span class="comment"># !pip install seaborn scikit-learn</span>
+
+<span class="comment"># Verify versions</span>
+<span class="func">print</span>(<span class="string">f"NumPy:   {np.__version__}"</span>)
+<span class="func">print</span>(<span class="string">f"Pandas:  {pd.__version__}"</span>)
+<span class="func">print</span>(<span class="string">f"Sklearn: {sklearn.__version__}"</span>)</div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3>Pandas Fundamentals</h3>
+          <p>Pandas is the core tool for working with tabular data in Python. A <strong>DataFrame</strong> is a 2D table with labelled rows and columns — like a spreadsheet you can program.</p>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="code-dots"><span></span><span></span><span></span></div>
+              <div class="code-lang">Python — Pandas Essentials</div>
+            </div>
+            <div class="code-body">
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># Create a DataFrame</span>
+df = pd.<span class="cls">DataFrame</span>({
+    <span class="string">'name'</span>:  [<span class="string">'Alice'</span>, <span class="string">'Bob'</span>, <span class="string">'Carol'</span>],
+    <span class="string">'score'</span>: [<span class="num">92</span>, <span class="num">78</span>, <span class="num">88</span>],
+    <span class="string">'grade'</span>: [<span class="string">'A'</span>, <span class="string">'C'</span>, <span class="string">'B'</span>]
+})
+
+df.<span class="func">head</span>()            <span class="comment"># view first 5 rows</span>
+df.<span class="func">info</span>()            <span class="comment"># column types and null counts</span>
+df.<span class="func">describe</span>()        <span class="comment"># statistical summary</span>
+df[<span class="string">'score'</span>].<span class="func">mean</span>()   <span class="comment"># average score: 86</span>
+
+<span class="comment"># Filtering</span>
+high_scores = df[df[<span class="string">'score'</span>] >= <span class="num">85</span>]</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Resources</div>
+        <div class="resource-grid">
+          <div class="resource-card">
+            <div class="resource-icon">&#9889;</div>
+            <div class="resource-body">
+              <div class="resource-label">Search</div>
+              <div class="resource-text">Google Colab for data science tutorial</div>
+              <div class="resource-hint">Official Colab notebooks cover the core features</div>
+            </div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-icon">&#128200;</div>
+            <div class="resource-body">
+              <div class="resource-label">Search</div>
+              <div class="resource-text">Pandas tutorial beginners 10 minutes</div>
+              <div class="resource-hint">Pandas official "10 Minutes to Pandas" doc is excellent</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Today's Exercise</div>
+        <div class="exercise-box">
+          <h3>&#9997; Exercise: Full Stack Setup Verification</h3>
+          <ul>
+            <li>Open a new Colab notebook, switch to GPU runtime, and import all five libraries above. Run the version check and confirm no errors.</li>
+            <li>Create a DataFrame with at least 10 rows and 4 columns of your own data (could be fake). Run <tag>df.info()</tag> and <tag>df.describe()</tag>.</li>
+            <li>Plot a histogram and a scatter plot of two columns using matplotlib.</li>
+            <li>Save the notebook to your Google Drive, then share it (view-only link). You'll push this to GitHub tomorrow.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="complete-bar">
+        <button class="btn-complete" id="complete-2" onclick="markComplete(2)">&#10003; Mark Day P3 Complete</button>
+        <div class="complete-msg" id="msg-2">&#10003; Day P3 complete — tools configured!</div>
+      </div>
+    </div>
+
+    <!-- Day 4 -->
+    <div class="day-panel" id="day-3">
+      <div class="day-header">
+        <div class="day-pill">Day P4</div>
+        <h2 class="day-title">Git & GitHub Basics</h2>
+        <p class="day-desc">Version control is non-negotiable for any serious developer. Git tracks changes to your code over time. GitHub hosts your code online and becomes your professional portfolio.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Why Version Control Matters</div>
+        <div class="content-card">
+          <p>Without version control, you'd make a change, break something, and have no way to get back to the working version. With Git, every state of your code is saved — you can jump back to any point in history, experiment on branches without affecting your main code, and collaborate with others without overwriting each other's work.</p>
+          <div class="info-box">
+            <p><strong>Real scenario:</strong> you're training a model, change the architecture, and performance drops. With Git, you can run <tag>git checkout previous-commit</tag> and instantly restore the version that worked. This is not optional — this is how professionals work.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Core Git Concepts</div>
+        <div class="content-card">
+          <h3>The Mental Model</h3>
+          <ul>
+            <li><strong>Repository (repo)</strong> — a folder tracked by Git. Contains all your files and their complete history.</li>
+            <li><strong>Commit</strong> — a snapshot of your files at a specific point in time. Each commit has a message describing what changed and why.</li>
+            <li><strong>Branch</strong> — an independent line of development. The default branch is <tag>main</tag>. Create a branch to work on a feature without touching <tag>main</tag>.</li>
+            <li><strong>Merge</strong> — combining changes from one branch into another. When your feature is done, you merge it back to <tag>main</tag>.</li>
+            <li><strong>Remote</strong> — a version of your repo hosted online (e.g., on GitHub). You push local commits to remote, pull remote changes to local.</li>
+          </ul>
+        </div>
+
+        <div class="content-card">
+          <h3>Essential Commands</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="code-dots"><span></span><span></span><span></span></div>
+              <div class="code-lang">Terminal — Git Commands</div>
+            </div>
+            <div class="code-body">
+<span class="comment"># Start tracking a folder</span>
+git init
+
+<span class="comment"># Check what's changed</span>
+git status
+
+<span class="comment"># Stage files for commit (. means all files)</span>
+git add .
+git add specific-file.py   <span class="comment"># or add just one file</span>
+
+<span class="comment"># Save a snapshot with a descriptive message</span>
+git commit -m "Add data loading and preprocessing pipeline"
+
+<span class="comment"># Connect to GitHub and push</span>
+git remote add origin https://github.com/yourusername/repo-name.git
+git push -u origin main
+
+<span class="comment"># Get latest changes from GitHub</span>
+git pull
+
+<span class="comment"># See full commit history</span>
+git log --oneline
+
+<span class="comment"># Create and switch to a new branch</span>
+git checkout -b feature/new-model-architecture</div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3>Writing Good Commit Messages</h3>
+          <p>A commit message should complete the sentence "This commit will...". Bad: <tag>fixed stuff</tag>. Good: <tag>Fix null handling in data preprocessing pipeline</tag>. Your future self will thank you.</p>
+          <ul>
+            <li>Keep the first line under 72 characters</li>
+            <li>Use imperative mood: "Add", "Fix", "Update", "Remove" — not "Added" or "Fixed"</li>
+            <li>Reference what changed and why, not what the code does</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Resources</div>
+        <div class="resource-grid">
+          <div class="resource-card">
+            <div class="resource-icon">&#128196;</div>
+            <div class="resource-body">
+              <div class="resource-label">Search</div>
+              <div class="resource-text">Git GitHub tutorial for beginners</div>
+              <div class="resource-hint">Traversy Media has an excellent 1-hour walkthrough</div>
+            </div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-icon">&#9881;</div>
+            <div class="resource-body">
+              <div class="resource-label">Search</div>
+              <div class="resource-text">Git crash course freeCodeCamp</div>
+              <div class="resource-hint">Comprehensive video covering all the essentials</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Today's Exercise</div>
+        <div class="exercise-box">
+          <h3>&#9997; Exercise: Your First GitHub Repository</h3>
+          <ul>
+            <li>Go to github.com → New Repository. Name it <tag>nexgen-ml-prereqs</tag>. Make it public. Add a README.</li>
+            <li>Clone it to your machine: <tag>git clone https://github.com/yourusername/nexgen-ml-prereqs.git</tag></li>
+            <li>Add your Day P3 notebook (download from Colab as .ipynb) to the folder.</li>
+            <li>Run <tag>git add</tag>, <tag>git commit -m "Add data science tools setup notebook"</tag>, <tag>git push</tag>.</li>
+            <li>Go to github.com and verify your file is there. Copy the URL — this is the start of your portfolio.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="complete-bar">
+        <button class="btn-complete" id="complete-3" onclick="markComplete(3)">&#10003; Mark Day P4 Complete</button>
+        <div class="complete-msg" id="msg-3">&#10003; Day P4 complete — version control active!</div>
+      </div>
+    </div>
+
+    <!-- Day 5 -->
+    <div class="day-panel" id="day-4">
+      <div class="day-header">
+        <div class="day-pill">Day P5</div>
+        <h2 class="day-title">Working with Data Files</h2>
+        <p class="day-desc">Data science starts with data — and data lives in files. Today you master the most common data file formats and learn to read, convert, and write them in Python.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Data File Formats</div>
+        <div class="content-card">
+          <h3>CSV — Comma-Separated Values</h3>
+          <p>The most universal format. A plain text file where each line is a row and columns are separated by commas. Every spreadsheet application and data tool can read CSV. Use it for: small-to-medium datasets that need to be human-readable or shared across tools.</p>
+          <div class="highlight-box">
+            <p><strong>Gotcha:</strong> CSV doesn't store data types. Every value is read as a string by default. You must explicitly convert columns to numbers, dates, or booleans when loading.</p>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3>JSON — JavaScript Object Notation</h3>
+          <p>A text format for structured, nested data. Think dictionaries and lists. APIs almost always return JSON. Use it for: API responses, nested/hierarchical data, configuration files.</p>
+          <p>JSON can express lists within lists, dictionaries within dictionaries — things CSV can't represent without flattening. This makes it more flexible but harder to query as a table.</p>
+        </div>
+
+        <div class="content-card">
+          <h3>Parquet — Columnar Storage for Big Data</h3>
+          <p>Parquet is a binary format designed for performance. Unlike CSV (row-oriented), Parquet stores data column by column. If your query only needs 3 columns out of 100, it only reads those 3. This makes it 10-100x faster for analytical queries on large datasets.</p>
+          <p>Parquet also stores data types natively, compresses extremely well, and is the standard format in Spark, Databricks, and cloud data warehouses. You'll see it frequently in production data pipelines.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Reading Files in Python</div>
+        <div class="content-card">
+          <div class="code-block">
+            <div class="code-header">
+              <div class="code-dots"><span></span><span></span><span></span></div>
+              <div class="code-lang">Python — Reading All Three Formats</div>
+            </div>
+            <div class="code-body">
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+<span class="keyword">import</span> json
+
+<span class="comment"># ── CSV ──────────────────────────────────────────────────</span>
+df_csv = pd.<span class="func">read_csv</span>(<span class="string">'data.csv'</span>)
+<span class="comment"># Force data types on load</span>
+df_csv = pd.<span class="func">read_csv</span>(<span class="string">'data.csv'</span>, dtype={<span class="string">'age'</span>: int, <span class="string">'name'</span>: str})
+<span class="comment"># Handle encoding issues (common with non-English data)</span>
+df_csv = pd.<span class="func">read_csv</span>(<span class="string">'data.csv'</span>, encoding=<span class="string">'utf-8'</span>)
+
+<span class="comment"># ── JSON ─────────────────────────────────────────────────</span>
+<span class="keyword">with</span> <span class="func">open</span>(<span class="string">'data.json'</span>) <span class="keyword">as</span> f:
+    data = json.<span class="func">load</span>(f)          <span class="comment"># Python dict/list</span>
+
+df_json = pd.<span class="func">read_json</span>(<span class="string">'data.json'</span>)  <span class="comment"># for flat JSON arrays</span>
+
+<span class="comment"># ── Parquet ──────────────────────────────────────────────</span>
+<span class="comment"># pip install pyarrow or fastparquet first</span>
+df_parquet = pd.<span class="func">read_parquet</span>(<span class="string">'data.parquet'</span>)
+
+<span class="comment"># ── Conversion ───────────────────────────────────────────</span>
+df_csv.<span class="func">to_json</span>(<span class="string">'output.json'</span>, orient=<span class="string">'records'</span>)
+df_csv.<span class="func">to_parquet</span>(<span class="string">'output.parquet'</span>, compression=<span class="string">'snappy'</span>)
+
+<span class="comment"># ── Chunked reading for large files ──────────────────────</span>
+<span class="keyword">for</span> chunk <span class="keyword">in</span> pd.<span class="func">read_csv</span>(<span class="string">'large_file.csv'</span>, chunksize=<span class="num">10000</span>):
+    <span class="func">process</span>(chunk)  <span class="comment"># process 10,000 rows at a time</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Resources</div>
+        <div class="resource-grid">
+          <div class="resource-card">
+            <div class="resource-icon">&#128194;</div>
+            <div class="resource-body">
+              <div class="resource-label">Search</div>
+              <div class="resource-text">Python reading CSV JSON pandas tutorial</div>
+              <div class="resource-hint">Real Python's data science tutorials cover this thoroughly</div>
+            </div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-icon">&#128736;</div>
+            <div class="resource-body">
+              <div class="resource-label">Search</div>
+              <div class="resource-text">Parquet format explained data engineering</div>
+              <div class="resource-hint">Understanding why columnar storage matters</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Today's Exercise</div>
+        <div class="exercise-box">
+          <h3>&#9997; Exercise: Format Conversion Pipeline</h3>
+          <ul>
+            <li>Download any CSV dataset from <strong>kaggle.com</strong> (search "beginner datasets", they're free). Load it with pandas.</li>
+            <li>Run <tag>df.info()</tag> to see column types. Identify at least one column that loaded as the wrong type and fix it with <tag>df['col'] = df['col'].astype(int)</tag>.</li>
+            <li>Convert the DataFrame to JSON (orient='records') and save it. Reload the JSON file and verify the data is identical.</li>
+            <li>Save the DataFrame as Parquet. Check the file size — compare it to the CSV. Which is smaller?</li>
+            <li>If the CSV is very large, practice chunked reading: process in chunks of 5000 rows, printing the shape of each chunk.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="complete-bar">
+        <button class="btn-complete" id="complete-4" onclick="markComplete(4)">&#10003; Mark Day P5 Complete</button>
+        <div class="complete-msg" id="msg-4">&#10003; Day P5 complete — data handling mastered!</div>
+      </div>
+    </div>
+
+    <!-- Day 6 -->
+    <div class="day-panel" id="day-5">
+      <div class="day-header">
+        <div class="day-pill">Day P6</div>
+        <h2 class="day-title">SQL Basics for Data Scientists</h2>
+        <p class="day-desc">SQL is not just for backend developers. Data scientists use it constantly — to pull training data, explore databases, and join datasets. Today you learn enough SQL to be effective.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Why SQL Matters for ML</div>
+        <div class="content-card">
+          <p>Your training data lives in databases. When you need to pull 500,000 rows for a model, filtering and aggregating in SQL before loading is orders of magnitude faster than loading everything into pandas and filtering in Python. SQL also runs close to the data — no network transfer of unused rows.</p>
+          <p>Additionally, many ML platforms (BigQuery ML, Databricks, Snowflake) let you train models directly with SQL. Knowing SQL opens doors that Python alone doesn't.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Core SQL Syntax</div>
+        <div class="content-card">
+          <div class="code-block">
+            <div class="code-header">
+              <div class="code-dots"><span></span><span></span><span></span></div>
+              <div class="code-lang">SQL — Essential Queries</div>
+            </div>
+            <div class="code-body">
+<span class="comment">-- Basic SELECT</span>
+<span class="keyword">SELECT</span> name, age, score
+<span class="keyword">FROM</span> students
+<span class="keyword">WHERE</span> score > <span class="num">80</span>
+<span class="keyword">ORDER BY</span> score <span class="keyword">DESC</span>
+<span class="keyword">LIMIT</span> <span class="num">10</span>;
+
+<span class="comment">-- Aggregation</span>
+<span class="keyword">SELECT</span>
+    grade,
+    <span class="func">COUNT</span>(*) <span class="keyword">AS</span> student_count,
+    <span class="func">AVG</span>(score) <span class="keyword">AS</span> avg_score,
+    <span class="func">MAX</span>(score) <span class="keyword">AS</span> top_score
+<span class="keyword">FROM</span> students
+<span class="keyword">GROUP BY</span> grade
+<span class="keyword">HAVING</span> <span class="func">AVG</span>(score) > <span class="num">75</span>;
+
+<span class="comment">-- JOIN: combine two tables</span>
+<span class="keyword">SELECT</span> s.name, s.score, c.course_name
+<span class="keyword">FROM</span> students s
+<span class="keyword">JOIN</span> courses c <span class="keyword">ON</span> s.course_id = c.id
+<span class="keyword">WHERE</span> c.category = <span class="string">'AI'</span>;</div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3>SQL in Python</h3>
+          <div class="code-block">
+            <div class="code-header">
+              <div class="code-dots"><span></span><span></span><span></span></div>
+              <div class="code-lang">Python — SQL with sqlite3 and Pandas</div>
+            </div>
+            <div class="code-body">
+<span class="keyword">import</span> sqlite3
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># Connect to a local SQLite database (creates it if missing)</span>
+conn = sqlite3.<span class="func">connect</span>(<span class="string">'students.db'</span>)
+
+<span class="comment"># Write a DataFrame to the database</span>
+df.<span class="func">to_sql</span>(<span class="string">'students'</span>, conn, if_exists=<span class="string">'replace'</span>, index=<span class="keyword">False</span>)
+
+<span class="comment"># Read query results directly into a DataFrame</span>
+query = <span class="string">"""
+    SELECT grade, AVG(score) as avg_score
+    FROM students
+    GROUP BY grade
+    ORDER BY avg_score DESC
+"""</span>
+results = pd.<span class="func">read_sql_query</span>(query, conn)
+<span class="func">print</span>(results)
+
+conn.<span class="func">close</span>()</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">When SQL Beats Pandas</div>
+        <div class="content-card">
+          <ul>
+            <li><strong>Data is in a database already</strong> — pulling with SQL is far faster than loading to CSV then pandas</li>
+            <li><strong>Dataset is too large for RAM</strong> — SQL can query terabytes; pandas loads everything into memory</li>
+            <li><strong>Multiple people need the same data</strong> — SQL queries are shareable, reproducible, and version-controllable</li>
+            <li><strong>You need JOINs across many tables</strong> — SQL's join syntax is cleaner and more performant than pandas merges for complex joins</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Resources</div>
+        <div class="resource-grid">
+          <div class="resource-card">
+            <div class="resource-icon">&#128203;</div>
+            <div class="resource-body">
+              <div class="resource-label">Search</div>
+              <div class="resource-text">SQL tutorial for data scientists</div>
+              <div class="resource-hint">Mode Analytics SQL tutorial is comprehensive and free</div>
+            </div>
+          </div>
+          <div class="resource-card">
+            <div class="resource-icon">&#128190;</div>
+            <div class="resource-body">
+              <div class="resource-label">Search</div>
+              <div class="resource-text">SQL basics SQLite Python tutorial</div>
+              <div class="resource-hint">Python docs + Real Python both have clear walkthroughs</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Today's Exercise</div>
+        <div class="exercise-box">
+          <h3>&#9997; Exercise: 5 SQL Queries on Real Data</h3>
+          <ul>
+            <li>In Colab, create a SQLite database from the CSV dataset you used on Day P5.</li>
+            <li>Write and run 5 SQL queries: (1) SELECT with WHERE and ORDER BY, (2) COUNT and GROUP BY, (3) AVG/MAX/MIN aggregation, (4) a JOIN if you have two tables, (5) a subquery or HAVING clause.</li>
+            <li>For each query, also write the equivalent in pandas and compare the results — they should match exactly.</li>
+            <li>Identify one case where the SQL version is more concise or readable. Note it.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="complete-bar">
+        <button class="btn-complete" id="complete-5" onclick="markComplete(5)">&#10003; Mark Day P6 Complete</button>
+        <div class="complete-msg" id="msg-5">&#10003; Day P6 complete — SQL in the toolkit!</div>
+      </div>
+    </div>
+
+    <!-- Day 7 -->
+    <div class="day-panel" id="day-6">
+      <div class="day-header">
+        <div class="day-pill">Day P7</div>
+        <h2 class="day-title">Capstone Readiness Project</h2>
+        <p class="day-desc">Today you combine everything from the past 6 days into one complete mini-project. This isn't a test — it's a demonstration to yourself that you're ready for the machine learning track.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">The Project</div>
+        <div class="content-card">
+          <h3>End-to-End Data Pipeline</h3>
+          <p>Build a complete pipeline that takes raw data and produces meaningful outputs. Every step uses skills from this week. The pipeline:</p>
+          <ol style="padding-left:18px;margin-top:10px;">
+            <li style="margin-bottom:8px;font-size:14px;color:var(--text-secondary)"><strong style="color:var(--text-primary)">Load</strong> — read a CSV dataset into a pandas DataFrame</li>
+            <li style="margin-bottom:8px;font-size:14px;color:var(--text-secondary)"><strong style="color:var(--text-primary)">Explore</strong> — run info(), describe(), check for null values</li>
+            <li style="margin-bottom:8px;font-size:14px;color:var(--text-secondary)"><strong style="color:var(--text-primary)">Clean</strong> — handle missing values, fix data types, remove duplicates</li>
+            <li style="margin-bottom:8px;font-size:14px;color:var(--text-secondary)"><strong style="color:var(--text-primary)">Analyse</strong> — calculate 5+ statistics, answer 3 questions about the data using SQL</li>
+            <li style="margin-bottom:8px;font-size:14px;color:var(--text-secondary)"><strong style="color:var(--text-primary)">Visualise</strong> — create at least 3 charts (histogram, scatter plot, bar chart)</li>
+            <li style="margin-bottom:8px;font-size:14px;color:var(--text-secondary)"><strong style="color:var(--text-primary)">Save</strong> — export the cleaned data to JSON and Parquet</li>
+            <li style="margin-bottom:8px;font-size:14px;color:var(--text-secondary)"><strong style="color:var(--text-primary)">Version</strong> — commit and push the notebook to your GitHub repo</li>
+          </ol>
+        </div>
+
+        <div class="content-card">
+          <h3>Suggested Datasets (all free on Kaggle)</h3>
+          <ul>
+            <li><strong>Titanic</strong> — classic, lots of missing values to handle, good for classification later</li>
+            <li><strong>Iris</strong> — simple, clean, great for focusing on visualisation</li>
+            <li><strong>House Prices</strong> — regression-friendly, interesting statistics</li>
+            <li><strong>Any dataset you find interesting</strong> — curiosity is better than convenience</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Quality Bar</div>
+        <div class="content-card">
+          <p>Your notebook should tell a story. A reader who opens it should understand: what dataset you used, what questions you asked, what you found, and what the cleaned data looks like. Every section should have a Markdown cell explaining what you're doing and why.</p>
+          <p>Before marking this complete: restart Colab and run all cells from top to bottom. If it fails, fix it. A notebook that doesn't run clean from scratch is not done.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">You're Ready</div>
+        <div class="celebration">
+          <h3>Ready for the Machine Learning Track</h3>
+          <p>You've verified your Python skills, built mathematical intuition, set up your full toolkit, learned version control, mastered data file formats, queried with SQL, and completed an end-to-end data pipeline. The ML course builds directly on everything you've done this week. You're ready.</p>
+        </div>
+      </div>
+
+      <div class="complete-bar">
+        <button class="btn-complete" id="complete-6" onclick="markComplete(6)">&#10003; Mark Day P7 Complete</button>
+        <div class="complete-msg" id="msg-6">&#10003; All prerequisites complete — ML track unlocked!</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  const STORAGE_KEY = 'nexgen_track2_prereq_progress';
+  const TOTAL = 7;
+
+  const days = [
+    { short: 'Python Readiness Check' },
+    { short: 'Mathematics for Data Science' },
+    { short: 'Data Science Tools Setup' },
+    { short: 'Git & GitHub Basics' },
+    { short: 'Working with Data Files' },
+    { short: 'SQL Basics for Data Scientists' },
+    { short: 'Capstone Readiness Project' },
+  ];
+
+  let progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  let currentDay = null;
+
+  function saveProgress() { localStorage.setItem(STORAGE_KEY, JSON.stringify(progress)); }
+
+  function renderSidebar() {
+    const nav = document.getElementById('sidebarNav');
+    nav.innerHTML = '';
+    days.forEach((d, i) => {
+      const done = progress.includes(i);
+      const btn = document.createElement('button');
+      btn.className = 'day-btn' + (done ? ' completed' : '') + (currentDay === i ? ' active' : '');
+      btn.innerHTML = `
+        <div class="day-check${done ? ' done' : ''}">${done ? '✓' : i + 1}</div>
+        <div class="day-label">
+          <span class="day-num">Day P${i + 1}</span>
+          ${d.short}
+        </div>`;
+      btn.onclick = () => showDay(i);
+      nav.appendChild(btn);
+    });
+  }
+
+  function renderProgress() {
+    const count = progress.length;
+    document.getElementById('progressBar').style.width = (count / TOTAL * 100) + '%';
+    document.getElementById('progressCount').textContent = count;
+    const btn = document.getElementById('courseBtn');
+    count >= TOTAL ? btn.classList.add('unlocked') : btn.classList.remove('unlocked');
+  }
+
+  function renderCompleteButtons() {
+    days.forEach((_, i) => {
+      const btn = document.getElementById('complete-' + i);
+      const msg = document.getElementById('msg-' + i);
+      if (progress.includes(i)) {
+        btn.disabled = true;
+        btn.textContent = '✓ Completed';
+        msg.classList.add('show');
+      }
+    });
+  }
+
+  function showDay(index) {
+    document.getElementById('welcome').style.display = 'none';
+    document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('day-' + index).classList.add('active');
+    currentDay = index;
+    renderSidebar();
+    document.querySelector('.main-content').scrollTo(0, 0);
+  }
+
+  function markComplete(index) {
+    if (!progress.includes(index)) { progress.push(index); saveProgress(); }
+    renderProgress();
+    renderSidebar();
+    renderCompleteButtons();
+    if (index < TOTAL - 1) setTimeout(() => showDay(index + 1), 600);
+  }
+
+  renderSidebar();
+  renderProgress();
+  renderCompleteButtons();
+
+  if (progress.length > 0 && progress.length < TOTAL) {
+    showDay(Math.min(Math.max(...progress) + 1, TOTAL - 1));
+  } else if (progress.length >= TOTAL) {
+    showDay(TOTAL - 1);
+  }
+</script>
+</body>
+</html>

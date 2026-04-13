@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Track 1 — Python & AI Basics | NexGen Computers</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#0F172A;color:#E2E8F0;min-height:100vh}
+:root{--primary:#4F46E5;--accent:#06B6D4;--card:#1E293B;--border:#334155;--muted:#94A3B8;--text:#E2E8F0}
+header{background:linear-gradient(135deg,#1E293B,#0F172A);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.logo{font-size:1.4rem;font-weight:700;color:var(--primary)}
+.logo span{color:var(--accent)}
+.track-badge{background:var(--primary);color:#fff;padding:.3rem .8rem;border-radius:999px;font-size:.75rem;font-weight:600}
+.layout{display:grid;grid-template-columns:280px 1fr;min-height:calc(100vh - 64px)}
+.sidebar{background:#162032;border-right:1px solid var(--border);overflow-y:auto;padding:1rem 0}
+.mod-header{padding:.5rem 1rem;font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:.5rem}
+.day-btn{display:flex;align-items:center;gap:.5rem;width:100%;padding:.55rem 1rem;background:none;border:none;color:var(--muted);font-size:.82rem;cursor:pointer;text-align:left;transition:.15s}
+.day-btn:hover{background:#1E293B;color:var(--text)}
+.day-btn.active{background:rgba(79,70,229,.15);color:var(--primary);font-weight:600}
+.day-btn.done .dot{background:var(--accent)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0}
+.main{padding:2rem;overflow-y:auto}
+.day-header{margin-bottom:1.5rem}
+.day-label{font-size:.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+.day-title{font-size:1.8rem;font-weight:700;color:var(--text);margin:.25rem 0}
+.mod-tag{display:inline-block;background:rgba(79,70,229,.15);color:var(--primary);padding:.2rem .6rem;border-radius:4px;font-size:.75rem;font-weight:600}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem}
+.card h3{font-size:1rem;font-weight:600;color:var(--accent);margin-bottom:.75rem}
+.card p,.card li{font-size:.9rem;line-height:1.7;color:#CBD5E1}
+.card ul{padding-left:1.2rem}
+.card li{margin-bottom:.3rem}
+.code-block{background:#0D1117;border:1px solid var(--border);border-radius:8px;padding:1rem;font-family:'JetBrains Mono',monospace;font-size:.8rem;color:#E6EDF3;overflow-x:auto;white-space:pre;line-height:1.6;margin:.75rem 0}
+.resources a{display:block;color:var(--primary);text-decoration:none;font-size:.85rem;margin:.4rem 0;padding:.4rem .8rem;border-radius:6px;border:1px solid rgba(79,70,229,.2);transition:.15s}
+.resources a:hover{background:rgba(79,70,229,.1)}
+.exercise{border-left:3px solid var(--accent);padding:1rem 1.2rem;background:rgba(6,182,212,.05);border-radius:0 8px 8px 0}
+.terms{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem}
+.term{background:rgba(79,70,229,.1);color:var(--primary);padding:.25rem .6rem;border-radius:4px;font-size:.75rem;font-weight:500}
+.btn-complete{background:var(--accent);color:#fff;border:none;padding:.75rem 2rem;border-radius:8px;font-size:.9rem;font-weight:600;cursor:pointer;margin-top:1rem;transition:.2s}
+.btn-complete:hover{opacity:.9}
+.btn-complete:disabled{background:var(--border);color:var(--muted);cursor:default}
+@media(max-width:700px){.layout{grid-template-columns:1fr}.sidebar{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">NEx-gEN <span>School of Computers</span></div>
+  <div style="display:flex;align-items:center;gap:1rem">
+    <span id="hdr-progress" style="font-size:.85rem;color:var(--muted)"></span>
+    <span class="track-badge">Track 1 — Python & AI Basics</span>
+  </div>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="main" id="main"></main>
+</div>
+<script>
+const STORAGE_KEY='nexgen_track1_progress';
+let completed=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+const modules=[
+  {id:1,title:'Python Fundamentals',days:[1,10]},
+  {id:2,title:'Intermediate Python for AI',days:[11,20]},
+  {id:3,title:'AI Introduction',days:[21,32]},
+  {id:4,title:'Capstone Project',days:[33,45]}
+];
+const lessons=[
+  // MODULE 1 — Python Fundamentals
+  {day:1,mod:1,title:'Welcome to Python',objectives:['Install Python and run your first program','Understand what Python is used for','Write and run a basic print statement'],
+   content:`<p>Python is a programming language used by NASA, Google, Netflix, and thousands of companies. It reads almost like English, which makes it the perfect first language. Today you write your very first Python program!</p>
+<p>Python can build websites, analyse data, create AI chatbots, automate boring tasks, and much more. The best way to run Python right now is <strong>Google Colab</strong> — it works in your browser with zero installation.</p>`,
+   code:`# Your very first Python program!
+print("Hello, World!")
+print("My name is Vamsi")
+print("I am learning Python at NexGen Computers")
+
+# Python can do math too
+print(2 + 3)
+print(10 * 5)
+print(100 / 4)`,
+   resources:[{title:'Python for Beginners — Full Course',url:'https://www.youtube.com/results?search_query=python+for+beginners+full+course+hindi'},{title:'Google Colab — Getting Started',url:'https://www.youtube.com/results?search_query=google+colab+tutorial+beginners+python'}],
+   exercise:'Open Google Colab and type the code above. Change "My name is Vamsi" to your own name and run it.',
+   keyTerms:['Python','program','print()','Google Colab','output']},
+
+  {day:2,mod:1,title:'Variables and Data Types',objectives:['Store values in variables','Know the 4 basic data types','Use type() to check a variable'],
+   content:`<p>A <strong>variable</strong> is like a labelled box where you store information. You can store numbers, words, or yes/no values. Python has 4 basic data types: <strong>int</strong> (whole numbers), <strong>float</strong> (decimal numbers), <strong>str</strong> (text), and <strong>bool</strong> (True or False).</p>
+<p>Variable names cannot have spaces or start with a number. Use underscores like <code>my_age</code>.</p>`,
+   code:`# Storing values in variables
+name = "Priya"
+age = 16
+height = 5.4
+is_student = True
+
+# Printing variables
+print(name)
+print(age)
+print(height)
+print(is_student)
+
+# Checking the type
+print(type(name))    # <class 'str'>
+print(type(age))     # <class 'int'>
+print(type(height))  # <class 'float'>
+print(type(is_student))  # <class 'bool'>`,
+   resources:[{title:'Python Variables Explained',url:'https://www.youtube.com/results?search_query=python+variables+data+types+tutorial+beginners'},{title:'Python Data Types in Telugu',url:'https://www.youtube.com/results?search_query=python+data+types+tutorial+telugu'}],
+   exercise:'Create 4 variables: your name, age, favourite subject, and whether you like coding (True/False). Print all of them.',
+   keyTerms:['variable','int','float','str','bool','type()']},
+
+  {day:3,mod:1,title:'Taking Input and Doing Math',objectives:['Get input from the user','Perform arithmetic in Python','Convert between data types'],
+   content:`<p>The <code>input()</code> function lets your program ask the user a question. Whatever the user types is returned as a <strong>string</strong> (text). If you want to use it as a number, you must convert it with <code>int()</code> or <code>float()</code>.</p>
+<p>Python arithmetic: <code>+</code> add, <code>-</code> subtract, <code>*</code> multiply, <code>/</code> divide, <code>**</code> power, <code>%</code> remainder.</p>`,
+   code:`# Getting user input
+name = input("What is your name? ")
+print("Hello,", name)
+
+age = int(input("How old are you? "))
+next_year = age + 1
+print("Next year you will be", next_year)
+
+# Math operations
+a = 25
+b = 4
+print(a + b)   # 29
+print(a - b)   # 21
+print(a * b)   # 100
+print(a / b)   # 6.25
+print(a ** 2)  # 625 (25 squared)
+print(a % b)   # 1 (remainder)`,
+   resources:[{title:'Python Input Function Tutorial',url:'https://www.youtube.com/results?search_query=python+input+function+tutorial+beginners'},{title:'Python Math Operations',url:'https://www.youtube.com/results?search_query=python+arithmetic+operators+tutorial'}],
+   exercise:'Write a program that asks for two numbers and prints their sum, difference, product, and quotient.',
+   keyTerms:['input()','int()','float()','arithmetic','type conversion']},
+
+  {day:4,mod:1,title:'If-Else Decisions',objectives:['Use if, elif, and else','Understand comparison operators','Build a grade calculator'],
+   content:`<p>Programs need to make decisions. <strong>if/elif/else</strong> lets your code choose different paths based on conditions. Comparison operators: <code>==</code> equal, <code>!=</code> not equal, <code>&gt;</code> greater, <code>&lt;</code> less, <code>&gt;=</code> greater or equal, <code>&lt;=</code> less or equal.</p>
+<p>Indentation (4 spaces or 1 tab) is mandatory in Python — it defines which code belongs inside the if block.</p>`,
+   code:`# Simple if-else
+marks = int(input("Enter your marks (0-100): "))
+
+if marks >= 90:
+    grade = "A+"
+    print("Outstanding!")
+elif marks >= 80:
+    grade = "A"
+    print("Excellent!")
+elif marks >= 70:
+    grade = "B"
+    print("Good work!")
+elif marks >= 60:
+    grade = "C"
+    print("Satisfactory")
+elif marks >= 35:
+    grade = "D"
+    print("Pass, but work harder!")
+else:
+    grade = "F"
+    print("Study harder and try again!")
+
+print("Your grade:", grade)`,
+   resources:[{title:'Python If Else Tutorial Beginners',url:'https://www.youtube.com/results?search_query=python+if+else+elif+tutorial+beginners'},{title:'Python Conditions Explained',url:'https://www.youtube.com/results?search_query=python+conditional+statements+examples'}],
+   exercise:'Build a program that asks for age and prints: "Child" (< 13), "Teenager" (13-17), "Adult" (18-59), "Senior" (60+).',
+   keyTerms:['if','elif','else','comparison operator','indentation','condition']},
+
+  {day:5,mod:1,title:'Loops — Repeating Actions',objectives:['Use for loops to repeat code','Use while loops with a condition','Control loops with break and continue'],
+   content:`<p>Loops let you run the same code many times without copying and pasting. <strong>for loops</strong> run a fixed number of times. <strong>while loops</strong> keep running as long as a condition is True. <strong>break</strong> exits the loop early. <strong>continue</strong> skips the current step and moves to the next.</p>`,
+   code:`# For loop — counting
+for i in range(1, 6):
+    print("Count:", i)
+
+# For loop — printing items
+fruits = ["mango", "banana", "apple"]
+for fruit in fruits:
+    print("I like", fruit)
+
+# While loop
+number = 1
+while number <= 5:
+    print("Square of", number, "is", number ** 2)
+    number += 1
+
+# Break and continue
+for i in range(1, 11):
+    if i == 5:
+        continue  # skip 5
+    if i == 8:
+        break     # stop at 8
+    print(i)`,
+   resources:[{title:'Python Loops For While Tutorial',url:'https://www.youtube.com/results?search_query=python+for+loop+while+loop+tutorial+beginners'},{title:'Python Range Function Explained',url:'https://www.youtube.com/results?search_query=python+range+function+explained+tutorial'}],
+   exercise:'Write a program that prints all even numbers from 1 to 50 using a for loop.',
+   keyTerms:['for loop','while loop','range()','break','continue','iteration']},
+
+  {day:6,mod:1,title:'Lists — Storing Many Values',objectives:['Create and modify lists','Use list methods: append, remove, sort','Slice a list to get parts of it'],
+   content:`<p>A <strong>list</strong> stores multiple values in one variable, like a shopping list. Lists are <strong>ordered</strong> (items keep their position) and <strong>mutable</strong> (you can change them). Access items using their index — Python starts counting from 0!</p>`,
+   code:`# Creating a list
+students = ["Ravi", "Priya", "Kiran", "Anita"]
+
+# Accessing items (index starts at 0)
+print(students[0])   # Ravi
+print(students[-1])  # Anita (last item)
+
+# Adding and removing
+students.append("Sai")       # add to end
+students.remove("Kiran")     # remove by value
+students.insert(1, "Deepa")  # insert at position 1
+
+# Useful operations
+print(len(students))   # number of items
+print(students)
+students.sort()        # sort alphabetically
+print(students)
+
+# Slicing
+marks = [85, 92, 78, 95, 88, 73]
+top_3 = marks[:3]   # first 3
+print(top_3)`,
+   resources:[{title:'Python Lists Complete Tutorial',url:'https://www.youtube.com/results?search_query=python+lists+tutorial+complete+beginners'},{title:'Python List Methods All',url:'https://www.youtube.com/results?search_query=python+list+methods+append+remove+sort'}],
+   exercise:'Create a list of 5 subject marks. Find and print the highest, lowest, and average mark.',
+   keyTerms:['list','index','append()','remove()','sort()','slicing']},
+
+  {day:7,mod:1,title:'Dictionaries — Key-Value Storage',objectives:['Create and use dictionaries','Access, add, and delete key-value pairs','Loop through a dictionary'],
+   content:`<p>A <strong>dictionary</strong> stores data as <strong>key: value</strong> pairs — like a real dictionary where you look up a word (key) to get its meaning (value). Use dictionaries when items have labels, not positions.</p>`,
+   code:`# Creating a dictionary
+student = {
+    "name": "Priya",
+    "age": 16,
+    "school": "NexGen High School",
+    "marks": 92
+}
+
+# Accessing values
+print(student["name"])
+print(student.get("marks"))
+
+# Adding and updating
+student["city"] = "Srikakulam"
+student["marks"] = 95  # update existing
+
+# Deleting
+del student["age"]
+
+# Looping through
+for key, value in student.items():
+    print(key, "->", value)
+
+# Practical example
+attendance = {"Monday": True, "Tuesday": False, "Wednesday": True}
+present_days = sum(1 for v in attendance.values() if v)
+print("Days present:", present_days)`,
+   resources:[{title:'Python Dictionary Tutorial',url:'https://www.youtube.com/results?search_query=python+dictionary+tutorial+beginners'},{title:'Python Dict Methods Explained',url:'https://www.youtube.com/results?search_query=python+dictionary+methods+keys+values+items'}],
+   exercise:'Create a dictionary for a student with name, 5 subjects, and marks. Print subjects where marks > 80.',
+   keyTerms:['dictionary','key','value','get()','items()','del']},
+
+  {day:8,mod:1,title:'Functions — Reusable Code Blocks',objectives:['Define and call functions','Use parameters and return values','Understand local vs global variables'],
+   content:`<p>A <strong>function</strong> is a named block of code that does one specific job. You define it once and call it as many times as you need. Functions make your code shorter, cleaner, and easier to fix. <strong>Parameters</strong> are inputs; <strong>return</strong> sends a value back out.</p>`,
+   code:`# Defining a function
+def greet(name):
+    message = "Hello, " + name + "! Welcome to NexGen."
+    return message
+
+# Calling the function
+print(greet("Priya"))
+print(greet("Ravi"))
+
+# Function with multiple parameters
+def calculate_grade(marks):
+    if marks >= 90: return "A+"
+    elif marks >= 80: return "A"
+    elif marks >= 70: return "B"
+    elif marks >= 60: return "C"
+    elif marks >= 35: return "Pass"
+    else: return "Fail"
+
+subjects = {"Maths": 88, "Science": 72, "Telugu": 95, "English": 65}
+for subject, mark in subjects.items():
+    print(subject, ":", mark, "->", calculate_grade(mark))
+
+# Default parameter
+def power(base, exponent=2):
+    return base ** exponent
+
+print(power(5))    # 25 (uses default exponent=2)
+print(power(2, 8)) # 256`,
+   resources:[{title:'Python Functions Tutorial',url:'https://www.youtube.com/results?search_query=python+functions+tutorial+beginners+def+return'},{title:'Python Parameters Arguments',url:'https://www.youtube.com/results?search_query=python+function+parameters+arguments+tutorial'}],
+   exercise:'Write a function is_prime(n) that returns True if n is a prime number, False otherwise.',
+   keyTerms:['function','def','parameter','return','call','default argument']},
+
+  {day:9,mod:1,title:'String Operations',objectives:['Format strings with f-strings','Use common string methods','Process user text input'],
+   content:`<p>Strings are everywhere in Python programs — names, messages, data. Python has many built-in string tools. <strong>f-strings</strong> are the modern way to insert variables into text. String methods like <code>.upper()</code>, <code>.strip()</code>, and <code>.split()</code> help clean and process text.</p>`,
+   code:`name = "priya sharma"
+city = "Srikakulam"
+score = 95.5
+
+# f-strings (most modern approach)
+print(f"Hello, {name.title()}!")
+print(f"Score: {score:.1f}%")
+
+# String methods
+print(name.upper())       # PRIYA SHARMA
+print(name.capitalize())  # Priya sharma
+print(name.title())       # Priya Sharma
+print("  hello  ".strip()) # "hello" (removes spaces)
+
+# Splitting and joining
+sentence = "Python is fun to learn"
+words = sentence.split(" ")
+print(words)           # ['Python', 'is', 'fun', 'to', 'learn']
+print(len(words))      # 5
+
+joined = "-".join(words)
+print(joined)          # Python-is-fun-to-learn
+
+# Checking contents
+email = "student@nexgen.in"
+print("@" in email)         # True
+print(email.endswith(".in")) # True`,
+   resources:[{title:'Python String Methods Tutorial',url:'https://www.youtube.com/results?search_query=python+string+methods+tutorial+complete'},{title:'Python f-strings Tutorial',url:'https://www.youtube.com/results?search_query=python+f+strings+format+tutorial+beginners'}],
+   exercise:'Write a program that asks for a full name and prints: number of characters, name in ALL CAPS, and each word separately.',
+   keyTerms:['f-string','string method','split()','join()','strip()','upper()']},
+
+  {day:10,mod:1,title:'Files & Error Handling',objectives:['Read and write text files','Handle errors with try-except','Understand common Python exceptions'],
+   content:`<p>Real programs read and write files — CSV, text, logs. Use <code>open()</code> with a <strong>with</strong> block so the file closes automatically. <strong>try-except</strong> catches errors gracefully instead of crashing. Common exceptions: <code>FileNotFoundError</code>, <code>ValueError</code>, <code>ZeroDivisionError</code>.</p>`,
+   code:`# Writing to a file
+with open("students.txt", "w") as f:
+    f.write("Priya, 92\n")
+    f.write("Ravi, 85\n")
+    f.write("Kiran, 78\n")
+
+# Reading from a file
+with open("students.txt", "r") as f:
+    for line in f:
+        print(line.strip())
+
+# Appending to a file
+with open("students.txt", "a") as f:
+    f.write("Anita, 95\n")
+
+# Error handling
+def safe_divide(a, b):
+    try:
+        result = a / b
+        return result
+    except ZeroDivisionError:
+        print("Error: Cannot divide by zero!")
+        return None
+    except TypeError:
+        print("Error: Please provide numbers!")
+        return None
+
+print(safe_divide(10, 2))   # 5.0
+print(safe_divide(10, 0))   # Error message
+print(safe_divide(10, "x")) # Error message`,
+   resources:[{title:'Python File Handling Tutorial',url:'https://www.youtube.com/results?search_query=python+file+handling+read+write+tutorial'},{title:'Python Try Except Tutorial',url:'https://www.youtube.com/results?search_query=python+try+except+error+handling+tutorial'}],
+   exercise:'Write a program that reads students.txt, calculates the average marks, and saves the result to a new file results.txt.',
+   keyTerms:['open()','read','write','try','except','FileNotFoundError']},
+
+  // MODULE 2 — Intermediate Python for AI
+  {day:11,mod:2,title:'NumPy — Numbers at Scale',objectives:['Create NumPy arrays','Perform array operations','Understand why NumPy is faster than lists'],
+   content:`<p><strong>NumPy</strong> is Python's library for working with large grids of numbers (arrays). AI and data science use NumPy everywhere because it processes millions of numbers in milliseconds — far faster than Python lists. An <strong>array</strong> is like a list, but all items must be the same type, which makes operations blazing fast.</p>`,
+   code:`import numpy as np
+
+# Creating arrays
+numbers = np.array([10, 20, 30, 40, 50])
+print(numbers)
+print(numbers.shape)   # (5,)
+print(numbers.dtype)   # int64
+
+# Math on the whole array at once!
+print(numbers * 2)      # [20 40 60 80 100]
+print(numbers + 5)      # [15 25 35 45 55]
+print(np.sqrt(numbers)) # square root of each
+
+# 2D arrays (like a table)
+marks = np.array([[85, 90, 78],
+                  [92, 88, 95],
+                  [70, 75, 80]])
+print("Shape:", marks.shape)  # (3, 3)
+print("Average per student:", marks.mean(axis=1))
+print("Highest in class:", marks.max())
+
+# Creating special arrays
+zeros = np.zeros((3, 3))
+ones = np.ones((2, 4))
+random = np.random.randint(0, 100, (3, 3))`,
+   resources:[{title:'NumPy Tutorial for Beginners',url:'https://www.youtube.com/results?search_query=numpy+tutorial+beginners+python+data+science'},{title:'NumPy Complete Course',url:'https://www.youtube.com/results?search_query=numpy+complete+course+python+arrays'}],
+   exercise:'Create a 5×5 random array of marks (50-100). Find the highest, lowest, and average for each row.',
+   keyTerms:['NumPy','array','shape','dtype','vectorisation','ndarray']},
+
+  {day:12,mod:2,title:'Pandas — Working with Data Tables',objectives:['Create DataFrames from dictionaries','Filter, sort, and group data','Read a CSV file with Pandas'],
+   content:`<p><strong>Pandas</strong> is Python's spreadsheet library. A <strong>DataFrame</strong> is a table with rows and columns — like Excel, but programmable. Pandas makes it easy to load data from CSV files, filter rows, sort by columns, and calculate group statistics.</p>`,
+   code:`import pandas as pd
+
+# Creating a DataFrame
+data = {
+    "Name": ["Priya", "Ravi", "Kiran", "Anita", "Sai"],
+    "Marks": [92, 85, 78, 95, 88],
+    "City": ["Srikakulam", "Vizag", "Srikakulam", "Vizag", "Srikakulam"]
+}
+df = pd.DataFrame(data)
+print(df)
+
+# Exploring data
+print(df.shape)        # (5, 3)
+print(df.dtypes)       # data types of each column
+print(df.describe())   # statistics summary
+
+# Filtering rows
+top_students = df[df["Marks"] >= 90]
+print(top_students)
+
+# Sorting
+sorted_df = df.sort_values("Marks", ascending=False)
+print(sorted_df)
+
+# Group statistics
+print(df.groupby("City")["Marks"].mean())
+
+# Reading CSV (try with your own file)
+# df = pd.read_csv("students.csv")`,
+   resources:[{title:'Pandas Tutorial Complete Beginners',url:'https://www.youtube.com/results?search_query=pandas+tutorial+beginners+python+dataframe'},{title:'Pandas for Data Analysis',url:'https://www.youtube.com/results?search_query=pandas+data+analysis+tutorial+python+csv'}],
+   exercise:'Download any CSV dataset from Kaggle. Load it with Pandas and print: shape, column names, and top 5 rows.',
+   keyTerms:['Pandas','DataFrame','CSV','filter','groupby','describe()']},
+
+  {day:13,mod:2,title:'Matplotlib — Visualising Data',objectives:['Create line, bar, and pie charts','Add titles and labels','Save a chart to a file'],
+   content:`<p>Numbers alone are hard to understand. <strong>Matplotlib</strong> turns data into charts. A chart communicates patterns instantly. The basic workflow: prepare data → call plt.figure() → plot → add labels → plt.show(). Always label your axes — a chart without labels is useless.</p>`,
+   code:`import matplotlib.pyplot as plt
+import numpy as np
+
+# Line chart — marks over tests
+tests = [1, 2, 3, 4, 5]
+priya = [65, 72, 80, 85, 92]
+ravi = [70, 68, 75, 78, 85]
+
+plt.figure(figsize=(8, 5))
+plt.plot(tests, priya, marker='o', label='Priya', color='blue')
+plt.plot(tests, ravi, marker='s', label='Ravi', color='orange')
+plt.title("Student Progress Over 5 Tests")
+plt.xlabel("Test Number")
+plt.ylabel("Marks")
+plt.legend()
+plt.grid(True)
+plt.savefig("progress.png")
+plt.show()
+
+# Bar chart — subject comparison
+subjects = ["Maths", "Science", "English", "Telugu"]
+marks = [88, 92, 75, 95]
+plt.figure(figsize=(6, 4))
+plt.bar(subjects, marks, color=['blue','green','orange','red'])
+plt.title("Subject Marks")
+plt.ylabel("Marks"); plt.ylim(0, 100)
+plt.show()`,
+   resources:[{title:'Matplotlib Tutorial Python',url:'https://www.youtube.com/results?search_query=matplotlib+tutorial+python+beginners+charts'},{title:'Data Visualisation Python Complete',url:'https://www.youtube.com/results?search_query=data+visualization+python+matplotlib+complete'}],
+   exercise:'Create a bar chart showing the top 5 populated cities in India. Add proper title and labels.',
+   keyTerms:['Matplotlib','plot()','bar()','title','xlabel','legend']},
+
+  {day:14,mod:2,title:'List Comprehensions & Lambda Functions',objectives:['Write list comprehensions','Use lambda for short functions','Apply map() and filter()'],
+   content:`<p><strong>List comprehensions</strong> are a compact, Pythonic way to create lists from other lists in one line. <strong>Lambda</strong> functions are tiny anonymous functions for simple operations. <strong>map()</strong> applies a function to every item. <strong>filter()</strong> keeps only items where a condition is True. These are tools you will see in every AI codebase.</p>`,
+   code:`# Regular way vs list comprehension
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+# Old way
+squares = []
+for n in numbers:
+    squares.append(n ** 2)
+
+# Pythonic way — list comprehension
+squares = [n ** 2 for n in numbers]
+evens = [n for n in numbers if n % 2 == 0]
+print(squares)  # [1, 4, 9, 16, 25, ...]
+print(evens)    # [2, 4, 6, 8, 10]
+
+# Lambda functions
+double = lambda x: x * 2
+add = lambda x, y: x + y
+print(double(5))   # 10
+print(add(3, 4))   # 7
+
+# map and filter
+names = ["priya", "ravi", "kiran"]
+upper_names = list(map(lambda n: n.upper(), names))
+print(upper_names)  # ['PRIYA', 'RAVI', 'KIRAN']
+
+marks = [85, 42, 93, 60, 38, 77]
+passed = list(filter(lambda m: m >= 60, marks))
+print(passed)  # [85, 93, 60, 77]`,
+   resources:[{title:'Python List Comprehension Tutorial',url:'https://www.youtube.com/results?search_query=python+list+comprehension+tutorial+examples'},{title:'Python Lambda Map Filter',url:'https://www.youtube.com/results?search_query=python+lambda+map+filter+tutorial'}],
+   exercise:'Use a list comprehension to create a list of all 3-digit numbers divisible by both 3 and 7.',
+   keyTerms:['list comprehension','lambda','map()','filter()','Pythonic']},
+
+  {day:15,mod:2,title:'Object-Oriented Programming — Classes',objectives:['Define a class with attributes and methods','Create objects from a class','Use __init__ and self'],
+   content:`<p><strong>Object-Oriented Programming (OOP)</strong> organises code around <strong>objects</strong> — things with properties (attributes) and actions (methods). A <strong>class</strong> is a blueprint; an <strong>object</strong> is a specific instance. <code>__init__</code> is called automatically when an object is created. <code>self</code> refers to the object itself.</p>`,
+   code:`class Student:
+    # Class attribute (shared by all students)
+    school = "NexGen Computers"
+
+    def __init__(self, name, age, marks):
+        # Instance attributes (unique to each student)
+        self.name = name
+        self.age = age
+        self.marks = marks
+
+    def get_grade(self):
+        if self.marks >= 90: return "A+"
+        elif self.marks >= 80: return "A"
+        elif self.marks >= 70: return "B"
+        else: return "C"
+
+    def introduce(self):
+        return f"Hi! I'm {self.name}, age {self.age}. Grade: {self.get_grade()}"
+
+# Creating objects
+s1 = Student("Priya", 16, 92)
+s2 = Student("Ravi", 15, 85)
+s3 = Student("Kiran", 16, 73)
+
+print(s1.introduce())
+print(s2.introduce())
+print(s3.school)  # NexGen Computers
+
+# List of student objects
+students = [s1, s2, s3]
+best = max(students, key=lambda s: s.marks)
+print("Top student:", best.name)`,
+   resources:[{title:'Python OOP Classes Tutorial',url:'https://www.youtube.com/results?search_query=python+object+oriented+programming+classes+tutorial'},{title:'Python OOP for Beginners Complete',url:'https://www.youtube.com/results?search_query=python+oop+beginners+complete+course'}],
+   exercise:'Create a BankAccount class with attributes: owner, balance. Add methods: deposit(), withdraw(), and get_balance().',
+   keyTerms:['class','object','__init__','self','attribute','method']},
+
+  {day:16,mod:2,title:'Working with APIs',objectives:['Understand what an API is','Make a GET request with requests library','Parse JSON responses'],
+   content:`<p>An <strong>API</strong> (Application Programming Interface) lets your program talk to another program over the internet. Most websites offer APIs. You send a <strong>request</strong>, and they send back data in <strong>JSON</strong> format (like a Python dictionary). The <code>requests</code> library makes this easy.</p>`,
+   code:`import requests
+
+# Fetching data from a public API (free, no key needed)
+url = "https://api.exchangerate-api.com/v4/latest/USD"
+response = requests.get(url)
+
+# Check if request succeeded
+print("Status code:", response.status_code)  # 200 = success
+
+if response.status_code == 200:
+    data = response.json()  # convert to dictionary
+    print("Base currency:", data["base"])
+    print("USD to INR:", data["rates"]["INR"])
+    print("USD to EUR:", data["rates"]["EUR"])
+
+# Another free API — random jokes
+joke_url = "https://official-joke-api.appspot.com/jokes/random"
+joke_response = requests.get(joke_url)
+if joke_response.status_code == 200:
+    joke = joke_response.json()
+    print("\nJoke:")
+    print(joke["setup"])
+    print(joke["punchline"])`,
+   resources:[{title:'Python Requests Library Tutorial',url:'https://www.youtube.com/results?search_query=python+requests+library+api+tutorial+beginners'},{title:'REST API Python Tutorial',url:'https://www.youtube.com/results?search_query=rest+api+python+requests+json+tutorial'}],
+   exercise:'Use the Open-Meteo weather API (free, no key) to fetch and print today\'s temperature for Srikakulam.',
+   keyTerms:['API','request','JSON','status code','GET','response']},
+
+  {day:17,mod:2,title:'Regular Expressions — Pattern Matching',objectives:['Find patterns in text with re module','Extract emails, phone numbers, dates','Use re.search, re.findall, re.sub'],
+   content:`<p><strong>Regular expressions (regex)</strong> are patterns that find text matching a specific structure — like a wildcard on steroids. Used everywhere in AI for data cleaning: extract all emails from a document, remove HTML tags, find phone numbers. The <code>re</code> module is built into Python.</p>`,
+   code:`import re
+
+text = """
+Contact us:
+Email: priya@nexgen.in, support@nex-gen.in
+Phone: 9876543210, +91-8765432109
+Date: 15/08/2024
+Website: https://nex-gen.in
+"""
+
+# Find all emails
+emails = re.findall(r'[\w.-]+@[\w.-]+\.\w+', text)
+print("Emails:", emails)
+
+# Find phone numbers
+phones = re.findall(r'\+?[\d-]{10,13}', text)
+print("Phones:", phones)
+
+# Find dates
+dates = re.findall(r'\d{2}/\d{2}/\d{4}', text)
+print("Dates:", dates)
+
+# Replace pattern
+clean = re.sub(r'https?://\S+', '[URL]', text)
+print(clean)
+
+# Validate email format
+def is_valid_email(email):
+    pattern = r'^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$'
+    return bool(re.match(pattern, email))
+
+print(is_valid_email("priya@nexgen.in"))  # True
+print(is_valid_email("not-an-email"))     # False`,
+   resources:[{title:'Python Regular Expressions Tutorial',url:'https://www.youtube.com/results?search_query=python+regular+expressions+tutorial+beginners'},{title:'Regex in Python Complete Guide',url:'https://www.youtube.com/results?search_query=regex+python+complete+guide+re+module'}],
+   exercise:'Write a function that extracts all hashtags from a social media post (e.g., #Python #AI).',
+   keyTerms:['regex','re.findall','re.search','re.sub','pattern','match']},
+
+  {day:18,mod:2,title:'Data Cleaning with Pandas',objectives:['Handle missing values','Remove duplicates','Fix inconsistent data types'],
+   content:`<p>Real-world data is messy: missing values, typos, wrong formats, duplicates. <strong>Data cleaning</strong> (also called data wrangling) is often 80% of an AI project. Core operations: find and fill NaN values (<code>fillna()</code>), drop duplicates (<code>drop_duplicates()</code>), fix data types (<code>astype()</code>), and rename columns.</p>`,
+   code:`import pandas as pd
+import numpy as np
+
+# Messy dataset
+df = pd.DataFrame({
+    "Name": ["Priya", "Ravi", None, "Priya", "Anita"],
+    "Age": [16, "17", 15, 16, None],
+    "Marks": [92, 85, np.nan, 92, 88],
+    "City": ["srikakulam", "VIZAG", "Srikakulam", "srikakulam", "vizag"]
+})
+
+print("Original:")
+print(df)
+print("\nMissing values:", df.isnull().sum().to_dict())
+
+# Fix: drop rows with missing Name
+df = df.dropna(subset=["Name"])
+
+# Fix: fill missing Marks with average
+df["Marks"] = df["Marks"].fillna(df["Marks"].mean())
+
+# Fix: convert Age to numeric
+df["Age"] = pd.to_numeric(df["Age"], errors="coerce")
+
+# Fix: standardise City to title case
+df["City"] = df["City"].str.title()
+
+# Remove duplicates
+df = df.drop_duplicates()
+
+print("\nCleaned:")
+print(df)`,
+   resources:[{title:'Pandas Data Cleaning Tutorial',url:'https://www.youtube.com/results?search_query=pandas+data+cleaning+tutorial+python+missing+values'},{title:'Data Wrangling Python Complete',url:'https://www.youtube.com/results?search_query=data+wrangling+python+pandas+tutorial'}],
+   exercise:'Download a Kaggle dataset with missing values. Clean it: handle NaN, fix types, remove duplicates.',
+   keyTerms:['missing values','NaN','fillna()','drop_duplicates()','data cleaning','astype()']},
+
+  {day:19,mod:2,title:'Modules and Packages',objectives:['Import standard library modules','Create your own module','Understand packages and __init__.py'],
+   content:`<p>Python's power comes from its ecosystem of <strong>modules</strong> (files with reusable code) and <strong>packages</strong> (folders of modules). Python's standard library has 200+ built-in modules. Third-party packages (NumPy, Pandas, etc.) are installed with <code>pip</code>. You can also create your own modules to organise your code.</p>`,
+   code:`# Standard library modules
+import math
+import random
+import datetime
+import os
+
+print(math.pi)           # 3.14159...
+print(math.sqrt(144))    # 12.0
+print(random.randint(1, 100))
+print(datetime.date.today())
+print(os.getcwd())       # current directory
+
+# Creating your own module
+# --- File: helpers.py ---
+# def greet(name):
+#     return f"Hello, {name}!"
+#
+# def calculate_bmi(weight, height):
+#     bmi = weight / (height ** 2)
+#     if bmi < 18.5: return bmi, "Underweight"
+#     elif bmi < 25: return bmi, "Normal"
+#     else: return bmi, "Overweight"
+
+# --- File: main.py ---
+# import helpers
+# print(helpers.greet("Priya"))
+# bmi, category = helpers.calculate_bmi(60, 1.65)
+# print(f"BMI: {bmi:.1f} — {category}")
+
+# Installing packages
+# Run in terminal: pip install pandas matplotlib scikit-learn
+import sys
+print("Python version:", sys.version)`,
+   resources:[{title:'Python Modules Packages Tutorial',url:'https://www.youtube.com/results?search_query=python+modules+packages+import+tutorial'},{title:'Python Standard Library Overview',url:'https://www.youtube.com/results?search_query=python+standard+library+useful+modules+tutorial'}],
+   exercise:'Create a module math_tools.py with 3 functions: area of circle, perimeter of rectangle, and is_prime. Import and test it.',
+   keyTerms:['module','package','import','pip','standard library','__init__.py']},
+
+  {day:20,mod:2,title:'Mini Project — Student Data Analyser',objectives:['Combine all Module 2 skills','Build a complete data analysis program','Generate a visual report'],
+   content:`<p>Today you build a complete project combining everything from Module 2: reading a CSV, cleaning data, calculating statistics, and generating charts. This is exactly how a real data analyst works. The program should be runnable by anyone with just one command.</p>`,
+   code:`import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Step 1: Create sample data (in real life, read from CSV)
+data = {
+    "Name": ["Priya","Ravi","Kiran","Anita","Sai","Deepa","Arun","Lakshmi"],
+    "Maths": [92,85,78,95,88,70,82,90],
+    "Science": [88,90,72,92,85,68,80,88],
+    "English": [75,80,85,78,92,82,70,85],
+    "Telugu": [95,88,90,85,78,92,88,82]
+}
+df = pd.DataFrame(data)
+
+# Step 2: Calculate totals and average
+df["Total"] = df[["Maths","Science","English","Telugu"]].sum(axis=1)
+df["Average"] = df["Total"] / 4
+df["Grade"] = df["Average"].apply(lambda x: "A+" if x>=90 else ("A" if x>=80 else ("B" if x>=70 else "C")))
+
+print("=== Student Report ===")
+print(df[["Name","Total","Average","Grade"]].to_string(index=False))
+
+# Step 3: Charts
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+
+# Bar chart — student averages
+ax1.bar(df["Name"], df["Average"], color='steelblue')
+ax1.set_title("Student Average Marks")
+ax1.set_ylabel("Average"); ax1.set_ylim(0, 100)
+ax1.tick_params(axis='x', rotation=45)
+
+# Subject averages
+subjects = ["Maths","Science","English","Telugu"]
+sub_avgs = [df[s].mean() for s in subjects]
+ax2.pie(sub_avgs, labels=subjects, autopct='%1.1f%%', startangle=90)
+ax2.set_title("Subject Difficulty Distribution")
+
+plt.tight_layout()
+plt.savefig("student_report.png", dpi=150)
+print("\nReport saved as student_report.png")`,
+   resources:[{title:'Python Data Analysis Project',url:'https://www.youtube.com/results?search_query=python+data+analysis+project+pandas+matplotlib'},{title:'Student Grade Analysis Python',url:'https://www.youtube.com/results?search_query=student+grade+analysis+python+pandas+project'}],
+   exercise:'Add a 3rd chart: a line graph showing each student\'s marks across subjects.',
+   keyTerms:['data analysis','report','visualization','project','end-to-end']},
+
+  // MODULE 3 — AI Introduction
+  {day:21,mod:3,title:'What is Artificial Intelligence?',objectives:['Understand AI, ML, and DL hierarchy','Know the types of ML learning','Identify real-world AI applications'],
+   content:`<p><strong>Artificial Intelligence (AI)</strong> is the ability of machines to perform tasks that normally require human intelligence. <strong>Machine Learning (ML)</strong> is a type of AI where machines <em>learn from data</em> instead of being programmed with rules. <strong>Deep Learning (DL)</strong> is a type of ML using neural networks inspired by the human brain.</p>
+<p>Types of ML: <strong>Supervised</strong> (learning from labelled examples), <strong>Unsupervised</strong> (finding patterns without labels), <strong>Reinforcement</strong> (learning by reward and punishment).</p>`,
+   code:`# Understanding AI through a simple example
+# Without AI: rule-based spam filter
+def is_spam_rules(email):
+    spam_words = ["free", "win", "prize", "click here", "limited offer"]
+    return any(word in email.lower() for word in spam_words)
+
+# With ML: the computer learns the patterns from thousands of examples
+# We don't write rules — we show examples of spam and not-spam
+# The algorithm figures out the rules by itself
+
+# Simple ML concept demonstration
+examples = [
+    ("Win a free prize! Click here!", "spam"),
+    ("Meeting at 3pm tomorrow", "not spam"),
+    ("LIMITED OFFER! Act now!", "spam"),
+    ("Project update from team", "not spam"),
+    ("Claim your FREE gift card", "spam")
+]
+
+print("Rule-based filter:")
+for email, label in examples:
+    result = "spam" if is_spam_rules(email) else "not spam"
+    match = "✓" if result == label else "✗"
+    print(f"  {match} '{email[:40]}...' → {result}")`,
+   resources:[{title:'What is Artificial Intelligence',url:'https://www.youtube.com/results?search_query=what+is+artificial+intelligence+explained+beginners'},{title:'AI vs ML vs Deep Learning',url:'https://www.youtube.com/results?search_query=ai+vs+machine+learning+vs+deep+learning+difference'}],
+   exercise:'List 5 AI applications you use every day (Google Maps, YouTube recommendations, etc.) and identify what type of ML each uses.',
+   keyTerms:['AI','machine learning','deep learning','supervised','unsupervised','reinforcement']},
+
+  {day:22,mod:3,title:'Your First ML Model — scikit-learn',objectives:['Load a dataset','Train a classifier in 5 lines','Evaluate accuracy'],
+   content:`<p><strong>scikit-learn</strong> is Python's most popular machine learning library. It provides simple, consistent tools for training models. The workflow is always the same: load data → split into train/test → create model → fit (train) → predict → evaluate. Today you train a classifier on the famous Iris dataset.</p>`,
+   code:`from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+
+# Step 1: Load data
+iris = load_iris()
+X = iris.data    # features (petal length, width, etc.)
+y = iris.target  # labels (0=setosa, 1=versicolor, 2=virginica)
+
+print("Dataset shape:", X.shape)       # (150, 4)
+print("Classes:", iris.target_names)
+
+# Step 2: Split data (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Step 3: Create and train the model
+model = DecisionTreeClassifier(max_depth=3, random_state=42)
+model.fit(X_train, y_train)
+
+# Step 4: Predict on test set
+y_pred = model.predict(X_test)
+
+# Step 5: Evaluate
+accuracy = accuracy_score(y_test, y_pred)
+print(f"\nAccuracy: {accuracy:.2%}")
+
+# Predict a new flower
+new_flower = [[5.1, 3.5, 1.4, 0.2]]
+prediction = model.predict(new_flower)
+print("Predicted:", iris.target_names[prediction[0]])`,
+   resources:[{title:'Scikit-learn Tutorial Beginners',url:'https://www.youtube.com/results?search_query=scikit+learn+tutorial+beginners+machine+learning'},{title:'Machine Learning Python scikit',url:'https://www.youtube.com/results?search_query=machine+learning+python+scikit+learn+first+model'}],
+   exercise:'Train the same Iris classifier using KNeighborsClassifier (k=5). Compare accuracy with DecisionTree.',
+   keyTerms:['scikit-learn','classifier','train_test_split','fit','predict','accuracy']},
+
+  {day:23,mod:3,title:'How Machine Learning Learns',objectives:['Understand features and labels','Grasp the concept of loss','See how gradient descent works'],
+   content:`<p>ML models learn by <strong>minimising loss</strong> — the difference between predicted and actual values. <strong>Gradient descent</strong> is the key algorithm: it adjusts model parameters step by step in the direction that reduces loss. The <strong>learning rate</strong> controls how big each step is. Too large: overshoots. Too small: takes forever.</p>`,
+   code:`import numpy as np
+import matplotlib.pyplot as plt
+
+# Simple linear regression from scratch
+# Task: predict marks from study hours
+
+hours = np.array([1, 2, 3, 4, 5, 6, 7, 8])
+marks = np.array([40, 50, 58, 65, 72, 80, 87, 93])
+
+# Our model: marks = w * hours + b
+# Start with random weights
+w, b = 0.0, 0.0
+lr = 0.01  # learning rate
+
+losses = []
+for epoch in range(1000):
+    # Forward pass: predict
+    pred = w * hours + b
+
+    # Calculate loss (Mean Squared Error)
+    loss = np.mean((pred - marks) ** 2)
+    losses.append(loss)
+
+    # Gradient descent: calculate gradients
+    dw = np.mean(2 * (pred - marks) * hours)
+    db = np.mean(2 * (pred - marks))
+
+    # Update weights
+    w -= lr * dw
+    b -= lr * db
+
+print(f"Learned: marks = {w:.2f} * hours + {b:.2f}")
+print(f"Final loss: {losses[-1]:.2f}")
+
+# Predict
+study_hours = 9
+predicted = w * study_hours + b
+print(f"\nIf you study {study_hours} hours, expected marks: {predicted:.0f}")`,
+   resources:[{title:'Gradient Descent Explained Visually',url:'https://www.youtube.com/results?search_query=gradient+descent+explained+visually+machine+learning'},{title:'How ML Models Learn',url:'https://www.youtube.com/results?search_query=how+machine+learning+models+learn+loss+function'}],
+   exercise:'Change the learning rate to 0.1, 0.001, and 0.0001. Observe how loss changes over epochs for each.',
+   keyTerms:['features','labels','loss','gradient descent','learning rate','epoch']},
+
+  {day:24,mod:3,title:'Linear & Logistic Regression',objectives:['Use LinearRegression for prediction','Use LogisticRegression for classification','Understand the difference'],
+   content:`<p><strong>Linear Regression</strong> predicts a continuous number (price, marks, temperature). <strong>Logistic Regression</strong> predicts a category (pass/fail, spam/not spam) — despite the name, it's a classifier. Both are fundamental models every AI engineer must know. Logistic regression outputs a probability (0 to 1) and uses a threshold (usually 0.5) to classify.</p>`,
+   code:`from sklearn.linear_model import LinearRegression, LogisticRegression
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, mean_squared_error
+import numpy as np
+
+# LINEAR REGRESSION: predict house price
+areas = np.array([500, 750, 1000, 1200, 1500, 2000]).reshape(-1, 1)
+prices = np.array([25, 38, 50, 60, 75, 95])  # in lakhs
+
+reg = LinearRegression()
+reg.fit(areas, prices)
+print(f"House price formula: {reg.coef_[0]:.4f} * area + {reg.intercept_:.2f}")
+print(f"1300 sq ft house: {reg.predict([[1300]])[0]:.1f} lakhs")
+
+# LOGISTIC REGRESSION: pass/fail classification
+study_hours = np.array([[1],[2],[3],[4],[5],[6],[7],[8]])
+passed = np.array([0, 0, 0, 1, 1, 1, 1, 1])
+
+clf = LogisticRegression()
+clf.fit(study_hours, passed)
+
+print("\nPass/Fail Classifier:")
+for h in [2, 4, 6]:
+    prob = clf.predict_proba([[h]])[0][1]
+    result = clf.predict([[h]])[0]
+    print(f"  {h} hours study → {prob:.0%} chance of pass → {'PASS' if result else 'FAIL'}")`,
+   resources:[{title:'Linear Regression Python Tutorial',url:'https://www.youtube.com/results?search_query=linear+regression+python+scikit+learn+tutorial'},{title:'Logistic Regression Explained',url:'https://www.youtube.com/results?search_query=logistic+regression+explained+python+classification'}],
+   exercise:'Predict student exam scores using linear regression. Features: study hours + sleep hours.',
+   keyTerms:['linear regression','logistic regression','predict','probability','threshold','coefficient']},
+
+  {day:25,mod:3,title:'Decision Trees and Random Forests',objectives:['Understand how decision trees split data','Identify overfitting','Use Random Forest to improve accuracy'],
+   content:`<p>A <strong>Decision Tree</strong> splits data by asking yes/no questions (like 20 questions). It's easy to understand but prone to <strong>overfitting</strong> — memorising training data instead of learning patterns. <strong>Random Forest</strong> trains hundreds of trees on random subsets of data and averages their predictions — much more robust and accurate.</p>`,
+   code:`from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+data = load_breast_cancer()
+X, y = data.data, data.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Decision Tree — prone to overfitting
+tree = DecisionTreeClassifier(random_state=42)
+tree.fit(X_train, y_train)
+train_acc = accuracy_score(y_train, tree.predict(X_train))
+test_acc = accuracy_score(y_test, tree.predict(X_test))
+print(f"Decision Tree — Train: {train_acc:.2%}, Test: {test_acc:.2%}")
+
+# Random Forest — more robust
+forest = RandomForestClassifier(n_estimators=100, random_state=42)
+forest.fit(X_train, y_train)
+train_acc = accuracy_score(y_train, forest.predict(X_train))
+test_acc = accuracy_score(y_test, forest.predict(X_test))
+print(f"Random Forest — Train: {train_acc:.2%}, Test: {test_acc:.2%}")
+
+# Feature importance
+import pandas as pd
+importance = pd.Series(forest.feature_importances_, index=data.feature_names)
+print("\nTop 5 most important features:")
+print(importance.nlargest(5))`,
+   resources:[{title:'Decision Tree Random Forest Tutorial',url:'https://www.youtube.com/results?search_query=decision+tree+random+forest+python+scikit+learn'},{title:'Overfitting Underfitting Explained',url:'https://www.youtube.com/results?search_query=overfitting+underfitting+machine+learning+explained'}],
+   exercise:'Compare Decision Tree (depth=3) vs Random Forest (100 trees) on the Titanic dataset from Kaggle.',
+   keyTerms:['decision tree','random forest','overfitting','feature importance','ensemble']},
+
+  {day:26,mod:3,title:'Evaluating ML Models Properly',objectives:['Use confusion matrix, precision, recall','Understand train/validation/test splits','Apply cross-validation'],
+   content:`<p>Accuracy alone is misleading — especially with imbalanced data. If 95% of emails are not spam, a model that always says "not spam" gets 95% accuracy but is useless! Use: <strong>Precision</strong> (of predicted positive, how many were right?), <strong>Recall</strong> (of actual positives, how many did we catch?), and <strong>F1 score</strong> (harmonic mean of precision and recall).</p>`,
+   code:`from sklearn.datasets import load_breast_cancer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.metrics import (accuracy_score, precision_score, recall_score,
+                              f1_score, confusion_matrix, classification_report)
+import numpy as np
+
+data = load_breast_cancer()
+X, y = data.data, data.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+
+print("=== Full Evaluation Report ===")
+print(f"Accuracy:  {accuracy_score(y_test, y_pred):.2%}")
+print(f"Precision: {precision_score(y_test, y_pred):.2%}")
+print(f"Recall:    {recall_score(y_test, y_pred):.2%}")
+print(f"F1 Score:  {f1_score(y_test, y_pred):.2%}")
+print("\nConfusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+print("\nFull Report:")
+print(classification_report(y_test, y_pred, target_names=data.target_names))
+
+# Cross-validation (5-fold)
+cv_scores = cross_val_score(model, X, y, cv=5)
+print(f"\nCross-Validation: {cv_scores.mean():.2%} +/- {cv_scores.std():.2%}")`,
+   resources:[{title:'Confusion Matrix Precision Recall',url:'https://www.youtube.com/results?search_query=confusion+matrix+precision+recall+f1+tutorial'},{title:'Cross Validation Python Tutorial',url:'https://www.youtube.com/results?search_query=cross+validation+python+scikit+learn+tutorial'}],
+   exercise:'Evaluate your Day 25 model with full metrics. Try to improve F1 score by tuning n_estimators.',
+   keyTerms:['precision','recall','F1 score','confusion matrix','cross-validation','evaluation']},
+
+  {day:27,mod:3,title:'Natural Language Processing Basics',objectives:['Tokenise and clean text','Calculate word frequency','Build a simple text classifier'],
+   content:`<p><strong>Natural Language Processing (NLP)</strong> teaches computers to understand human language. Core steps: tokenisation (split text into words), stop word removal (remove "the", "is", "a"), stemming/lemmatisation (reduce words to root form), and vectorisation (convert text to numbers). Today you build a simple sentiment detector.</p>`,
+   code:`import re
+from collections import Counter
+
+# Simple NLP from scratch
+def tokenise(text):
+    text = text.lower()
+    text = re.sub(r'[^a-z\s]', '', text)
+    return text.split()
+
+def remove_stopwords(tokens):
+    stopwords = {'the','is','a','an','and','or','but','in','on','at','to','for','of','it','this','that'}
+    return [t for t in tokens if t not in stopwords]
+
+# Analyse a review
+review = "This Python course is absolutely wonderful! The teachers are very helpful and the content is excellent and easy to understand."
+
+tokens = tokenise(review)
+clean = remove_stopwords(tokens)
+freq = Counter(clean)
+print("Most common words:", freq.most_common(5))
+
+# Simple sentiment analysis
+positive_words = {"wonderful","excellent","helpful","easy","great","amazing","best"}
+negative_words = {"terrible","bad","boring","difficult","worst","awful","horrible"}
+
+pos = sum(1 for w in tokens if w in positive_words)
+neg = sum(1 for w in tokens if w in negative_words)
+if pos > neg: sentiment = "POSITIVE"
+elif neg > pos: sentiment = "NEGATIVE"
+else: sentiment = "NEUTRAL"
+
+print(f"\nPositive words: {pos}, Negative words: {neg}")
+print(f"Sentiment: {sentiment}")`,
+   resources:[{title:'NLP Tutorial Python Beginners',url:'https://www.youtube.com/results?search_query=nlp+natural+language+processing+tutorial+python+beginners'},{title:'Text Classification Python',url:'https://www.youtube.com/results?search_query=text+classification+python+nlp+tutorial'}],
+   exercise:'Analyse 10 movie reviews. Print their sentiment and identify the top 5 most used words.',
+   keyTerms:['NLP','tokenisation','stopwords','frequency','sentiment','text processing']},
+
+  {day:28,mod:3,title:'Image Recognition with ML',objectives:['Load and display images with Pillow','Understand pixels and image arrays','Train a classifier on MNIST digits'],
+   content:`<p>Images are just grids of numbers — each pixel has a value 0 (black) to 255 (white). For grayscale, each pixel is one number. For colour, each pixel has 3 numbers (R, G, B). ML models learn patterns in these pixel values. The <strong>MNIST</strong> dataset (handwritten digits 0-9) is the "Hello World" of image recognition.</p>`,
+   code:`from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Load digits dataset (8x8 pixel images of handwritten digits)
+digits = load_digits()
+X, y = digits.data, digits.target
+
+print("Dataset shape:", X.shape)   # (1797, 64) — 64 pixels each
+print("Number of classes:", len(set(y)))  # 10 digits (0-9)
+
+# Show some sample images
+fig, axes = plt.subplots(1, 5, figsize=(10, 2))
+for ax, img, label in zip(axes, digits.images[:5], digits.target[:5]):
+    ax.imshow(img, cmap='gray')
+    ax.set_title(f"Digit: {label}")
+    ax.axis('off')
+plt.savefig("digits.png"); plt.show()
+
+# Train classifier
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+acc = accuracy_score(y_test, model.predict(X_test))
+print(f"\nDigit Recognition Accuracy: {acc:.2%}")`,
+   resources:[{title:'MNIST Image Recognition Tutorial',url:'https://www.youtube.com/results?search_query=mnist+image+recognition+python+machine+learning'},{title:'Computer Vision Beginners Python',url:'https://www.youtube.com/results?search_query=computer+vision+beginners+python+tutorial'}],
+   exercise:'Display the 5 misclassified digits from your test set. What patterns do you notice?',
+   keyTerms:['pixel','image array','MNIST','image classification','RGB','grayscale']},
+
+  {day:29,mod:3,title:'Introduction to Neural Networks',objectives:['Understand neurons and layers','Build a simple neural network with sklearn','Visualise how it learns'],
+   content:`<p>Neural networks are inspired by the human brain. <strong>Neurons</strong> receive inputs, process them, and produce an output. Neurons are organised in <strong>layers</strong>: an input layer, hidden layers, and an output layer. Each connection has a <strong>weight</strong> that the network learns. More layers = more complex patterns the network can learn.</p>`,
+   code:`from sklearn.neural_network import MLPClassifier
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+
+digits = load_digits()
+X, y = digits.data, digits.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Scale features (important for neural networks!)
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Neural network: 64 inputs → 128 → 64 → 10 outputs
+nn = MLPClassifier(hidden_layer_sizes=(128, 64), max_iter=500,
+                   learning_rate_init=0.001, random_state=42, verbose=False)
+nn.fit(X_train, y_train)
+
+acc = accuracy_score(y_test, nn.predict(X_test))
+print(f"Neural Network Accuracy: {acc:.2%}")
+
+# Plot training loss
+plt.plot(nn.loss_curve_)
+plt.title("Neural Network Learning Curve")
+plt.xlabel("Training Epoch")
+plt.ylabel("Loss")
+plt.savefig("nn_loss.png"); plt.show()`,
+   resources:[{title:'Neural Networks Explained Simply',url:'https://www.youtube.com/results?search_query=neural+networks+explained+simply+beginners'},{title:'Python Neural Network sklearn',url:'https://www.youtube.com/results?search_query=neural+network+python+sklearn+mlpclassifier+tutorial'}],
+   exercise:'Try different hidden layer sizes: (64,), (256, 128, 64). Compare accuracy and training time.',
+   keyTerms:['neural network','neuron','hidden layer','weight','loss curve','MLPClassifier']},
+
+  {day:30,mod:3,title:'Using ChatGPT and Gemini APIs',objectives:['Call the ChatGPT API from Python','Use Gemini for free text generation','Build a simple chatbot'],
+   content:`<p>Large Language Models (LLMs) like <strong>ChatGPT (GPT-4o)</strong> and <strong>Gemini</strong> can answer questions, write code, summarise text, translate languages, and much more. They're available via APIs — you send text in, get text back. Today you build your own chatbot using these APIs.</p>`,
+   code:`# Option 1: Using OpenAI (requires API key)
+# pip install openai
+import os
+
+def chat_with_gpt(message, conversation_history=[]):
+    from openai import OpenAI
+    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+    conversation_history.append({"role": "user", "content": message})
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[{"role": "system", "content": "You are a helpful Python tutor for 10th grade students."}]
+                 + conversation_history)
+    reply = response.choices[0].message.content
+    conversation_history.append({"role": "assistant", "content": reply})
+    return reply
+
+# Option 2: Using Google Gemini (free tier available)
+# pip install google-generativeai
+def chat_with_gemini(message):
+    import google.generativeai as genai
+    genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    response = model.generate_content(message)
+    return response.text
+
+# Simple chatbot loop
+print("NexGen AI Tutor (type 'quit' to exit)")
+history = []
+while True:
+    user_input = input("You: ")
+    if user_input.lower() == 'quit': break
+    # reply = chat_with_gpt(user_input, history)
+    reply = f"[AI would respond to: {user_input}]"  # demo
+    print("Tutor:", reply)`,
+   resources:[{title:'ChatGPT API Python Tutorial',url:'https://www.youtube.com/results?search_query=chatgpt+api+python+tutorial+beginners+openai'},{title:'Google Gemini API Tutorial',url:'https://www.youtube.com/results?search_query=google+gemini+api+python+tutorial+free'}],
+   exercise:'Build a study helper chatbot that answers questions only about your school subjects.',
+   keyTerms:['LLM','GPT-4o','Gemini','API key','chatbot','conversation history']},
+
+  {day:31,mod:3,title:'Responsible AI & Ethics',objectives:['Understand AI bias and fairness','Know data privacy principles','Recognise when AI should not be used'],
+   content:`<p>AI is powerful but can cause harm if used carelessly. <strong>AI bias</strong> occurs when training data reflects human prejudices — biased data produces biased predictions. <strong>Privacy</strong>: AI systems trained on personal data can leak private information. <strong>Hallucination</strong>: LLMs confidently state false information. As an AI builder, you are responsible for these impacts.</p>`,
+   code:`# Demonstrating bias in data
+import pandas as pd
+import numpy as np
+
+# Biased hiring data (historical discrimination baked in)
+np.random.seed(42)
+n = 200
+data = {
+    "name": [f"Person_{i}" for i in range(n)],
+    "gender": np.random.choice(["M","F"], n),
+    "years_experience": np.random.randint(1, 15, n),
+    "hired": None
+}
+df = pd.DataFrame(data)
+
+# BIASED hiring: males with same experience hired more
+def biased_hire(row):
+    base = row["years_experience"] > 5
+    bias = row["gender"] == "M"
+    return int(base and (bias or np.random.random() > 0.6))
+
+df["hired"] = df.apply(biased_hire, axis=1)
+
+# Show the bias
+print("=== Hiring Rate by Gender ===")
+print(df.groupby("gender")["hired"].mean().apply(lambda x: f"{x:.0%}"))
+
+# What a fair model should do: ignore gender
+from sklearn.linear_model import LogisticRegression
+fair_model = LogisticRegression()
+X_fair = df[["years_experience"]]  # gender excluded!
+fair_model.fit(X_fair, df["hired"])
+print("\nFair model uses only experience, not gender.")`,
+   resources:[{title:'AI Ethics and Bias Explained',url:'https://www.youtube.com/results?search_query=ai+ethics+bias+fairness+explained+tutorial'},{title:'Responsible AI Principles',url:'https://www.youtube.com/results?search_query=responsible+ai+principles+ethics+machine+learning'}],
+   exercise:'Research one real-world case where AI bias caused harm. Write a 10-sentence summary.',
+   keyTerms:['AI bias','fairness','privacy','hallucination','responsible AI','data ethics']},
+
+  {day:32,mod:3,title:'Module 3 Review — AI Fundamentals Quiz',objectives:['Revise all AI concepts from this module','Identify gaps in understanding','Prepare for capstone project'],
+   content:`<p>Before starting your capstone, consolidate your AI knowledge. Review: supervised vs unsupervised learning, how models train and evaluate, the ML workflow, NLP basics, neural networks, and LLM APIs. The strongest capstone projects combine at least 3 of these concepts.</p>`,
+   code:`# Self-assessment quiz — predict your answers before running
+from sklearn.datasets import load_iris, load_digits
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import StandardScaler
+
+# Q1: Which model is better for Iris?
+iris = load_iris()
+X_tr, X_te, y_tr, y_te = train_test_split(iris.data, iris.target, test_size=0.2, random_state=42)
+rf = RandomForestClassifier(100, random_state=42).fit(X_tr, y_tr)
+nn = MLPClassifier((64,32), max_iter=500, random_state=42).fit(
+    StandardScaler().fit_transform(X_tr), y_te)
+print("Random Forest Iris:", accuracy_score(y_te, rf.predict(X_te)))
+
+# Q2: What happens with more training data?
+for frac in [0.3, 0.5, 0.8]:
+    X_tr2, X_te2, y_tr2, y_te2 = train_test_split(iris.data, iris.target, train_size=frac, random_state=42)
+    m = RandomForestClassifier(100, random_state=42).fit(X_tr2, y_tr2)
+    print(f"Train size {frac:.0%}: accuracy = {accuracy_score(y_te2, m.predict(X_te2)):.2%}")
+
+print("\nKey takeaway: More data generally = better model")`,
+   resources:[{title:'Machine Learning Review Complete',url:'https://www.youtube.com/results?search_query=machine+learning+complete+review+tutorial+2024'},{title:'AI Concepts Revision',url:'https://www.youtube.com/results?search_query=artificial+intelligence+concepts+revision+beginners'}],
+   exercise:'Without looking at notes: write the 5-step ML workflow from memory. Then check your notes.',
+   keyTerms:['revision','ML workflow','model selection','accuracy','evaluation','consolidation']},
+
+  // MODULE 4 — Capstone Project
+  {day:33,mod:4,title:'Capstone Planning — AI Project Design',objectives:['Choose a capstone project idea','Define the problem and expected output','Plan your 13-day development schedule'],
+   content:`<p>Your capstone brings together everything you have learned. Choose a project meaningful to you. Options:</p>
+<ul>
+<li><strong>A</strong>: Student Performance Predictor — predict if a student will pass or fail based on attendance, study hours, and past marks</li>
+<li><strong>B</strong>: Spam / Not-Spam Classifier — build and train an email classifier</li>
+<li><strong>C</strong>: Crop Disease Detector — classify plant diseases from images (use a public dataset)</li>
+<li><strong>D</strong>: Your own idea</strong> — must include a real dataset, ML model, and a result</li>
+</ul>
+<p>Write a simple 1-page plan: problem → data → model → evaluation → output.</p>`,
+   code:`# Capstone project template
+project = {
+    "title": "Student Performance Predictor",
+    "problem": "Predict whether a student will pass or fail based on their study habits and past performance",
+    "dataset": "Kaggle Student Performance Dataset (student-mat.csv)",
+    "features": ["study_time", "absences", "past_failures", "extra_support", "internet"],
+    "target": "pass_or_fail (1=pass, 0=fail)",
+    "model": "Random Forest Classifier",
+    "evaluation_metric": "F1 Score and Confusion Matrix",
+    "output": "A program that asks for student details and predicts outcome",
+    "timeline": {
+        "Days 33-35": "Data collection and exploration",
+        "Days 36-38": "Data cleaning and feature engineering",
+        "Days 39-41": "Model training and evaluation",
+        "Days 42-43": "Build user interface",
+        "Days 44-45": "Test, document, and present"
+    }
+}
+
+print("=== Capstone Project Plan ===")
+for key, value in project.items():
+    print(f"\n{key}:")
+    if isinstance(value, list): print("  " + ", ".join(value))
+    elif isinstance(value, dict):
+        for k, v in value.items(): print(f"  {k}: {v}")
+    else: print(f"  {value}")`,
+   resources:[{title:'Machine Learning Project Ideas Beginners',url:'https://www.youtube.com/results?search_query=machine+learning+project+ideas+beginners+python'},{title:'How to Plan a Data Science Project',url:'https://www.youtube.com/results?search_query=how+to+plan+data+science+project+beginners'}],
+   exercise:'Write your project plan in a text file. Include: title, problem, dataset source, model choice, and what the output will look like.',
+   keyTerms:['project planning','problem statement','dataset','model selection','timeline']},
+
+  {day:34,mod:4,title:'Capstone — Data Collection',objectives:['Download your dataset from Kaggle','Explore it with Pandas','Document initial observations'],
+   content:`<p>Good data is the foundation of any AI project. Download your dataset from Kaggle, load it with Pandas, and spend today <em>understanding</em> it before writing a single model. Answer: How many rows and columns? What are the features? Are there missing values? What is the distribution of the target variable? Write your observations down.</p>`,
+   code:`import pandas as pd
+import matplotlib.pyplot as plt
+
+# Example with Student Performance dataset (download from Kaggle)
+# df = pd.read_csv("student-mat.csv", sep=";")
+
+# Simulated version for demonstration
+import numpy as np
+np.random.seed(42)
+df = pd.DataFrame({
+    "study_time": np.random.randint(1, 5, 300),
+    "absences": np.random.randint(0, 30, 300),
+    "failures": np.random.randint(0, 4, 300),
+    "G3": np.random.randint(0, 20, 300)  # final grade
+})
+df["pass"] = (df["G3"] >= 10).astype(int)
+
+# Explore
+print("Shape:", df.shape)
+print("\nFirst 5 rows:")
+print(df.head())
+print("\nData types:")
+print(df.dtypes)
+print("\nStatistics:")
+print(df.describe())
+print("\nMissing values:", df.isnull().sum().sum())
+print("\nPass rate:", df["pass"].mean().round(2))
+
+# Visualise
+df.hist(figsize=(10, 8)); plt.tight_layout()
+plt.savefig("data_exploration.png"); plt.show()`,
+   resources:[{title:'Kaggle Dataset Download Tutorial',url:'https://www.youtube.com/results?search_query=kaggle+dataset+download+python+tutorial'},{title:'Exploratory Data Analysis Python',url:'https://www.youtube.com/results?search_query=exploratory+data+analysis+python+pandas+tutorial'}],
+   exercise:'Write 10 observations about your dataset in a text file (e.g., "35% of students are failing", "absences range from 0 to 93").',
+   keyTerms:['EDA','exploratory data analysis','distribution','missing values','data profiling']},
+
+  {day:35,mod:4,title:'Capstone — Data Cleaning & EDA',objectives:['Handle all missing values','Remove outliers','Create visualisations for each feature'],
+   content:`<p>Before training any model, your data must be clean. Today: handle missing values, fix data types, and create one chart for each important feature. Look for outliers (extreme values that could confuse the model) and correlations (which features are related to the target?).</p>`,
+   code:`import pandas as pd, numpy as np, matplotlib.pyplot as plt, seaborn as sns
+
+# Using the simulated student data from Day 34
+np.random.seed(42)
+df = pd.DataFrame({
+    "study_time": np.random.randint(1, 5, 300),
+    "absences": np.random.randint(0, 50, 300),
+    "failures": np.random.randint(0, 4, 300),
+    "G3": np.random.randint(0, 20, 300)
+})
+df["pass"] = (df["G3"] >= 10).astype(int)
+
+# Correlation heatmap
+print("Correlation with target (pass):")
+print(df.corr()["pass"].sort_values(ascending=False))
+
+# Boxplot to identify outliers
+plt.figure(figsize=(10, 4))
+plt.subplot(1, 2, 1)
+df.boxplot(column="absences")
+plt.title("Absences Distribution")
+
+# Distribution of target
+plt.subplot(1, 2, 2)
+df["pass"].value_counts().plot(kind="bar", color=["red","green"])
+plt.title("Pass/Fail Distribution")
+plt.xticks([0, 1], ["Fail", "Pass"], rotation=0)
+plt.tight_layout()
+plt.savefig("eda.png"); plt.show()`,
+   resources:[{title:'Data Cleaning Python Tutorial',url:'https://www.youtube.com/results?search_query=data+cleaning+python+pandas+tutorial+complete'},{title:'Seaborn Tutorial Visualisation',url:'https://www.youtube.com/results?search_query=seaborn+tutorial+python+data+visualization'}],
+   exercise:'Create a correlation heatmap for your dataset. Which 3 features are most correlated with your target?',
+   keyTerms:['outlier','correlation','heatmap','boxplot','distribution','data cleaning']},
+
+  {day:36,mod:4,title:'Capstone — Feature Engineering',objectives:['Create new features from existing ones','Encode categorical variables','Scale numerical features'],
+   content:`<p><strong>Feature engineering</strong> transforms raw data into better inputs for the model. Techniques: <strong>encoding</strong> converts categories (yes/no, male/female) to numbers, <strong>scaling</strong> normalises features to similar ranges (so one feature doesn't dominate), and <strong>creating new features</strong> by combining existing ones (e.g., total_marks = exam + homework).</p>`,
+   code:`import pandas as pd, numpy as np
+from sklearn.preprocessing import LabelEncoder, StandardScaler, MinMaxScaler
+
+np.random.seed(42)
+df = pd.DataFrame({
+    "study_time": np.random.randint(1, 5, 100),
+    "absences": np.random.randint(0, 30, 100),
+    "failures": np.random.randint(0, 4, 100),
+    "extra_support": np.random.choice(["yes", "no"], 100),
+    "internet": np.random.choice(["yes", "no"], 100),
+    "pass": np.random.randint(0, 2, 100)
+})
+
+print("Before feature engineering:")
+print(df.head(3))
+
+# Encode categorical features
+le = LabelEncoder()
+df["extra_support"] = le.fit_transform(df["extra_support"])
+df["internet"] = le.fit_transform(df["internet"])
+
+# Create a new feature
+df["risk_score"] = df["absences"] * 0.5 + df["failures"] * 2
+
+# Scale numerical features
+scaler = StandardScaler()
+numerical = ["study_time", "absences", "failures", "risk_score"]
+df[numerical] = scaler.fit_transform(df[numerical])
+
+print("\nAfter feature engineering:")
+print(df.head(3))
+print("\nNew features:", df.columns.tolist())`,
+   resources:[{title:'Feature Engineering Python Tutorial',url:'https://www.youtube.com/results?search_query=feature+engineering+python+machine+learning+tutorial'},{title:'One Hot Encoding Label Encoding',url:'https://www.youtube.com/results?search_query=one+hot+encoding+label+encoding+python+tutorial'}],
+   exercise:'Apply one-hot encoding to any multi-category column in your dataset. Verify the result.',
+   keyTerms:['feature engineering','encoding','scaling','LabelEncoder','StandardScaler','new feature']},
+
+  {day:37,mod:4,title:'Capstone — Model Training',objectives:['Train 3 different models','Compare their accuracy','Select the best model with cross-validation'],
+   content:`<p>Train multiple models and compare them. Never pick a model based on test accuracy alone — use cross-validation for a fair comparison. Document each model's performance. The best model isn't always the most complex — simpler models that generalise better are often preferred in production.</p>`,
+   code:`import pandas as pd, numpy as np
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, f1_score
+from sklearn.preprocessing import StandardScaler
+
+np.random.seed(42)
+X = np.random.randn(300, 5)
+y = (X[:, 0] + X[:, 1] * 2 - X[:, 2] > 0).astype(int)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+scaler = StandardScaler()
+X_train_s = scaler.fit_transform(X_train)
+X_test_s = scaler.transform(X_test)
+
+models = {
+    "Logistic Regression": LogisticRegression(),
+    "Decision Tree": DecisionTreeClassifier(max_depth=4, random_state=42),
+    "Random Forest": RandomForestClassifier(100, random_state=42)
+}
+
+print(f"{'Model':<25} {'Accuracy':>10} {'F1 Score':>10} {'CV Score':>10}")
+print("-" * 60)
+for name, model in models.items():
+    model.fit(X_train_s, y_train)
+    preds = model.predict(X_test_s)
+    acc = accuracy_score(y_test, preds)
+    f1 = f1_score(y_test, preds)
+    cv = cross_val_score(model, X_train_s, y_train, cv=5).mean()
+    print(f"{name:<25} {acc:>10.2%} {f1:>10.2%} {cv:>10.2%}")`,
+   resources:[{title:'Compare ML Models Python',url:'https://www.youtube.com/results?search_query=compare+machine+learning+models+python+tutorial'},{title:'Model Selection Cross Validation',url:'https://www.youtube.com/results?search_query=model+selection+cross+validation+scikit+learn'}],
+   exercise:'Train your 3 models on your actual capstone dataset. Pick the best and explain why in 3 sentences.',
+   keyTerms:['model comparison','cross-validation','model selection','F1 score','generalisation']},
+
+  {day:38,mod:4,title:'Capstone — Improving the Model',objectives:['Tune hyperparameters','Try feature selection','Address class imbalance if present'],
+   content:`<p>Your first model is rarely your best. Improvement techniques: <strong>hyperparameter tuning</strong> (try different settings), <strong>feature selection</strong> (remove noisy features), and handling <strong>class imbalance</strong> (if 90% of data is one class, the model is biased — use SMOTE or class_weight="balanced").</p>`,
+   code:`from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import f1_score
+
+X, y = make_classification(n_samples=500, n_features=10, weights=[0.8, 0.2], random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Baseline
+base = RandomForestClassifier(random_state=42).fit(X_train, y_train)
+print(f"Baseline F1: {f1_score(y_test, base.predict(X_test)):.2%}")
+
+# Handle imbalance with class_weight
+balanced = RandomForestClassifier(class_weight="balanced", random_state=42)
+balanced.fit(X_train, y_train)
+print(f"Balanced F1: {f1_score(y_test, balanced.predict(X_test)):.2%}")
+
+# Grid search for best hyperparameters
+param_grid = {"n_estimators": [50, 100, 200], "max_depth": [3, 5, None]}
+grid = GridSearchCV(RandomForestClassifier(random_state=42), param_grid, cv=3, scoring="f1", n_jobs=-1)
+grid.fit(X_train, y_train)
+print(f"Best params: {grid.best_params_}")
+print(f"Best F1: {f1_score(y_test, grid.best_estimator_.predict(X_test)):.2%}")`,
+   resources:[{title:'Hyperparameter Tuning GridSearch',url:'https://www.youtube.com/results?search_query=hyperparameter+tuning+gridsearchcv+python+tutorial'},{title:'Imbalanced Dataset Machine Learning',url:'https://www.youtube.com/results?search_query=imbalanced+dataset+machine+learning+python+tutorial'}],
+   exercise:'Apply GridSearchCV to your capstone model. Document: starting F1, best F1, and best parameters found.',
+   keyTerms:['GridSearchCV','hyperparameter tuning','class_weight','class imbalance','model improvement']},
+
+  {day:39,mod:4,title:'Capstone — Building the User Interface',objectives:['Create a simple command-line interface','Take user inputs and make predictions','Display results clearly'],
+   content:`<p>A model no one can use is useless. Build a simple interface that lets a user input information and get a prediction. Start with a command-line (terminal) interface — clean and simple. If time permits, add a basic web interface with Streamlit.</p>`,
+   code:`import joblib
+import numpy as np
+
+# Simulate a trained model (in your project, load the real one)
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import make_classification
+
+X, y = make_classification(n_samples=500, n_features=4, random_state=42)
+model = RandomForestClassifier(100, random_state=42).fit(X, y)
+# joblib.dump(model, "model.pkl")  # save
+# model = joblib.load("model.pkl")  # load
+
+def get_prediction(study_time, absences, failures, has_support):
+    features = np.array([[study_time, absences, failures, has_support]])
+    prediction = model.predict(features)[0]
+    probability = model.predict_proba(features)[0][prediction]
+    return prediction, probability
+
+def run_app():
+    print("=" * 40)
+    print("  NexGen Student Performance Predictor")
+    print("=" * 40)
+    print("Answer the following questions:\n")
+    study = int(input("Weekly study hours (1-5): "))
+    absences = int(input("Days absent this year (0-30): "))
+    failures = int(input("Previous class failures (0-3): "))
+    support = int(input("Extra tuition support? (1=Yes, 0=No): "))
+    result, confidence = get_prediction(study, absences, failures, support)
+    print(f"\nPrediction: {'LIKELY TO PASS' if result else 'AT RISK OF FAILING'}")
+    print(f"Confidence: {confidence:.0%}")
+    if not result:
+        print("Advice: Reduce absences and increase study time!")
+
+run_app()`,
+   resources:[{title:'Python CLI Application Tutorial',url:'https://www.youtube.com/results?search_query=python+command+line+application+tutorial+beginners'},{title:'Streamlit ML App Tutorial',url:'https://www.youtube.com/results?search_query=streamlit+machine+learning+app+tutorial+python'}],
+   exercise:'Add input validation: if the user enters a number outside the valid range, show an error and ask again.',
+   keyTerms:['CLI','user interface','joblib','model deployment','input validation']},
+
+  {day:40,mod:4,title:'Capstone — Testing Your Project',objectives:['Test with different inputs','Find and fix edge cases','Write a testing checklist'],
+   content:`<p>Before presenting, test your project thoroughly. Edge cases: What if someone enters 0 study hours? What if absences is 100? What if they skip a question? A good project handles all inputs gracefully. Create a testing checklist with at least 10 test cases, and document the results.</p>`,
+   code:`# Testing checklist template
+
+test_cases = [
+    # (description, inputs, expected_behaviour)
+    ("Normal student", (3, 5, 0, 1), "Should predict PASS"),
+    ("Zero study hours", (0, 0, 0, 0), "Should handle gracefully"),
+    ("High absences", (3, 25, 0, 0), "Should predict AT RISK"),
+    ("Perfect student", (5, 0, 0, 1), "Should predict PASS confidently"),
+    ("Multiple failures", (2, 10, 3, 0), "Should predict AT RISK"),
+    ("Invalid study hours", (10, 0, 0, 0), "Should show error or clamp to 5"),
+]
+
+print("=== Test Results ===")
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import make_classification
+import numpy as np
+X, y = make_classification(n_samples=500, n_features=4, random_state=42)
+model = RandomForestClassifier(100, random_state=42).fit(X, y)
+
+for desc, inputs, expected in test_cases:
+    study = min(inputs[0], 5)  # clamp invalid values
+    feat = np.array([inputs]).clip(0, None)
+    try:
+        pred = "PASS" if model.predict(feat)[0] else "FAIL"
+        conf = max(model.predict_proba(feat)[0])
+        print(f"  [OK] {desc}: {pred} ({conf:.0%}) — Expected: {expected}")
+    except Exception as e:
+        print(f"  [ERROR] {desc}: {e}")`,
+   resources:[{title:'Python Testing Tutorial Beginners',url:'https://www.youtube.com/results?search_query=python+testing+tutorial+beginners+pytest'},{title:'Software Testing Concepts',url:'https://www.youtube.com/results?search_query=software+testing+concepts+beginners+tutorial'}],
+   exercise:'Test your capstone project with all 10 test cases from your checklist. Fix any failures.',
+   keyTerms:['testing','edge case','input validation','checklist','robustness']},
+
+  {day:41,mod:4,title:'Capstone — Writing Documentation',objectives:['Write a README for your project','Document how to run it','Explain how the model works'],
+   content:`<p>Good documentation makes your project professional. A <strong>README</strong> tells anyone who finds your project: what it does, how to install it, how to use it, and what you learned. Write it as if explaining to a friend who knows Python but hasn't seen your project.</p>`,
+   code:`# README.md template for your capstone project
+readme_template = """
+# [Your Project Name]
+
+## What This Project Does
+[1-2 sentences explaining what problem your AI solves]
+
+## How to Run It
+1. Install Python 3.10 or later
+2. Install required libraries:
+   pip install pandas scikit-learn matplotlib
+
+3. Run the program:
+   python main.py
+
+## Dataset
+- Source: [e.g., Kaggle — Student Performance Dataset]
+- Rows: [number]
+- Features used: [list]
+
+## Model Used
+[e.g., Random Forest Classifier with 100 trees]
+Accuracy: [your result]
+F1 Score: [your result]
+
+## Example Output
+Input: Study time=3 hours, Absences=5 days, Failures=0
+Output: LIKELY TO PASS (87% confidence)
+
+## What I Learned
+1. [something you learned about the data]
+2. [something you learned about ML]
+3. [something you would do differently next time]
+
+## Author
+[Your name] — NexGen Computers, Track 1 (2024)
+"""
+print(readme_template)
+# Save this to a README.md file in your project folder`,
+   resources:[{title:'How to Write a Good README',url:'https://www.youtube.com/results?search_query=how+to+write+a+good+readme+github+tutorial'},{title:'GitHub Portfolio for Students',url:'https://www.youtube.com/results?search_query=github+portfolio+student+projects+tutorial'}],
+   exercise:'Write your complete README.md and save it in your project folder.',
+   keyTerms:['README','documentation','GitHub','project structure','user guide']},
+
+  {day:42,mod:4,title:'Capstone — Saving and Loading Your Model',objectives:['Save a trained model with joblib','Load and use it in a separate script','Understand why this matters in production'],
+   content:`<p>Training takes time. In real applications, you train once, save the model, and load it every time someone needs a prediction. <code>joblib</code> saves the model as a file. Always save the <strong>scaler</strong> too — if you scaled inputs during training, you must scale them the same way during prediction.</p>`,
+   code:`import joblib
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+
+# Step 1: Train and save
+X, y = make_classification(n_samples=500, n_features=4, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+scaler = StandardScaler()
+X_train_s = scaler.fit_transform(X_train)
+
+model = RandomForestClassifier(100, random_state=42)
+model.fit(X_train_s, y_train)
+
+# Save BOTH model and scaler
+joblib.dump(model, "model.pkl")
+joblib.dump(scaler, "scaler.pkl")
+print("Model and scaler saved!")
+
+# Step 2: Load and predict (in a separate script)
+loaded_model = joblib.load("model.pkl")
+loaded_scaler = joblib.load("scaler.pkl")
+
+new_data = np.array([[3, 5, 0, 1]])  # new student
+scaled_data = loaded_scaler.transform(new_data)
+prediction = loaded_model.predict(scaled_data)[0]
+confidence = max(loaded_model.predict_proba(scaled_data)[0])
+
+print(f"Prediction: {'PASS' if prediction else 'FAIL'} ({confidence:.0%} confidence)")`,
+   resources:[{title:'Save Load Machine Learning Model',url:'https://www.youtube.com/results?search_query=save+load+machine+learning+model+python+joblib'},{title:'Model Deployment Python Tutorial',url:'https://www.youtube.com/results?search_query=machine+learning+model+deployment+python+beginners'}],
+   exercise:'Save your capstone model and scaler. Load them in a new Python file and make 5 predictions.',
+   keyTerms:['joblib','model persistence','save','load','scaler','deployment']},
+
+  {day:43,mod:4,title:'Capstone — Polish and Improvements',objectives:['Add meaningful print statements','Handle all errors gracefully','Make the output easy to understand'],
+   content:`<p>Polish makes a project professional. Today: add clear section headings in output, handle all possible error inputs, add colour to terminal output with colorama, and make prediction results easy to understand for non-technical users.</p>`,
+   code:`# Polished prediction interface
+import time
+
+def display_banner():
+    print("\n" + "="*50)
+    print("  NexGen AI — Student Success Predictor v1.0")
+    print("  Track 1 Capstone Project")
+    print("="*50 + "\n")
+
+def get_valid_input(prompt, min_val, max_val):
+    while True:
+        try:
+            val = int(input(prompt))
+            if min_val <= val <= max_val:
+                return val
+            print(f"Please enter a number between {min_val} and {max_val}.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+def display_result(passed, confidence, study_time, absences):
+    print("\n" + "-"*40)
+    if passed:
+        print("  RESULT: LIKELY TO PASS")
+        print(f"  Confidence: {confidence:.0%}")
+        print("\n  Keep up the great work!")
+    else:
+        print("  RESULT: AT RISK OF FAILING")
+        print(f"  Confidence: {confidence:.0%}")
+        print("\n  Action Plan:")
+        if absences > 10:
+            print("  - Reduce absences (you missed too many classes)")
+        if study_time < 3:
+            print("  - Increase study time to at least 3 hours/day")
+        print("  - Talk to your teacher for extra support")
+    print("-"*40 + "\n")
+
+# Demo
+display_banner()
+print("This predictor uses AI trained on 500+ student records.")
+print("Answer honestly for the most accurate result.\n")
+time.sleep(0.5)
+display_result(False, 0.78, 1, 15)`,
+   resources:[{title:'Python CLI Polish Tutorial',url:'https://www.youtube.com/results?search_query=python+cli+polish+colors+terminal+output'},{title:'Python User Experience CLI',url:'https://www.youtube.com/results?search_query=python+command+line+user+experience+tutorial'}],
+   exercise:'Add personalised advice messages to your project based on which features most influenced the prediction.',
+   keyTerms:['polish','user experience','error handling','validation','clarity','actionable output']},
+
+  {day:44,mod:4,title:'Capstone — Rehearsal and Peer Review',objectives:['Present your project to a peer','Get and give constructive feedback','Make final improvements'],
+   content:`<p>Presenting your work is as important as building it. Practise explaining: what problem you solved, how you solved it, and what you learned. Be ready for questions like "Why Random Forest and not Logistic Regression?" and "What does the model get wrong?"</p>
+<p>When giving feedback, be specific: not "it's good" but "the accuracy display is very clear, but the error message when I type a letter instead of a number is confusing."</p>`,
+   code:`# Peer review checklist
+checklist = {
+    "Functionality": [
+        "Program runs without errors",
+        "All inputs produce valid outputs",
+        "Edge cases handled (zero inputs, very high values)",
+    ],
+    "Code Quality": [
+        "Functions are used (not one giant block)",
+        "Variable names are descriptive",
+        "No unnecessary repetition",
+    ],
+    "Documentation": [
+        "README is complete and accurate",
+        "Code has comments explaining non-obvious parts",
+    ],
+    "Results": [
+        "Accuracy or F1 score is reported",
+        "At least 3 models were compared",
+        "Results are clearly communicated to users",
+    ]
+}
+
+print("=== Peer Review Checklist ===")
+total = 0
+for category, items in checklist.items():
+    print(f"\n{category}:")
+    for item in items:
+        print(f"  [ ] {item}")
+        total += 1
+print(f"\nTotal items to check: {total}")`,
+   resources:[{title:'How to Present a Coding Project',url:'https://www.youtube.com/results?search_query=how+to+present+coding+project+students+tips'},{title:'Code Review for Beginners',url:'https://www.youtube.com/results?search_query=code+review+beginners+how+to+give+feedback'}],
+   exercise:'Complete the peer review checklist for a classmate\'s project. Write 3 specific improvements they can make.',
+   keyTerms:['peer review','feedback','presentation','checklist','code quality']},
+
+  {day:45,mod:4,title:'Demo Day — Present Your Capstone',objectives:['Deliver a clear 10-minute presentation','Answer questions confidently','Celebrate completing the course!'],
+   content:`<p>You made it! Today you present your capstone project. Structure your presentation:</p>
+<ol>
+<li><strong>Problem</strong> (1 min): What problem does your AI solve? Why does it matter?</li>
+<li><strong>Data</strong> (2 min): Where did you get the data? What did you discover during EDA?</li>
+<li><strong>Model</strong> (2 min): Which model did you choose? How accurate is it?</li>
+<li><strong>Demo</strong> (3 min): Run the program live with real inputs.</li>
+<li><strong>Lessons</strong> (2 min): What was hardest? What would you do differently?</li>
+</ol>
+<p>You started Day 1 not knowing what Python was. Today you built an AI system. That is an incredible achievement — be proud!</p>`,
+   code:`# Capstone summary generator
+def generate_summary(name, project_title, model_used, accuracy, days_completed):
+    print("=" * 55)
+    print("  NEXGEN COMPUTERS — COURSE COMPLETION CERTIFICATE")
+    print("  Track 1: Python & AI Basics")
+    print("=" * 55)
+    print(f"""
+  Student Name   : {name}
+  Course Duration: {days_completed} Days
+  Status         : COMPLETED
+
+  Capstone Project: {project_title}
+  Model Used      : {model_used}
+  Final Accuracy  : {accuracy:.1%}
+
+  Skills Earned:
+  - Python Programming (Variables, Loops, Functions, OOP)
+  - Data Analysis (NumPy, Pandas, Matplotlib)
+  - Machine Learning (scikit-learn)
+  - AI Ethics and Responsible AI
+  - Full Project Lifecycle (Data → Model → UI → Docs)
+
+  Powered by NExGen School of Computers, Srikakulam
+  ISO 9001:2015 Certified | 18+ Years of Excellence
+  www.nex-gen.in
+""")
+    print("=" * 55)
+
+generate_summary(
+    name="Your Name Here",
+    project_title="Student Performance Predictor",
+    model_used="Random Forest Classifier",
+    accuracy=0.87,
+    days_completed=45
+)`,
+   resources:[{title:'What to Learn After Python Basics',url:'https://www.youtube.com/results?search_query=what+to+learn+after+python+basics+machine+learning+roadmap'},{title:'Python AI Engineer Roadmap 2024',url:'https://www.youtube.com/results?search_query=python+ai+engineer+roadmap+2024+beginners'}],
+   exercise:'Record your project demo as a short video. Upload it to YouTube as "unlisted" and share the link with your class.',
+   keyTerms:['presentation','demo','certificate','completion','next steps','career']},
+];
+
+let currentDay=1;
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function buildSidebar(){
+  const sb=document.getElementById('sidebar');
+  modules.forEach(m=>{
+    const hdr=document.createElement('div');hdr.className='mod-header';hdr.textContent=m.title;sb.appendChild(hdr);
+    for(let d=m.days[0];d<=m.days[1];d++){
+      const btn=document.createElement('button');btn.className='day-btn'+(d===currentDay?' active':'')+(completed.includes(d)?' done':'');
+      btn.id=`btn-${d}`;btn.innerHTML=`<span class="dot"></span>Day ${d}`;
+      btn.onclick=()=>loadDay(d);sb.appendChild(btn);
+    }
+  });
+}
+function loadDay(n){
+  currentDay=n;
+  document.querySelectorAll('.day-btn').forEach(b=>b.classList.remove('active'));
+  const btn=document.getElementById(`btn-${n}`);if(btn)btn.classList.add('active');
+  const l=lessons.find(x=>x.day===n);if(!l)return;
+  const mod=modules.find(m=>m.id===l.mod);
+  const done=completed.includes(n);
+  document.getElementById('main').innerHTML=`
+    <div class="day-header">
+      <div class="day-label">Day ${n} of 45 · ${mod.title}</div>
+      <h1 class="day-title">${l.title}</h1>
+      <span class="mod-tag">Module ${l.mod}</span>
+    </div>
+    <div class="card"><h3>Learning Objectives</h3><ul>${l.objectives.map(o=>`<li>${o}</li>`).join('')}</ul></div>
+    <div class="card"><h3>Content</h3>${l.content}</div>
+    <div class="card"><h3>Code</h3><div class="code-block">${escHtml(l.code)}</div></div>
+    <div class="card resources"><h3>Resources</h3>${l.resources.map(r=>`<a href="${r.url}" target="_blank" rel="noopener">${r.title}</a>`).join('')}</div>
+    <div class="card"><h3>Exercise</h3><div class="exercise"><p>${l.exercise}</p></div></div>
+    <div class="card"><h3>Key Terms</h3><div class="terms">${l.keyTerms.map(t=>`<span class="term">${t}</span>`).join('')}</div></div>
+    <button class="btn-complete" id="btn-done" onclick="markComplete(${n})" ${done?'disabled':''}>
+      ${done?'Completed ✓':'Mark Day Complete'}
+    </button>`;
+  updateHeader();
+}
+function markComplete(n){
+  if(!completed.includes(n))completed.push(n);
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(completed));
+  const btn=document.getElementById('btn-done');if(btn){btn.disabled=true;btn.textContent='Completed ✓';}
+  const sb=document.getElementById(`btn-${n}`);if(sb)sb.classList.add('done');
+  updateHeader();
+  if(n<45)setTimeout(()=>loadDay(n+1),800);
+}
+function updateHeader(){
+  document.getElementById('hdr-progress').textContent=`${completed.length}/45 days`;
+}
+buildSidebar();loadDay(1);
+</script>
+</body>
+</html>

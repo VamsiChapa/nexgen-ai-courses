@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track 3 Prerequisites – NexGen Computers AI Course</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --primary: #DC2626;
+  --primary-light: #F87171;
+  --primary-dark: #991B1B;
+  --accent: #16A34A;
+  --accent-light: #4ADE80;
+  --accent-dark: #15803D;
+  --bg: #0F172A;
+  --bg-card: #1E293B;
+  --bg-sidebar: #0F172A;
+  --bg-elevated: #253247;
+  --border: #2A3A52;
+  --border-light: #334E68;
+  --text-primary: #E2E8F0;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --success: #10B981;
+  --success-bg: #064E3B;
+  --code-bg: #0D1117;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-header {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.logo-block { display: flex; align-items: center; gap: 12px; }
+.logo-icon {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 800; color: #fff;
+  letter-spacing: -1px;
+}
+.logo-text { display: flex; flex-direction: column; }
+.logo-name { font-size: 15px; font-weight: 700; color: var(--text-primary); line-height: 1; }
+.logo-sub  { font-size: 11px; color: var(--accent-light); font-weight: 500; margin-top: 2px; letter-spacing: 0.5px; }
+
+.header-right { display: flex; align-items: center; gap: 16px; }
+.back-link {
+  display: flex; align-items: center; gap: 6px;
+  color: var(--text-secondary); text-decoration: none;
+  font-size: 13px; font-weight: 500;
+  padding: 6px 12px; border: 1px solid var(--border); border-radius: 6px;
+  transition: all 0.2s;
+}
+.back-link:hover { color: var(--text-primary); border-color: var(--border-light); background: var(--bg-elevated); }
+.track-badge {
+  background: linear-gradient(135deg, var(--primary), #B91C1C);
+  color: #fff; font-size: 11px; font-weight: 700;
+  padding: 4px 10px; border-radius: 20px;
+  letter-spacing: 0.5px; text-transform: uppercase;
+}
+
+.app-body { display: flex; flex: 1; overflow: hidden; height: calc(100vh - 64px); }
+
+.sidebar {
+  width: 280px; background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0;
+}
+.sidebar-header { padding: 20px 20px 16px; border-bottom: 1px solid var(--border); }
+.sidebar-title { font-size: 13px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+.progress-bar-wrap { background: var(--bg-elevated); border-radius: 4px; height: 6px; overflow: hidden; margin-bottom: 8px; }
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 4px; transition: width 0.5s ease; width: 0%;
+}
+.progress-text { font-size: 12px; color: var(--text-secondary); }
+.progress-text span { color: var(--accent-light); font-weight: 600; }
+.sidebar-nav { flex: 1; overflow-y: auto; padding: 12px; }
+.sidebar-nav::-webkit-scrollbar { width: 4px; }
+.sidebar-nav::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 2px; }
+
+.day-btn {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border: none; background: transparent;
+  color: var(--text-secondary); cursor: pointer; border-radius: 8px;
+  font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 500;
+  text-align: left; transition: all 0.2s; margin-bottom: 3px;
+}
+.day-btn:hover { background: var(--bg-elevated); color: var(--text-primary); }
+.day-btn.active { background: rgba(220,38,38,0.15); color: var(--primary-light); border: 1px solid rgba(220,38,38,0.3); }
+.day-btn.completed { color: var(--success); }
+.day-check {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid var(--border-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; flex-shrink: 0; transition: all 0.2s;
+}
+.day-check.done { background: var(--success); border-color: var(--success); color: #fff; }
+.day-label { flex: 1; line-height: 1.3; }
+.day-num { font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 1px; }
+.sidebar-footer { padding: 16px; border-top: 1px solid var(--border); }
+.btn-course {
+  display: block; width: 100%; text-align: center;
+  padding: 11px 16px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff; font-weight: 700; font-size: 13px;
+  border-radius: 8px; text-decoration: none;
+  transition: opacity 0.2s, transform 0.1s;
+  pointer-events: none; opacity: 0.35;
+}
+.btn-course.unlocked { pointer-events: auto; opacity: 1; }
+.btn-course.unlocked:hover { opacity: 0.9; transform: translateY(-1px); }
+
+.main-content { flex: 1; overflow-y: auto; padding: 40px 48px; }
+.main-content::-webkit-scrollbar { width: 6px; }
+.main-content::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: 3px; }
+
+.day-panel { display: none; max-width: 820px; }
+.day-panel.active { display: block; }
+
+.day-header { margin-bottom: 32px; }
+.day-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(220,38,38,0.12); border: 1px solid rgba(220,38,38,0.35);
+  color: var(--primary-light); font-size: 11px; font-weight: 700;
+  padding: 4px 12px; border-radius: 20px; margin-bottom: 14px;
+  text-transform: uppercase; letter-spacing: 0.8px;
+}
+.day-title { font-size: 28px; font-weight: 800; color: var(--text-primary); line-height: 1.2; margin-bottom: 10px; }
+.day-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.7; max-width: 680px; }
+
+.section { margin-bottom: 32px; }
+.section-title {
+  font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  color: var(--accent-light); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.content-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 22px 24px; margin-bottom: 14px;
+}
+.content-card h3 { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 10px; }
+.content-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 10px; }
+.content-card p:last-child { margin-bottom: 0; }
+.content-card ul, .content-card ol { padding-left: 18px; margin-bottom: 10px; }
+.content-card li { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 4px; }
+.content-card li strong { color: var(--text-primary); }
+
+.highlight-box {
+  background: rgba(22,163,74,0.07); border: 1px solid rgba(22,163,74,0.2);
+  border-left: 3px solid var(--accent-light); border-radius: 8px;
+  padding: 14px 18px; margin: 14px 0;
+}
+.highlight-box p { font-size: 13.5px; color: var(--text-secondary); margin: 0; }
+.highlight-box strong { color: var(--accent-light); }
+
+.warning-box {
+  background: rgba(220,38,38,0.07); border: 1px solid rgba(220,38,38,0.2);
+  border-left: 3px solid var(--primary-light); border-radius: 8px;
+  padding: 14px 18px; margin: 14px 0;
+}
+.warning-box p { font-size: 13.5px; color: var(--text-secondary); margin: 0; }
+.warning-box strong { color: var(--primary-light); }
+
+.info-box {
+  background: rgba(220,38,38,0.07); border: 1px solid rgba(220,38,38,0.2);
+  border-left: 3px solid var(--primary-light); border-radius: 8px;
+  padding: 14px 18px; margin: 14px 0;
+}
+.info-box p { font-size: 13.5px; color: var(--text-secondary); margin: 0; }
+.info-box strong { color: var(--primary-light); }
+
+.resource-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 600px) { .resource-grid { grid-template-columns: 1fr; } }
+.resource-card {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 16px;
+  display: flex; align-items: flex-start; gap: 12px;
+  text-decoration: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.resource-card:hover { border-color: var(--primary-light); background: rgba(220,38,38,0.06); }
+.resource-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: rgba(220,38,38,0.18);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.resource-body { flex: 1; min-width: 0; }
+.resource-label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+.resource-text { font-size: 13px; color: var(--text-primary); font-weight: 500; line-height: 1.4; }
+.resource-hint { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+
+.code-block { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 14px 0; }
+.code-header {
+  background: var(--bg-elevated); padding: 8px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+.code-lang { font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.code-dots { display: flex; gap: 6px; }
+.code-dots span { width: 10px; height: 10px; border-radius: 50%; }
+.code-dots span:nth-child(1) { background: #FF5F57; }
+.code-dots span:nth-child(2) { background: #FEBC2E; }
+.code-dots span:nth-child(3) { background: #28C840; }
+.code-body {
+  padding: 18px 20px; font-family: 'JetBrains Mono', monospace;
+  font-size: 13px; line-height: 1.8; color: #E2E8F0; overflow-x: auto;
+  white-space: pre;
+}
+.code-body .comment { color: #6B7280; }
+.code-body .keyword { color: #F87171; }
+.code-body .string  { color: #86EFAC; }
+.code-body .func    { color: #60A5FA; }
+.code-body .num     { color: #FB923C; }
+.code-body .cls     { color: #FCD34D; }
+.code-body .dec     { color: #C084FC; }
+.code-body .op      { color: #94A3B8; }
+
+.exercise-box {
+  background: rgba(220,38,38,0.06); border: 1px solid rgba(220,38,38,0.22);
+  border-radius: 12px; padding: 20px 22px;
+}
+.exercise-box h3 { font-size: 14px; font-weight: 700; color: var(--primary-light); margin-bottom: 10px; }
+.exercise-box ol { padding-left: 18px; }
+.exercise-box li { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 6px; }
+.exercise-box li strong { color: var(--text-primary); }
+
+.checklist { list-style: none; padding: 0; }
+.checklist li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px;
+}
+.checklist li::before {
+  content: '□';
+  color: var(--border-light); font-size: 16px; flex-shrink: 0; margin-top: -1px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.checklist li strong { color: var(--text-primary); }
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+.badge-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.badge {
+  background: rgba(220,38,38,0.12); border: 1px solid rgba(220,38,38,0.3);
+  color: var(--primary-light); font-size: 12px; font-weight: 600;
+  padding: 3px 10px; border-radius: 20px; font-family: 'JetBrains Mono', monospace;
+}
+.badge.green {
+  background: rgba(22,163,74,0.12); border-color: rgba(22,163,74,0.3);
+  color: var(--accent-light);
+}
+
+.complete-bar { margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
+.btn-complete {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff; font-weight: 700; font-size: 14px;
+  border: none; border-radius: 8px; cursor: pointer;
+  font-family: 'Poppins', sans-serif; transition: opacity 0.2s, transform 0.1s;
+}
+.btn-complete:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-complete:disabled { background: var(--bg-elevated); color: var(--text-muted); cursor: default; transform: none; opacity: 1; }
+.complete-msg { display: none; align-items: center; gap: 8px; color: var(--success); font-size: 14px; font-weight: 600; }
+.complete-msg.show { display: flex; }
+
+.welcome-panel { max-width: 620px; padding: 60px 0; }
+.welcome-panel h1 { font-size: 36px; font-weight: 800; line-height: 1.2; margin-bottom: 16px; }
+.welcome-panel h1 span { background: linear-gradient(135deg, var(--primary-light), var(--accent-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.welcome-panel p { font-size: 16px; color: var(--text-secondary); line-height: 1.75; margin-bottom: 12px; }
+.start-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 13px 28px; margin-top: 20px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #fff; font-weight: 700; font-size: 15px;
+  border: none; border-radius: 8px; cursor: pointer;
+  font-family: 'Poppins', sans-serif; transition: opacity 0.2s, transform 0.1s;
+}
+.start-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+.celebration {
+  background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(220,38,38,0.08));
+  border: 1px solid rgba(16,185,129,0.3);
+  border-radius: 12px; padding: 28px 24px; text-align: center; margin-top: 14px;
+}
+.celebration h3 { font-size: 22px; font-weight: 800; color: var(--success); margin-bottom: 10px; }
+.celebration p { font-size: 15px; color: var(--text-secondary); line-height: 1.7; }
+
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0; }
+.stat-card {
+  background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;
+  padding: 14px; text-align: center;
+}
+.stat-val { font-size: 22px; font-weight: 800; color: var(--primary-light); }
+.stat-label { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
+
+tag {
+  display: inline; background: rgba(220,38,38,0.1); color: var(--primary-light);
+  font-family: 'JetBrains Mono', monospace; font-size: 12.5px;
+  padding: 1px 6px; border-radius: 4px;
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo-block">
+    <div class="logo-icon">N</div>
+    <div class="logo-text">
+      <span class="logo-name">NexGen Computers</span>
+      <span class="logo-sub">AI Course Platform</span>
+    </div>
+  </div>
+  <div class="header-right">
+    <span class="track-badge">Track 3 — Advanced</span>
+    <a href="../index.html" class="back-link">&#8592; Back to Home</a>
+  </div>
+</header>
+
+<div class="app-body">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Prerequisites</div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressBar"></div></div>
+      <div class="progress-text"><span id="progressCount">0</span> / 7 days complete</div>
+    </div>
+    <nav class="sidebar-nav" id="sidebarNav"></nav>
+    <div class="sidebar-footer">
+      <a href="../track-3/index.html" class="btn-course" id="courseBtn">Continue to Track 3 Course &#8594;</a>
+    </div>
+  </aside>
+
+  <main class="main-content" id="mainContent">
+
+    <div id="welcome" class="welcome-panel">
+      <h1>Before You Begin:<br><span>Advanced Track</span><br>Prerequisites</h1>
+      <p>This 7-day module is a hard gate for Track 3. It covers engineering-level Python, mathematical foundations, production ML tooling, software engineering practices, deployment, research literacy, and systems thinking.</p>
+      <p>This is not a refresher for beginners. If you find Day P1 genuinely difficult, consider Track 2 first. If it feels like a checklist you can tick off in an afternoon, you're ready to proceed.</p>
+      <button class="start-btn" onclick="showDay(0)">Begin Day P1 &#8594;</button>
+    </div>
+
+    <!-- DAY 0: P1 -->
+    <div class="day-panel" id="day-0">
+      <div class="day-header">
+        <div class="day-pill">Day P1</div>
+        <h2 class="day-title">Python Mastery Self-Assessment</h2>
+        <p class="day-desc">Verify engineering-level Python readiness. The Track 3 course assumes fluency with advanced Python constructs — decorators, generators, async, metaclasses, and memory internals. Identify gaps today and fill them before moving forward.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Engineering-Level Python Checklist</div>
+        <div class="content-card">
+          <h3>Decorators with Arguments</h3>
+          <p>A decorator is a callable that returns a callable. A parameterised decorator adds one more layer: a factory that accepts arguments and returns the actual decorator. You need to understand all three levels of closure here.</p>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">Python — Parameterised Decorator</div></div>
+            <div class="code-body"><span class="keyword">import</span> functools, time
+
+<span class="keyword">def</span> <span class="func">retry</span>(max_attempts=<span class="num">3</span>, delay=<span class="num">1.0</span>, exceptions=(Exception,)):
+    <span class="string">"""Decorator factory: returns a decorator that retries on failure."""</span>
+    <span class="keyword">def</span> <span class="func">decorator</span>(func):
+        <span class="dec">@functools.wraps</span>(func)
+        <span class="keyword">def</span> <span class="func">wrapper</span>(*args, **kwargs):
+            last_exc = <span class="keyword">None</span>
+            <span class="keyword">for</span> attempt <span class="keyword">in</span> <span class="func">range</span>(max_attempts):
+                <span class="keyword">try</span>:
+                    <span class="keyword">return</span> <span class="func">func</span>(*args, **kwargs)
+                <span class="keyword">except</span> exceptions <span class="keyword">as</span> e:
+                    last_exc = e
+                    <span class="keyword">if</span> attempt &lt; max_attempts - <span class="num">1</span>:
+                        time.<span class="func">sleep</span>(delay * (<span class="num">2</span> ** attempt))  <span class="comment"># exponential backoff</span>
+            <span class="keyword">raise</span> last_exc
+        <span class="keyword">return</span> wrapper
+    <span class="keyword">return</span> decorator
+
+<span class="dec">@retry</span>(max_attempts=<span class="num">3</span>, delay=<span class="num">0.5</span>, exceptions=(ConnectionError, TimeoutError))
+<span class="keyword">def</span> <span class="func">fetch_data</span>(url: str) -> dict:
+    <span class="comment"># Simulates a flaky network call</span>
+    <span class="keyword">import</span> random
+    <span class="keyword">if</span> random.<span class="func">random</span>() &lt; <span class="num">0.7</span>:
+        <span class="keyword">raise</span> <span class="cls">ConnectionError</span>(<span class="string">"Network blip"</span>)
+    <span class="keyword">return</span> {<span class="string">"data"</span>: <span class="string">"ok"</span>}</div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3>Generators — yield, send(), and Generator Pipelines</h3>
+          <p>A generator is a lazy iterator. <tag>yield</tag> suspends execution and returns a value. <tag>send()</tag> resumes execution and injects a value back into the generator — this is the basis of coroutines before async/await.</p>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">Python — Generator Pipeline</div></div>
+            <div class="code-body"><span class="keyword">from</span> typing <span class="keyword">import</span> Iterator
+<span class="keyword">import</span> pathlib
+
+<span class="keyword">def</span> <span class="func">read_lines</span>(path: str) -> Iterator[str]:
+    <span class="string">"""Source generator: yields lines lazily, no file fully loaded in memory."""</span>
+    <span class="keyword">with</span> <span class="func">open</span>(path) <span class="keyword">as</span> f:
+        <span class="keyword">yield from</span> f
+
+<span class="keyword">def</span> <span class="func">strip_comments</span>(lines: Iterator[str]) -> Iterator[str]:
+    <span class="keyword">for</span> line <span class="keyword">in</span> lines:
+        stripped = line.<span class="func">strip</span>()
+        <span class="keyword">if</span> stripped <span class="keyword">and not</span> stripped.<span class="func">startswith</span>(<span class="string">"#"</span>):
+            <span class="keyword">yield</span> stripped
+
+<span class="keyword">def</span> <span class="func">parse_kv</span>(lines: Iterator[str]) -> Iterator[tuple[str, str]]:
+    <span class="keyword">for</span> line <span class="keyword">in</span> lines:
+        <span class="keyword">if</span> <span class="string">"="</span> <span class="keyword">in</span> line:
+            key, _, val = line.<span class="func">partition</span>(<span class="string">"="</span>)
+            <span class="keyword">yield</span> key.<span class="func">strip</span>(), val.<span class="func">strip</span>()
+
+<span class="comment"># Pipeline: each stage is lazy — no intermediate list created</span>
+pipeline = <span class="func">parse_kv</span>(<span class="func">strip_comments</span>(<span class="func">read_lines</span>(<span class="string">"config.txt"</span>)))
+config = <span class="func">dict</span>(pipeline)  <span class="comment"># only materialises at consumption</span>
+
+<span class="comment"># send() example: accumulating generator</span>
+<span class="keyword">def</span> <span class="func">running_average</span>():
+    total, count = <span class="num">0</span>, <span class="num">0</span>
+    <span class="keyword">while True</span>:
+        value = <span class="keyword">yield</span> (total / count <span class="keyword">if</span> count <span class="keyword">else None</span>)
+        total += value; count += <span class="num">1</span>
+
+avg = <span class="func">running_average</span>()
+<span class="func">next</span>(avg)         <span class="comment"># prime the generator</span>
+avg.<span class="func">send</span>(<span class="num">10</span>)     <span class="comment"># → 10.0</span>
+avg.<span class="func">send</span>(<span class="num">20</span>)     <span class="comment"># → 15.0</span></div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3>async/await — Event Loop, Coroutines, asyncio.gather</h3>
+          <p>Python's async model is cooperative multitasking on a single thread. An <tag>async def</tag> function returns a coroutine object — it does not run until awaited or scheduled. <tag>asyncio.gather()</tag> runs coroutines concurrently by interleaving them at every <tag>await</tag> point.</p>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">Python — Async HTTP Client</div></div>
+            <div class="code-body"><span class="keyword">import</span> asyncio
+<span class="keyword">import</span> aiohttp
+<span class="keyword">from</span> typing <span class="keyword">import</span> Any
+
+<span class="keyword">async def</span> <span class="func">fetch_json</span>(session: aiohttp.ClientSession, url: str) -> dict[str, Any]:
+    <span class="string">"""Single async fetch — yields control at the network boundary."""</span>
+    <span class="keyword">async with</span> session.<span class="func">get</span>(url, timeout=aiohttp.<span class="cls">ClientTimeout</span>(total=<span class="num">10</span>)) <span class="keyword">as</span> resp:
+        resp.<span class="func">raise_for_status</span>()
+        <span class="keyword">return await</span> resp.<span class="func">json</span>()
+
+<span class="keyword">async def</span> <span class="func">fetch_all</span>(urls: list[str]) -> list[dict]:
+    <span class="string">"""Fetch all URLs concurrently — total time ≈ slowest request, not sum."""</span>
+    <span class="keyword">async with</span> aiohttp.<span class="cls">ClientSession</span>() <span class="keyword">as</span> session:
+        tasks = [<span class="func">fetch_json</span>(session, url) <span class="keyword">for</span> url <span class="keyword">in</span> urls]
+        <span class="comment"># gather schedules all tasks; return_exceptions prevents one failure</span>
+        <span class="comment"># from cancelling the rest</span>
+        results = <span class="keyword">await</span> asyncio.<span class="func">gather</span>(*tasks, return_exceptions=<span class="keyword">True</span>)
+    <span class="keyword">return</span> [r <span class="keyword">for</span> r <span class="keyword">in</span> results <span class="keyword">if not isinstance</span>(r, <span class="cls">Exception</span>)]
+
+<span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:
+    urls = [<span class="string">"https://api.example.com/a"</span>, <span class="string">"https://api.example.com/b"</span>]
+    data = asyncio.<span class="func">run</span>(<span class="func">fetch_all</span>(urls))</div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3>Context Managers, Metaclasses, Dunder Methods</h3>
+          <ul>
+            <li><strong>Context managers</strong> — implement <tag>__enter__</tag> / <tag>__exit__</tag> for deterministic resource cleanup. <tag>__exit__</tag> receives exception info; return <tag>True</tag> to suppress it.</li>
+            <li><strong>Metaclasses</strong> — a metaclass is the class of a class. <tag>type</tag> is the default metaclass. Override <tag>__new__</tag> on a metaclass to intercept class creation — used by ORMs, validation frameworks, and plugin registries.</li>
+            <li><strong>Dunder methods</strong> — <tag>__repr__</tag> for unambiguous string (used by debuggers), <tag>__str__</tag> for human-readable, <tag>__eq__</tag>/<tag>__hash__</tag> for collections, <tag>__iter__</tag>/<tag>__next__</tag> for iteration protocol.</li>
+            <li><strong>Memory management</strong> — CPython uses reference counting + a cyclic garbage collector (<tag>gc</tag> module). <tag>sys.getrefcount(obj)</tag> returns the count. Circular references are collected by the GC but not by refcount alone.</li>
+            <li><strong>Profiling</strong> — <tag>cProfile</tag> measures CPU time per function call; <tag>memory_profiler</tag> measures line-by-line memory allocations. Always profile before optimising.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Exercises</div>
+        <div class="exercise-box">
+          <h3>Implement All Four — No Skipping</h3>
+          <ol>
+            <li><strong>@retry(max_attempts=3, delay=1.0)</strong> — decorator factory that retries the wrapped function with exponential backoff on exception. Verify with a function that fails the first two calls.</li>
+            <li><strong>Async file processor</strong> — given a list of file paths, read all of them concurrently using <tag>asyncio.gather</tag> and <tag>aiofiles</tag>. Return a dict mapping filename to line count.</li>
+            <li><strong>Custom DB context manager</strong> — class-based, implements <tag>__enter__</tag>/<tag>__exit__</tag>. On enter, open a SQLite connection. On exit, commit if no exception; rollback and re-raise if exception occurred.</li>
+            <li><strong>Lazy Fibonacci generator</strong> — yields Fibonacci numbers indefinitely. Compose it with a <tag>take(n, gen)</tag> utility that consumes only the first n values. Verify memory stays flat for n=1,000,000.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Resources</div>
+        <div class="resource-grid">
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=Python+advanced+concepts+decorators+generators" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">Python advanced concepts decorators generators</div>
+              <div class="resource-hint">Search returns multiple deep-dive tutorials</div>
+            </div>
+          </a>
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=Async+Python+tutorial+complete+asyncio" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">Async Python tutorial complete asyncio</div>
+              <div class="resource-hint">Full event loop + coroutine walkthroughs</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="complete-bar">
+        <button class="btn-complete" id="btn-0" onclick="markComplete(0)">Mark Day P1 Complete</button>
+        <div class="complete-msg" id="msg-0">&#10003; Completed</div>
+      </div>
+    </div>
+
+    <!-- DAY 1: P2 -->
+    <div class="day-panel" id="day-1">
+      <div class="day-header">
+        <div class="day-pill">Day P2</div>
+        <h2 class="day-title">Advanced Mathematics for Deep Learning</h2>
+        <p class="day-desc">Mathematical intuition, not memorisation. You need to understand why these tools exist and what they're doing geometrically — because they show up directly in the architectures and training loops you'll implement in Track 3.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Linear Algebra</div>
+        <div class="content-card">
+          <h3>Eigenvalues, Eigenvectors, and PCA</h3>
+          <p>An eigenvector of matrix A is a vector that doesn't change direction when A is applied to it — only its magnitude scales by the eigenvalue. Formally: <tag>Av = λv</tag>. In PCA, eigendecomposition of the covariance matrix finds the axes of maximum variance. The eigenvector with the largest eigenvalue is the first principal component.</p>
+          <p>SVD generalises this: any matrix M can be decomposed as <tag>M = UΣVᵀ</tag> where U and V are orthogonal matrices and Σ is diagonal. SVD is numerically more stable than eigendecomposition and works on non-square matrices — which is why it's used in collaborative filtering, dimensionality reduction, and attention weight compression (LoRA).</p>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">Python — PCA from Scratch via SVD</div></div>
+            <div class="code-body"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="keyword">def</span> <span class="func">pca_from_scratch</span>(X: np.ndarray, n_components: int) -> np.ndarray:
+    <span class="string">"""
+    PCA using SVD. No sklearn.
+    X: (n_samples, n_features)
+    Returns: (n_samples, n_components) projected data
+    """</span>
+    <span class="comment"># 1. Centre the data (critical — PCA is sensitive to mean shift)</span>
+    X_centred = X - X.<span class="func">mean</span>(axis=<span class="num">0</span>)
+
+    <span class="comment"># 2. SVD of centred data (not covariance matrix — more numerically stable)</span>
+    U, S, Vt = np.linalg.<span class="func">svd</span>(X_centred, full_matrices=<span class="keyword">False</span>)
+
+    <span class="comment"># Vt rows are principal components (right singular vectors)</span>
+    components = Vt[:n_components]
+
+    <span class="comment"># 3. Explained variance ratio</span>
+    explained = (S ** <span class="num">2</span>) / (S ** <span class="num">2</span>).<span class="func">sum</span>()
+    <span class="func">print</span>(<span class="string">f"Explained variance: {explained[:n_components].sum():.3f}"</span>)
+
+    <span class="comment"># 4. Project</span>
+    <span class="keyword">return</span> X_centred @ components.T
+
+<span class="comment"># Verify against sklearn</span>
+<span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> PCA
+<span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris
+
+X, y = <span class="func">load_iris</span>(return_X_y=<span class="keyword">True</span>)
+scratch = <span class="func">pca_from_scratch</span>(X, n_components=<span class="num">2</span>)
+sklearn_pca = <span class="cls">PCA</span>(n_components=<span class="num">2</span>).<span class="func">fit_transform</span>(X)
+
+<span class="comment"># Results are identical up to sign flip (both are valid bases)</span>
+<span class="func">print</span>(np.<span class="func">allclose</span>(np.<span class="func">abs</span>(scratch), np.<span class="func">abs</span>(sklearn_pca)))  <span class="comment"># True</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Probability &amp; Statistics</div>
+        <div class="content-card">
+          <h3>MLE Intuition and Bayesian Updating</h3>
+          <p><strong>Maximum Likelihood Estimation (MLE)</strong> — find the parameters θ that maximise P(data | θ). In practice you maximise log-likelihood (same maximum, but sums instead of products avoid numerical underflow). For a Gaussian, MLE gives you the sample mean and variance. For a Bernoulli, it gives you the proportion of 1s. This IS what your loss function is doing — cross-entropy loss is negative log-likelihood under a categorical distribution.</p>
+          <p><strong>Bayesian updating</strong> — instead of a point estimate, you maintain a distribution over θ. Prior × Likelihood → Posterior. The posterior becomes the prior for the next observation. Key insight: regularisation (L2 = Gaussian prior, L1 = Laplace prior) is MAP estimation, not pure MLE.</p>
+          <div class="highlight-box">
+            <p><strong>Key connection:</strong> Cross-entropy loss = negative log-likelihood of your model's predictions under the true labels. Minimising cross-entropy is exactly MLE. This is why it's the right loss for classification.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Calculus for Backpropagation</div>
+        <div class="content-card">
+          <h3>Chain Rule = Backpropagation</h3>
+          <p>Backpropagation is just the multivariate chain rule applied to a computation graph. If loss L depends on output y, y depends on weights W through some function, then <tag>∂L/∂W = (∂L/∂y) × (∂y/∂W)</tag>. In deep networks this chains backward through every layer.</p>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">Python — Gradient Descent from Scratch (MSE + Linear Regression)</div></div>
+            <div class="code-body"><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+np.random.<span class="func">seed</span>(<span class="num">42</span>)
+X = np.random.<span class="func">randn</span>(<span class="num">100</span>, <span class="num">1</span>)      <span class="comment"># 100 samples, 1 feature</span>
+y = <span class="num">3.0</span> * X.flatten() + <span class="num">2.0</span> + np.random.<span class="func">randn</span>(<span class="num">100</span>) * <span class="num">0.5</span>  <span class="comment"># y = 3x + 2 + noise</span>
+
+w, b = <span class="num">0.0</span>, <span class="num">0.0</span>   <span class="comment"># initialise parameters</span>
+lr = <span class="num">0.1</span>
+n = <span class="func">len</span>(y)
+
+<span class="keyword">for</span> epoch <span class="keyword">in</span> <span class="func">range</span>(<span class="num">200</span>):
+    <span class="comment"># Forward pass</span>
+    y_pred = w * X.flatten() + b
+    loss = ((y_pred - y) ** <span class="num">2</span>).<span class="func">mean</span>()
+
+    <span class="comment"># Backward pass — derive these from calculus, don't memorise</span>
+    <span class="comment"># ∂L/∂w = (2/n) Σ (y_pred - y) * x</span>
+    <span class="comment"># ∂L/∂b = (2/n) Σ (y_pred - y)</span>
+    residuals = y_pred - y
+    dw = (<span class="num">2</span> / n) * (residuals * X.flatten()).<span class="func">sum</span>()
+    db = (<span class="num">2</span> / n) * residuals.<span class="func">sum</span>()
+
+    <span class="comment"># Gradient descent update</span>
+    w -= lr * dw
+    b -= lr * db
+
+    <span class="keyword">if</span> epoch % <span class="num">40</span> == <span class="num">0</span>:
+        <span class="func">print</span>(<span class="string">f"Epoch {epoch:3d} | Loss: {loss:.4f} | w={w:.3f} b={b:.3f}"</span>)
+
+<span class="comment"># Should converge near w≈3.0, b≈2.0</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Exercises</div>
+        <div class="exercise-box">
+          <h3>Build and Verify</h3>
+          <ol>
+            <li><strong>Derive the gradient descent update rule for MSE + linear regression from scratch</strong> — on paper first (partial derivatives), then implement in NumPy. Verify that <tag>w</tag> and <tag>b</tag> converge to the true values used to generate synthetic data.</li>
+            <li><strong>Compare your result with scikit-learn's LinearRegression</strong> — coefficients should match to 2+ decimal places.</li>
+            <li><strong>Plot the loss curve</strong> using matplotlib — confirm it decreases monotonically. If it diverges, your learning rate is too high.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Resources</div>
+        <div class="resource-grid">
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=3Blue1Brown+linear+algebra+essence" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">3Blue1Brown linear algebra essence</div>
+              <div class="resource-hint">Best geometric intuition for eigenvectors + transformations</div>
+            </div>
+          </a>
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=StatQuest+maximum+likelihood+estimation" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">StatQuest maximum likelihood estimation</div>
+              <div class="resource-hint">Clear probabilistic framing of loss functions</div>
+            </div>
+          </a>
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=Mathematics+for+machine+learning+calculus+backpropagation" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">Mathematics for machine learning calculus backpropagation</div>
+              <div class="resource-hint">Chain rule → backprop derivation</div>
+            </div>
+          </a>
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=convex+vs+non+convex+loss+landscape+deep+learning" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">Convex vs non-convex loss landscape deep learning</div>
+              <div class="resource-hint">Why saddle points matter more than local minima</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="complete-bar">
+        <button class="btn-complete" id="btn-1" onclick="markComplete(1)">Mark Day P2 Complete</button>
+        <div class="complete-msg" id="msg-1">&#10003; Completed</div>
+      </div>
+    </div>
+
+    <!-- DAY 2: P3 -->
+    <div class="day-panel" id="day-2">
+      <div class="day-header">
+        <div class="day-pill">Day P3</div>
+        <h2 class="day-title">PyTorch &amp; Deep Learning Environment</h2>
+        <p class="day-desc">Set up a production-grade deep learning environment and learn to debug GPU issues before they cost you hours. Understanding GPU memory management is a core engineering skill — not an afterthought.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Environment Setup</div>
+        <div class="content-card">
+          <h3>Colab Pro vs Local CUDA — Trade-offs</h3>
+          <ul>
+            <li><strong>Colab Free</strong> — T4 GPU, sessions disconnect after ~90 min of inactivity, no persistent storage. Fine for learning, not for serious training runs.</li>
+            <li><strong>Colab Pro/Pro+</strong> — A100 access, background execution, more RAM. Good for medium experiments. Still no persistent filesystem across sessions.</li>
+            <li><strong>Local CUDA</strong> — Full control, persistent storage, no GPU time limits. Requires NVIDIA GPU (RTX 3080+ recommended), correct CUDA + cuDNN versions. Driver version determines max CUDA version — check with <tag>nvidia-smi</tag>.</li>
+            <li><strong>Cloud (Lambda, RunPod, Vast.ai)</strong> — On-demand A100/H100 VMs by the hour. Best for large training runs without capital expenditure.</li>
+          </ul>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">Python — GPU Verification + Memory Diagnostics</div></div>
+            <div class="code-body"><span class="keyword">import</span> torch
+
+<span class="comment"># Verify CUDA is available and identify your GPU</span>
+<span class="func">print</span>(<span class="string">f"CUDA available: {torch.cuda.is_available()}"</span>)
+<span class="func">print</span>(<span class="string">f"GPU: {torch.cuda.get_device_name(0)}"</span>)
+<span class="func">print</span>(<span class="string">f"CUDA version: {torch.version.cuda}"</span>)
+<span class="func">print</span>(<span class="string">f"Total memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB"</span>)
+
+<span class="comment"># Memory tracking — call before and after allocations to find leaks</span>
+<span class="keyword">def</span> <span class="func">gpu_mem_stats</span>(label: str = <span class="string">""</span>):
+    alloc = torch.cuda.<span class="func">memory_allocated</span>() / <span class="num">1e9</span>
+    reserved = torch.cuda.<span class="func">memory_reserved</span>() / <span class="num">1e9</span>
+    <span class="func">print</span>(<span class="string">f"[{label}] Allocated: {alloc:.3f}GB | Reserved: {reserved:.3f}GB"</span>)
+
+<span class="comment"># Mixed precision training — halves memory, increases throughput</span>
+<span class="keyword">from</span> torch.cuda.amp <span class="keyword">import</span> autocast, GradScaler
+
+scaler = <span class="cls">GradScaler</span>()
+
+<span class="keyword">def</span> <span class="func">train_step</span>(model, optimizer, x, y, loss_fn):
+    optimizer.<span class="func">zero_grad</span>()
+    <span class="keyword">with</span> <span class="func">autocast</span>(device_type=<span class="string">'cuda'</span>):   <span class="comment"># forward in fp16</span>
+        pred = <span class="func">model</span>(x)
+        loss = <span class="func">loss_fn</span>(pred, y)
+    scaler.<span class="func">scale</span>(loss).<span class="func">backward</span>()       <span class="comment"># backward in fp16 with scaling</span>
+    scaler.<span class="func">step</span>(optimizer)               <span class="comment"># unscale + step in fp32</span>
+    scaler.<span class="func">update</span>()
+    <span class="keyword">return</span> loss.<span class="func">item</span>()</div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3>CUDA OOM Errors — Diagnosis and Fixes</h3>
+          <p>Out-of-memory errors are the most common GPU failure mode. Diagnose systematically before reaching for batch size reductions.</p>
+          <ul>
+            <li><strong>Find the culprit</strong> — add <tag>gpu_mem_stats()</tag> calls between layers to isolate where memory spikes.</li>
+            <li><strong>Gradient checkpointing</strong> — recomputes activations during the backward pass instead of storing them. Trades compute for memory. Use <tag>torch.utils.checkpoint.checkpoint()</tag> on expensive layers.</li>
+            <li><strong>Reduce batch size</strong> — last resort, but effective. Pair with gradient accumulation to maintain the effective batch size: accumulate gradients over N steps before calling <tag>optimizer.step()</tag>.</li>
+            <li><strong>Delete tensors explicitly</strong> — <tag>del tensor; torch.cuda.empty_cache()</tag> frees reserved memory back to the OS. Important in evaluation loops where you're not using <tag>torch.no_grad()</tag>.</li>
+            <li><strong>Model parallelism</strong> — split the model across multiple GPUs when a single GPU can't hold the entire model in memory.</li>
+          </ul>
+        </div>
+
+        <div class="content-card">
+          <h3>DataLoader Optimisation</h3>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">Python — Optimised DataLoader Configuration</div></div>
+            <div class="code-body"><span class="keyword">from</span> torch.utils.data <span class="keyword">import</span> DataLoader
+<span class="keyword">import</span> multiprocessing
+
+<span class="comment"># num_workers: CPU workers for data loading. Rule: 4 × num_GPUs is a</span>
+<span class="comment"># reasonable starting point, but profile with the PyTorch profiler.</span>
+<span class="comment"># pin_memory: pins host memory → faster CPU→GPU transfer (DMA).</span>
+<span class="comment"># prefetch_factor: N batches pre-loaded per worker.</span>
+<span class="comment"># persistent_workers: workers survive epoch boundaries (avoids spawn overhead).</span>
+
+loader = <span class="cls">DataLoader</span>(
+    dataset,
+    batch_size=<span class="num">256</span>,
+    shuffle=<span class="keyword">True</span>,
+    num_workers=<span class="func">min</span>(<span class="num">8</span>, multiprocessing.<span class="func">cpu_count</span>()),
+    pin_memory=<span class="keyword">True</span>,           <span class="comment"># only True when training on GPU</span>
+    prefetch_factor=<span class="num">2</span>,
+    persistent_workers=<span class="keyword">True</span>,
+    drop_last=<span class="keyword">True</span>,            <span class="comment"># avoids uneven batch sizes at epoch end</span>
+)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Exercises</div>
+        <div class="exercise-box">
+          <h3>Profile and Optimise ResNet-18 on CIFAR-10</h3>
+          <ol>
+            <li><strong>Train ResNet-18 on CIFAR-10</strong> for 5 epochs — use <tag>torchvision.models.resnet18()</tag> with modified first conv layer for 32×32 inputs.</li>
+            <li><strong>Run the PyTorch profiler</strong> — wrap your training loop with <tag>torch.profiler.profile()</tag>, capture traces, and view in TensorBoard or export to JSON.</li>
+            <li><strong>Identify the top 3 bottlenecks</strong> — is it DataLoader IO? CPU→GPU transfer? Specific operations?</li>
+            <li><strong>Fix them</strong> — apply <tag>pin_memory</tag>, increase <tag>num_workers</tag>, enable mixed precision, and measure the speedup in iterations/second.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Resources</div>
+        <div class="resource-grid">
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=PyTorch+GPU+training+optimisation+tutorial" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">PyTorch GPU training optimisation tutorial</div>
+            </div>
+          </a>
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=CUDA+memory+management+PyTorch+OOM+tutorial" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">CUDA memory management PyTorch OOM tutorial</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="complete-bar">
+        <button class="btn-complete" id="btn-2" onclick="markComplete(2)">Mark Day P3 Complete</button>
+        <div class="complete-msg" id="msg-2">&#10003; Completed</div>
+      </div>
+    </div>
+
+    <!-- DAY 3: P4 -->
+    <div class="day-panel" id="day-3">
+      <div class="day-header">
+        <div class="day-pill">Day P4</div>
+        <h2 class="day-title">Software Engineering for ML</h2>
+        <p class="day-desc">The gap between a notebook prototype and production ML code is enormous. Today you close that gap — project structure, packaging, type hints, testing, configuration, and code quality tooling. Track 3 expects production-quality code, not Jupyter scripts.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">ML Project Structure</div>
+        <div class="content-card">
+          <h3>The src Layout — Why It Matters</h3>
+          <p>The <tag>src/</tag> layout prevents accidentally importing your package from the wrong place during development. It forces proper installation, which catches packaging bugs early.</p>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">Shell — Standard ML Project Structure</div></div>
+            <div class="code-body">my_ml_project/
+├── src/
+│   └── my_ml_project/
+│       ├── __init__.py
+│       ├── data/
+│       │   ├── __init__.py
+│       │   ├── dataset.py       <span class="comment"># Dataset classes, preprocessing</span>
+│       │   └── transforms.py
+│       ├── models/
+│       │   ├── __init__.py
+│       │   └── resnet.py        <span class="comment"># Model definitions only</span>
+│       ├── training/
+│       │   ├── __init__.py
+│       │   ├── trainer.py       <span class="comment"># Training loop logic</span>
+│       │   └── callbacks.py
+│       └── utils/
+│           └── logging.py
+├── configs/
+│   ├── base.yaml
+│   └── experiments/
+│       └── resnet18_cifar10.yaml
+├── tests/
+│   ├── conftest.py              <span class="comment"># pytest fixtures</span>
+│   ├── test_dataset.py
+│   └── test_model.py
+├── notebooks/                   <span class="comment"># exploration only, never imported</span>
+├── pyproject.toml
+└── README.md</div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3>Type Hints, Dataclasses, and Configuration with Hydra</h3>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">Python — Type-Annotated Training Config with Dataclasses</div></div>
+            <div class="code-body"><span class="keyword">from</span> dataclasses <span class="keyword">import</span> dataclass, field
+<span class="keyword">from</span> typing <span class="keyword">import</span> Optional
+<span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
+
+<span class="dec">@dataclass</span>
+<span class="keyword">class</span> <span class="cls">DataConfig</span>:
+    root: Path = Path(<span class="string">"data/raw"</span>)
+    batch_size: int = <span class="num">256</span>
+    num_workers: int = <span class="num">8</span>
+    augment: bool = <span class="keyword">True</span>
+
+<span class="dec">@dataclass</span>
+<span class="keyword">class</span> <span class="cls">ModelConfig</span>:
+    architecture: str = <span class="string">"resnet18"</span>
+    pretrained: bool = <span class="keyword">False</span>
+    num_classes: int = <span class="num">10</span>
+    dropout: float = <span class="num">0.0</span>
+
+<span class="dec">@dataclass</span>
+<span class="keyword">class</span> <span class="cls">TrainingConfig</span>:
+    epochs: int = <span class="num">50</span>
+    lr: float = <span class="num">1e-3</span>
+    weight_decay: float = <span class="num">1e-4</span>
+    data: <span class="cls">DataConfig</span> = field(default_factory=<span class="cls">DataConfig</span>)
+    model: <span class="cls">ModelConfig</span> = field(default_factory=<span class="cls">ModelConfig</span>)
+    output_dir: Path = Path(<span class="string">"outputs"</span>)
+    seed: int = <span class="num">42</span>
+
+<span class="comment"># With Hydra: python train.py model.architecture=resnet50 training.lr=1e-4</span>
+<span class="comment"># Hydra handles YAML loading, CLI overrides, and experiment tracking</span></div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3>Testing ML Code with pytest</h3>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">Python — pytest for ML (fixtures, parametrise, mocking)</div></div>
+            <div class="code-body"><span class="keyword">import</span> pytest
+<span class="keyword">import</span> torch
+<span class="keyword">from</span> src.my_ml_project.models.resnet <span class="keyword">import</span> build_model
+
+<span class="dec">@pytest.fixture</span>
+<span class="keyword">def</span> <span class="func">small_batch</span>() -> tuple[torch.Tensor, torch.Tensor]:
+    <span class="string">"""CPU batch for fast unit tests — no GPU required."""</span>
+    x = torch.<span class="func">randn</span>(<span class="num">4</span>, <span class="num">3</span>, <span class="num">32</span>, <span class="num">32</span>)
+    y = torch.<span class="func">randint</span>(<span class="num">0</span>, <span class="num">10</span>, (<span class="num">4</span>,))
+    <span class="keyword">return</span> x, y
+
+<span class="dec">@pytest.mark.parametrize</span>(<span class="string">"arch,num_classes"</span>, [
+    (<span class="string">"resnet18"</span>, <span class="num">10</span>),
+    (<span class="string">"resnet50"</span>, <span class="num">100</span>),
+])
+<span class="keyword">def</span> <span class="func">test_model_output_shape</span>(small_batch, arch, num_classes):
+    x, _ = small_batch
+    model = <span class="func">build_model</span>(arch, num_classes=num_classes)
+    model.<span class="func">eval</span>()
+    <span class="keyword">with</span> torch.<span class="func">no_grad</span>():
+        out = <span class="func">model</span>(x)
+    <span class="keyword">assert</span> out.shape == (x.shape[<span class="num">0</span>], num_classes)
+
+<span class="keyword">def</span> <span class="func">test_model_gradients_flow</span>(small_batch):
+    x, y = small_batch
+    model = <span class="func">build_model</span>(<span class="string">"resnet18"</span>, num_classes=<span class="num">10</span>)
+    out = <span class="func">model</span>(x)
+    loss = torch.nn.functional.<span class="func">cross_entropy</span>(out, y)
+    loss.<span class="func">backward</span>()
+    <span class="comment"># Verify at least one parameter has non-None, non-zero gradient</span>
+    grads = [p.grad <span class="keyword">for</span> p <span class="keyword">in</span> model.<span class="func">parameters</span>() <span class="keyword">if</span> p.grad <span class="keyword">is not None</span>]
+    <span class="keyword">assert len</span>(grads) > <span class="num">0</span>
+    <span class="keyword">assert any</span>(g.<span class="func">abs</span>().<span class="func">max</span>().<span class="func">item</span>() > <span class="num">0</span> <span class="keyword">for</span> g <span class="keyword">in</span> grads)</div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3>Code Quality Tools — pyproject.toml Configuration</h3>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">TOML — pyproject.toml with black + ruff + pre-commit</div></div>
+            <div class="code-body">[tool.black]
+line-length = <span class="num">100</span>
+target-version = [<span class="string">"py311"</span>]
+
+[tool.ruff]
+line-length = <span class="num">100</span>
+select = [<span class="string">"E"</span>, <span class="string">"F"</span>, <span class="string">"I"</span>, <span class="string">"N"</span>, <span class="string">"UP"</span>]  <span class="comment"># errors, pyflakes, isort, naming, upgrades</span>
+ignore = [<span class="string">"E501"</span>]   <span class="comment"># black handles line length</span>
+
+[tool.pytest.ini_options]
+testpaths = [<span class="string">"tests"</span>]
+addopts = <span class="string">"-v --tb=short -x"</span>   <span class="comment"># verbose, short traceback, stop on first failure</span>
+
+[tool.mypy]
+strict = <span class="keyword">true</span>
+ignore_missing_imports = <span class="keyword">true</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Exercise</div>
+        <div class="exercise-box">
+          <h3>Refactor a Notebook into a Package</h3>
+          <ol>
+            <li>Take any previous ML notebook (CIFAR-10 training, titanic classifier, anything). Restructure it into the <tag>src/</tag> layout above.</li>
+            <li>Add a <tag>configs/</tag> YAML with all hyperparameters. No hardcoded values in Python files.</li>
+            <li>Add structured logging with <tag>structlog</tag> or Python's <tag>logging</tag> module in JSON format.</li>
+            <li>Write 5 unit tests covering: dataset <tag>__len__</tag>, dataset <tag>__getitem__</tag> output shape, model forward pass shape, loss is non-negative, optimizer step reduces loss.</li>
+            <li>Run <tag>black .</tag> and <tag>ruff check .</tag> — fix all issues. Set up a <tag>pre-commit</tag> hook so they run automatically on every commit.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Resources</div>
+        <div class="resource-grid">
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=Python+project+structure+best+practices+src+layout" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">Python project structure best practices src layout</div>
+            </div>
+          </a>
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=pytest+tutorial+for+ML+engineers+fixtures+parametrize" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">pytest tutorial for ML engineers fixtures parametrize</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="complete-bar">
+        <button class="btn-complete" id="btn-3" onclick="markComplete(3)">Mark Day P4 Complete</button>
+        <div class="complete-msg" id="msg-3">&#10003; Completed</div>
+      </div>
+    </div>
+
+    <!-- DAY 4: P5 -->
+    <div class="day-panel" id="day-4">
+      <div class="day-header">
+        <div class="day-pill">Day P5</div>
+        <h2 class="day-title">APIs, Docker &amp; Cloud for ML</h2>
+        <p class="day-desc">Packaging a trained model as a production service is a distinct engineering discipline. Today you build a FastAPI inference server, containerise it with a multi-stage Dockerfile, and deploy it to Cloud Run — end-to-end.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">FastAPI for ML Serving</div>
+        <div class="content-card">
+          <h3>Model Serving with FastAPI — Route Design and Pydantic</h3>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">Python — FastAPI ML Inference Service</div></div>
+            <div class="code-body"><span class="keyword">from</span> fastapi <span class="keyword">import</span> FastAPI, HTTPException, BackgroundTasks
+<span class="keyword">from</span> pydantic <span class="keyword">import</span> BaseModel, Field, validator
+<span class="keyword">from</span> contextlib <span class="keyword">import</span> asynccontextmanager
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">import</span> joblib
+<span class="keyword">from</span> pathlib <span class="keyword">import</span> Path
+<span class="keyword">import</span> logging
+
+logger = logging.<span class="func">getLogger</span>(__name__)
+
+<span class="comment"># ── Lifespan: load model once at startup, not per-request ─────────</span>
+<span class="dec">@asynccontextmanager</span>
+<span class="keyword">async def</span> <span class="func">lifespan</span>(app: FastAPI):
+    app.state.model = joblib.<span class="func">load</span>(Path(<span class="string">"models/classifier.joblib"</span>))
+    logger.<span class="func">info</span>(<span class="string">"Model loaded"</span>)
+    <span class="keyword">yield</span>
+    <span class="keyword">del</span> app.state.model
+
+app = <span class="cls">FastAPI</span>(title=<span class="string">"ML Inference Service"</span>, version=<span class="string">"1.0.0"</span>, lifespan=lifespan)
+
+<span class="comment"># ── Request / Response models ──────────────────────────────────────</span>
+<span class="keyword">class</span> <span class="cls">PredictRequest</span>(BaseModel):
+    features: list[float] = <span class="cls">Field</span>(..., min_items=<span class="num">4</span>, max_items=<span class="num">4</span>)
+
+    <span class="dec">@validator</span>(<span class="string">"features"</span>, each_item=<span class="keyword">True</span>)
+    <span class="keyword">def</span> <span class="func">check_finite</span>(cls, v):
+        <span class="keyword">if not</span> np.<span class="func">isfinite</span>(v):
+            <span class="keyword">raise</span> <span class="cls">ValueError</span>(<span class="string">"Feature must be finite"</span>)
+        <span class="keyword">return</span> v
+
+<span class="keyword">class</span> <span class="cls">PredictResponse</span>(BaseModel):
+    label: int
+    confidence: float
+    label_name: str
+
+<span class="comment"># ── Endpoints ─────────────────────────────────────────────────────</span>
+<span class="dec">@app.get</span>(<span class="string">"/health"</span>)
+<span class="keyword">async def</span> <span class="func">health</span>():
+    <span class="keyword">return</span> {<span class="string">"status"</span>: <span class="string">"ok"</span>, <span class="string">"model_loaded"</span>: <span class="func">hasattr</span>(app.state, <span class="string">"model"</span>)}
+
+<span class="dec">@app.post</span>(<span class="string">"/predict"</span>, response_model=<span class="cls">PredictResponse</span>)
+<span class="keyword">async def</span> <span class="func">predict</span>(req: <span class="cls">PredictRequest</span>):
+    <span class="keyword">try</span>:
+        X = np.<span class="func">array</span>([req.features])
+        proba = app.state.model.<span class="func">predict_proba</span>(X)[<span class="num">0</span>]
+        label = int(proba.<span class="func">argmax</span>())
+        CLASSES = [<span class="string">"setosa"</span>, <span class="string">"versicolor"</span>, <span class="string">"virginica"</span>]
+        <span class="keyword">return</span> <span class="cls">PredictResponse</span>(label=label, confidence=<span class="func">float</span>(proba[label]), label_name=CLASSES[label])
+    <span class="keyword">except Exception</span> <span class="keyword">as</span> e:
+        logger.<span class="func">exception</span>(<span class="string">"Prediction failed"</span>)
+        <span class="keyword">raise</span> <span class="cls">HTTPException</span>(status_code=<span class="num">500</span>, detail=<span class="func">str</span>(e))</div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3>Multi-Stage Dockerfile for Python ML Services</h3>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">Dockerfile — Multi-Stage ML Service</div></div>
+            <div class="code-body"><span class="comment"># Stage 1: builder — install deps (large, discarded after build)</span>
+FROM python:<span class="num">3.11</span>-slim <span class="keyword">AS</span> builder
+WORKDIR /app
+COPY pyproject.toml ./
+RUN pip install --upgrade pip &amp;&amp; \
+    pip install --no-cache-dir --prefix=/install .
+
+<span class="comment"># Stage 2: runtime — only what's needed to run</span>
+FROM python:<span class="num">3.11</span>-slim <span class="keyword">AS</span> runtime
+WORKDIR /app
+
+<span class="comment"># Copy installed packages from builder (no compiler toolchain in final image)</span>
+COPY --from=builder /install /usr/local
+
+<span class="comment"># Copy source code and model artefacts</span>
+COPY src/ ./src/
+COPY models/ ./models/
+
+<span class="comment"># Non-root user — security best practice</span>
+RUN useradd -m appuser
+USER appuser
+
+<span class="comment"># Health check for container orchestrators</span>
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
+
+ENV PORT=8080
+EXPOSE 8080
+CMD [<span class="string">"uvicorn"</span>, <span class="string">"src.service.main:app"</span>, <span class="string">"--host"</span>, <span class="string">"0.0.0.0"</span>, <span class="string">"--port"</span>, <span class="string">"8080"</span>]</div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3>docker-compose for Local Dev</h3>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">YAML — docker-compose.yml</div></div>
+            <div class="code-body">version: <span class="string">"3.9"</span>
+services:
+  api:
+    build: .
+    ports: [<span class="string">"8080:8080"</span>]
+    environment:
+      - REDIS_URL=redis://redis:6379
+    depends_on: [redis]
+    volumes:
+      - ./models:/app/models:ro    <span class="comment"># mount models without rebuild</span>
+
+  redis:
+    image: redis:<span class="num">7</span>-alpine
+    ports: [<span class="string">"6379:6379"</span>]
+
+<span class="comment"># Run: docker-compose up --build</span>
+<span class="comment"># Test: curl http://localhost:8080/health</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Exercise</div>
+        <div class="exercise-box">
+          <h3>End-to-End: Train → Serve → Deploy</h3>
+          <ol>
+            <li><strong>Train a model</strong> — iris classifier or anything you have. Serialise with <tag>joblib.dump()</tag>.</li>
+            <li><strong>Build the FastAPI service</strong> — <tag>/health</tag>, <tag>/predict</tag> with Pydantic validation, model loaded once in lifespan.</li>
+            <li><strong>Write a multi-stage Dockerfile</strong> — verify final image is under 500MB. Run <tag>docker images</tag> to check size.</li>
+            <li><strong>Run with docker-compose</strong> — test all endpoints with <tag>curl</tag> or httpie.</li>
+            <li><strong>Deploy to Cloud Run</strong> — <tag>gcloud run deploy</tag> from the container. Test the public HTTPS endpoint.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Resources</div>
+        <div class="resource-grid">
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=FastAPI+tutorial+Python+model+serving+ML" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">FastAPI tutorial Python model serving ML</div>
+            </div>
+          </a>
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=Docker+multi-stage+build+Python+ML+service" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">Docker multi-stage build Python ML service</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="complete-bar">
+        <button class="btn-complete" id="btn-4" onclick="markComplete(4)">Mark Day P5 Complete</button>
+        <div class="complete-msg" id="msg-4">&#10003; Completed</div>
+      </div>
+    </div>
+
+    <!-- DAY 5: P6 -->
+    <div class="day-panel" id="day-5">
+      <div class="day-header">
+        <div class="day-pill">Day P6</div>
+        <h2 class="day-title">Research Paper Reading for Engineers</h2>
+        <p class="day-desc">Track 3 will reference papers directly. You need to extract engineering insight from research quickly and accurately — not just understand the abstract, but know what to implement and what to skip.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">The 3-Pass Reading Method</div>
+        <div class="content-card">
+          <h3>Pass 1 — 10 Minutes: Orient Yourself</h3>
+          <p>Read: title, abstract, section headings, figure captions, conclusion. Answer: What problem does this solve? What is the claimed contribution? Is this relevant to what I need? Do not read the full body yet. Decide whether to continue.</p>
+          <div class="highlight-box">
+            <p><strong>Filter ruthlessly.</strong> Most papers that look relevant aren't. The 3-pass method exists so you spend 10 minutes deciding, not 2 hours reading something you won't use.</p>
+          </div>
+        </div>
+        <div class="content-card">
+          <h3>Pass 2 — 30-60 Minutes: Understand the Claim</h3>
+          <p>Read introduction and conclusions carefully. Skim the method section — focus on the architecture diagram, the loss function, and the training procedure. Read the experimental setup and ablation tables. Questions to answer: What baseline does this beat, and by how much? What ablation proves the key contribution works? What did they not test?</p>
+        </div>
+        <div class="content-card">
+          <h3>Pass 3 — Implementation Read</h3>
+          <p>Read the method section in full. Write pseudocode for the key algorithm. Identify: what hyperparameters matter (from ablations), what the authors glossed over, and what the reproducibility challenges are. Check Papers With Code for available implementations — compare against your pseudocode before coding from scratch.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Foundational Papers Every AI Engineer Must Know</div>
+        <div class="content-card">
+          <h3>The Canon — What They Contributed and Why You Care</h3>
+          <ul>
+            <li><strong>"Attention Is All You Need" (Vaswani et al., 2017)</strong> — introduced the Transformer: self-attention replaces recurrence entirely. Every large language model you'll work with in Track 3 is built on this architecture. You must understand multi-head attention mechanically.</li>
+            <li><strong>"BERT: Pre-training of Deep Bidirectional Transformers" (Devlin et al., 2018)</strong> — showed that masked language modelling on large corpora produces representations transferable to downstream tasks with minimal fine-tuning. Established the pre-train → fine-tune paradigm.</li>
+            <li><strong>"Language Models are Few-Shot Learners" (Brown et al., 2020 — GPT-3)</strong> — demonstrated that scale alone enables in-context learning without gradient updates. Established prompt engineering as an engineering discipline.</li>
+            <li><strong>"LoRA: Low-Rank Adaptation of Large Language Models" (Hu et al., 2021)</strong> — decomposed weight updates into low-rank matrices, enabling fine-tuning of 175B+ models on consumer GPUs. The dominant PEFT method in production today.</li>
+            <li><strong>"ReAct: Synergizing Reasoning and Acting" (Yao et al., 2022)</strong> — combined chain-of-thought reasoning with tool use in a single loop. The architectural ancestor of modern agent frameworks.</li>
+          </ul>
+        </div>
+
+        <div class="content-card">
+          <h3>LoRA — Implement the Key Algorithm from Scratch</h3>
+          <p>LoRA freezes the pretrained weight matrix W and trains two low-rank matrices A and B such that the weight update is ΔW = BA. Rank r is typically 4–64, much smaller than the original dimensions. At inference, BA is merged into W — zero latency overhead.</p>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">Python — LoRA Layer from Scratch</div></div>
+            <div class="code-body"><span class="keyword">import</span> torch
+<span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn
+<span class="keyword">import</span> math
+
+<span class="keyword">class</span> <span class="cls">LoRALinear</span>(nn.Module):
+    <span class="string">"""
+    Drop-in replacement for nn.Linear with LoRA adaptation.
+    Only A and B are trained; weight W is frozen.
+    """</span>
+    <span class="keyword">def</span> <span class="func">__init__</span>(self, in_features: int, out_features: int,
+                 rank: int = <span class="num">4</span>, alpha: float = <span class="num">1.0</span>):
+        <span class="func">super</span>().__init__()
+        self.rank = rank
+        self.scaling = alpha / rank   <span class="comment"># controls magnitude of adaptation</span>
+
+        <span class="comment"># Frozen pretrained weights</span>
+        self.weight = nn.<span class="cls">Parameter</span>(
+            torch.<span class="func">empty</span>(out_features, in_features), requires_grad=<span class="keyword">False</span>
+        )
+        nn.init.<span class="func">kaiming_uniform_</span>(self.weight, a=math.<span class="func">sqrt</span>(<span class="num">5</span>))
+
+        <span class="comment"># Trainable low-rank matrices</span>
+        <span class="comment"># A: initialised with random Gaussian (not zeros — breaks symmetry)</span>
+        <span class="comment"># B: initialised to zero (so ΔW = BA = 0 at start)</span>
+        self.lora_A = nn.<span class="cls">Parameter</span>(torch.<span class="func">empty</span>(rank, in_features))
+        self.lora_B = nn.<span class="cls">Parameter</span>(torch.<span class="func">zeros</span>(out_features, rank))
+        nn.init.<span class="func">kaiming_uniform_</span>(self.lora_A, a=math.<span class="func">sqrt</span>(<span class="num">5</span>))
+
+    <span class="keyword">def</span> <span class="func">forward</span>(self, x: torch.Tensor) -> torch.Tensor:
+        <span class="comment"># Original path (frozen) + LoRA path (trained)</span>
+        base = nn.functional.<span class="func">linear</span>(x, self.weight)
+        lora = nn.functional.<span class="func">linear</span>(
+            nn.functional.<span class="func">linear</span>(x, self.lora_A), self.lora_B
+        ) * self.scaling
+        <span class="keyword">return</span> base + lora
+
+    <span class="keyword">def</span> <span class="func">merge_weights</span>(self):
+        <span class="string">"""Fuse LoRA into W for zero-overhead inference."""</span>
+        self.weight.data += (self.lora_B @ self.lora_A) * self.scaling
+        self.lora_A.<span class="func">requires_grad_</span>(<span class="keyword">False</span>)
+        self.lora_B.<span class="func">requires_grad_</span>(<span class="keyword">False</span>)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Where to Stay Current</div>
+        <div class="content-card">
+          <h3>Sources That Matter</h3>
+          <ul>
+            <li><strong>arXiv cs.LG / cs.CL</strong> — primary source. Filter by submission date. New papers drop daily at 8am EST.</li>
+            <li><strong>Papers With Code</strong> — links papers to implementations. Check the "Methods" tab to find specific architectures with benchmarks.</li>
+            <li><strong>Hugging Face Daily Papers</strong> — curated top papers with community discussion. Good signal-to-noise ratio.</li>
+            <li><strong>Yannic Kilcher (YouTube)</strong> — deep technical walkthroughs of influential papers. Watch the Transformer and GPT-3 videos before Track 3 begins.</li>
+            <li><strong>Ahead of AI (Sebastian Raschka newsletter)</strong> — weekly digest of papers relevant to practitioners.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Exercise</div>
+        <div class="exercise-box">
+          <h3>Read "Attention Is All You Need" — Engineering Summary</h3>
+          <ol>
+            <li>Apply the 3-pass method to "Attention Is All You Need" (Vaswani et al., 2017). It's freely available on arXiv: 1706.03762.</li>
+            <li>Write a 1-page engineering summary covering: (a) what problem it solves vs LSTMs, (b) the key architectural choices — multi-head attention, positional encoding, encoder-decoder structure, (c) what you would implement differently today given what we know now (e.g. RoPE instead of sinusoidal PE, pre-norm instead of post-norm, no decoder if doing classification).</li>
+            <li>Implement the <tag>LoRALinear</tag> layer above, swap it into a small pretrained model (e.g. DistilBERT via HuggingFace), and verify the parameter count — only A and B should require gradients.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Resources</div>
+        <div class="resource-grid">
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=How+to+read+ML+research+papers+efficiently" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">How to read ML research papers efficiently</div>
+            </div>
+          </a>
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=Attention+is+all+you+need+explained+Yannic+Kilcher" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">Attention is all you need explained Yannic Kilcher</div>
+              <div class="resource-hint">Best technical walkthrough of the Transformer paper</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="complete-bar">
+        <button class="btn-complete" id="btn-5" onclick="markComplete(5)">Mark Day P6 Complete</button>
+        <div class="complete-msg" id="msg-5">&#10003; Completed</div>
+      </div>
+    </div>
+
+    <!-- DAY 6: P7 -->
+    <div class="day-panel" id="day-6">
+      <div class="day-header">
+        <div class="day-pill">Day P7</div>
+        <h2 class="day-title">Engineering Mindset for AI Systems</h2>
+        <p class="day-desc">The final gate. AI systems fail in ways that are distinct from traditional software. Today you develop the systematic debugging mindset, understand production failure modes, and complete a deliberately broken pipeline exercise that tests everything you've learned this week.</p>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Production ML Failure Modes</div>
+        <div class="content-card">
+          <h3>The Four Failure Categories</h3>
+          <ul>
+            <li><strong>Data bugs</strong> — wrong labels, distribution shift, preprocessing applied inconsistently between train and serve, silent NaN propagation, feature leakage from the future. The most common and hardest to catch. Always validate data before blaming the model.</li>
+            <li><strong>Model bugs</strong> — wrong architecture for the problem, gradient issues (vanishing/exploding), incorrect loss function for the label space, evaluation metric computed on training set by mistake.</li>
+            <li><strong>Serving bugs</strong> — model serialised differently from how it was trained, input normalisation missing at inference time, output postprocessing inconsistent with training, batching logic incorrect.</li>
+            <li><strong>Monitoring bugs</strong> — no alerting on input distribution shift, prediction distribution drift ignored, model degradation discovered by end users instead of metrics, confidence scores not calibrated.</li>
+          </ul>
+          <div class="warning-box">
+            <p><strong>The 80/20 rule:</strong> In production, data quality issues cause 80%+ of model performance problems. Before tuning hyperparameters or swapping architectures, audit your data pipeline. Clean data beats a better model on dirty data every time.</p>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <h3>Debugging Systematically — Binary Search Your Pipeline</h3>
+          <p>Never debug end-to-end. Isolate the boundary where correct behaviour ends. Split the pipeline in half — test the midpoint. The bug is in whichever half fails. Repeat until you have a minimal reproducing case.</p>
+          <ul>
+            <li><strong>Unit test your data pipeline</strong> — load one batch and inspect it manually. Print shapes, dtypes, min/max values, label distribution. Do not trust it just because it doesn't throw an error.</li>
+            <li><strong>Overfit one batch</strong> — before training on the full dataset, verify your model can achieve near-zero loss on a single batch with enough epochs. If it can't, the model or loss function is wrong — not the data or regularisation.</li>
+            <li><strong>Use assertions defensively</strong> — <tag>assert tensor.shape == (batch_size, num_classes)</tag> at every layer boundary during development. Remove in production if performance critical, but catch shape bugs early.</li>
+            <li><strong>Profile before optimising</strong> — measure actual wall-clock time per stage before deciding where to spend engineering effort.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">The Broken Pipeline Exercise</div>
+        <div class="content-card">
+          <h3>5 Deliberate Bugs — Find and Fix All of Them</h3>
+          <p>The code below trains a classifier on the Titanic dataset. It runs without errors. It reports high accuracy. All five of the following bugs are present. Your job is to find them, diagnose each one, fix it, and document what symptom gave it away.</p>
+          <div class="code-block">
+            <div class="code-header"><div class="code-dots"><span></span><span></span><span></span></div><div class="code-lang">Python — Deliberately Broken ML Pipeline (5 bugs)</div></div>
+            <div class="code-body"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+<span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier
+<span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> LabelEncoder
+<span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score
+
+df = pd.<span class="func">read_csv</span>(<span class="string">"titanic.csv"</span>)
+
+<span class="comment"># ── Bug 1: Data Leakage ───────────────────────────────────────────</span>
+<span class="comment"># The "Survived" column is included as a feature</span>
+features = [<span class="string">"Pclass"</span>, <span class="string">"Age"</span>, <span class="string">"Fare"</span>, <span class="string">"Survived"</span>, <span class="string">"SibSp"</span>, <span class="string">"Parch"</span>]
+
+<span class="comment"># ── Bug 2: NaN propagation ────────────────────────────────────────</span>
+<span class="comment"># Age has missing values. fillna is called after feature selection,</span>
+<span class="comment"># but RandomForest silently accepts NaN and produces incorrect splits</span>
+X = df[features].copy()
+y = df[<span class="string">"Survived"</span>]
+
+<span class="comment"># ── Bug 3: Wrong Label Encoding ───────────────────────────────────</span>
+<span class="comment"># Fit LabelEncoder on the entire dataset including test set,</span>
+<span class="comment"># then use the same encoder for both — causes index mismatch when</span>
+<span class="comment"># unseen categories appear in deployment</span>
+le = <span class="cls">LabelEncoder</span>()
+le.<span class="func">fit</span>(df[<span class="string">"Sex"</span>])
+
+<span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split
+X_train, X_test, y_train, y_test = <span class="func">train_test_split</span>(
+    X, y, test_size=<span class="num">0.2</span>, random_state=<span class="num">42</span>
+)
+
+<span class="comment"># NaN fill happens AFTER split but before the model — but note:</span>
+<span class="comment"># the mean is computed on X (all data), not X_train → leakage</span>
+X_train[<span class="string">"Age"</span>].<span class="func">fillna</span>(X[<span class="string">"Age"</span>].<span class="func">mean</span>(), inplace=<span class="keyword">True</span>)  <span class="comment"># Bug 2 partial fix, still leaky</span>
+X_test[<span class="string">"Age"</span>].<span class="func">fillna</span>(X[<span class="string">"Age"</span>].<span class="func">mean</span>(), inplace=<span class="keyword">True</span>)
+
+model = <span class="cls">RandomForestClassifier</span>(n_estimators=<span class="num">100</span>, random_state=<span class="num">42</span>)
+model.<span class="func">fit</span>(X_train, y_train)
+
+<span class="comment"># ── Bug 4: Metric computed on training set ────────────────────────</span>
+train_preds = model.<span class="func">predict</span>(X_train)
+<span class="func">print</span>(<span class="string">f"Accuracy: {accuracy_score(y_train, train_preds):.4f}"</span>)  <span class="comment"># reports ~0.99, not test acc</span>
+
+<span class="comment"># ── Bug 5: Dimension mismatch at inference ────────────────────────</span>
+<span class="comment"># When serving a single sample, the caller passes a 1D array.</span>
+<span class="comment"># RandomForest expects 2D. This crashes in production, not training.</span>
+<span class="keyword">def</span> <span class="func">predict_single</span>(sample: list) -> int:
+    <span class="keyword">return</span> model.<span class="func">predict</span>(sample)[<span class="num">0</span>]  <span class="comment"># passes list, not np.array([[...]])</span>
+
+<span class="func">predict_single</span>([<span class="num">3</span>, <span class="num">22.0</span>, <span class="num">7.25</span>, <span class="num">0</span>, <span class="num">1</span>, <span class="num">0</span>])  <span class="comment"># DataConversionWarning or ValueError</span></div>
+          </div>
+
+          <div class="highlight-box">
+            <p><strong>Bug inventory:</strong> (1) Data leakage — "Survived" used as feature. (2) NaN imputation leakage — mean computed on full dataset including test set. (3) Label encoder fit on full data — creates data leakage; should fit only on train. (4) Accuracy reported on training set — model looks 99% accurate, actually just memorised. (5) Dimension mismatch — predict_single passes a list instead of a 2D array.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Communicating Technical Work</div>
+        <div class="content-card">
+          <h3>The "So What" Framing</h3>
+          <p>Non-technical stakeholders don't care that you used a Random Forest vs XGBoost. They care about the decision it enables. Frame every technical result as: <strong>observation → implication → recommendation</strong>.</p>
+          <p>Bad: "We trained a Random Forest with 100 estimators achieving 87% accuracy on the held-out test set."</p>
+          <p>Good: "The model correctly predicts customer churn 87% of the time. At current volume, that means we can target intervention campaigns with ~1,100 accurate predictions per day — enough to make the campaign ROI positive. The main error mode is false negatives (missed churners), which we can tune by lowering the decision threshold."</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Exercise</div>
+        <div class="exercise-box">
+          <h3>Find and Fix All 5 Bugs — Then Celebrate</h3>
+          <ol>
+            <li>Run the broken pipeline above on the Titanic dataset (available from <tag>seaborn.load_dataset('titanic')</tag> or Kaggle).</li>
+            <li>Find all 5 bugs. For each one, document: <strong>symptom</strong> (what clue told you something was wrong), <strong>diagnosis</strong> (what the bug actually is), <strong>fix</strong> (the corrected code), <strong>prevention</strong> (what test or process would catch this automatically).</li>
+            <li>After fixing all bugs, compare the reported accuracy before and after. You should see a significant drop — that's the real model performance, not the inflated leakage-assisted number.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Resources</div>
+        <div class="resource-grid">
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=ML+debugging+strategies+production+machine+learning" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">ML debugging strategies production machine learning</div>
+            </div>
+          </a>
+          <a class="resource-card" href="https://www.youtube.com/results?search_query=Andrej+Karpathy+software+2.0+AI+systems" target="_blank" rel="noopener">
+            <div class="resource-icon">&#9654;</div>
+            <div class="resource-body">
+              <div class="resource-label">YouTube Search</div>
+              <div class="resource-text">Andrej Karpathy software 2.0 AI systems</div>
+              <div class="resource-hint">Essential framing for engineering mindset in AI</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="celebration" id="celebrationBox" style="display:none;">
+        <h3>You Are Ready for Track 3</h3>
+        <p>Engineering-level Python. Mathematical foundations. Production tooling. Software quality. Model deployment. Research literacy. Systems thinking. You've covered the full stack of what it takes to build production AI systems. Track 3 — Advanced AI &amp; Agent Engineering — starts where this ends.</p>
+      </div>
+
+      <div class="complete-bar">
+        <button class="btn-complete" id="btn-6" onclick="markComplete(6)">Mark Day P7 Complete</button>
+        <div class="complete-msg" id="msg-6">&#10003; Completed</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const STORAGE_KEY = 'nexgen_track3_prereq_progress';
+const TOTAL_DAYS = 7;
+
+const DAY_META = [
+  { id: 'P1', title: 'Python Mastery Self-Assessment' },
+  { id: 'P2', title: 'Advanced Mathematics for Deep Learning' },
+  { id: 'P3', title: 'PyTorch & Deep Learning Environment' },
+  { id: 'P4', title: 'Software Engineering for ML' },
+  { id: 'P5', title: 'APIs, Docker & Cloud for ML' },
+  { id: 'P6', title: 'Research Paper Reading for Engineers' },
+  { id: 'P7', title: 'Engineering Mindset for AI Systems' },
+];
+
+let progress = loadProgress();
+
+function loadProgress() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) return JSON.parse(stored);
+  } catch(e) {}
+  return Array(TOTAL_DAYS).fill(false);
+}
+
+function saveProgress() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+}
+
+function buildSidebar() {
+  const nav = document.getElementById('sidebarNav');
+  nav.innerHTML = '';
+  DAY_META.forEach((day, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'day-btn' + (progress[i] ? ' completed' : '');
+    btn.id = 'navbtn-' + i;
+    btn.onclick = () => showDay(i);
+    btn.innerHTML = `
+      <div class="day-check ${progress[i] ? 'done' : ''}">${progress[i] ? '✓' : ''}</div>
+      <div class="day-label">
+        <span class="day-num">Day ${day.id}</span>
+        ${day.title}
+      </div>
+    `;
+    nav.appendChild(btn);
+  });
+}
+
+function updateProgress() {
+  const done = progress.filter(Boolean).length;
+  const pct = (done / TOTAL_DAYS) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressCount').textContent = done;
+  const courseBtn = document.getElementById('courseBtn');
+  if (done === TOTAL_DAYS) {
+    courseBtn.classList.add('unlocked');
+  } else {
+    courseBtn.classList.remove('unlocked');
+  }
+}
+
+function showDay(index) {
+  document.getElementById('welcome').style.display = 'none';
+  document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+
+  const panel = document.getElementById('day-' + index);
+  if (panel) {
+    panel.classList.add('active');
+    document.getElementById('mainContent').scrollTop = 0;
+  }
+
+  const navBtn = document.getElementById('navbtn-' + index);
+  if (navBtn) navBtn.classList.add('active');
+
+  // Restore button/msg state for this day
+  refreshDayUI(index);
+}
+
+function refreshDayUI(index) {
+  const btn = document.getElementById('btn-' + index);
+  const msg = document.getElementById('msg-' + index);
+  if (!btn || !msg) return;
+
+  if (progress[index]) {
+    btn.disabled = true;
+    btn.textContent = 'Completed';
+    msg.classList.add('show');
+  } else {
+    btn.disabled = false;
+    btn.textContent = 'Mark Day ' + DAY_META[index].id + ' Complete';
+    msg.classList.remove('show');
+  }
+}
+
+function markComplete(index) {
+  progress[index] = true;
+  saveProgress();
+  buildSidebar();
+  updateProgress();
+  refreshDayUI(index);
+
+  // Show celebration on last day
+  if (index === 6) {
+    const cel = document.getElementById('celebrationBox');
+    if (cel) { cel.style.display = 'block'; cel.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+  }
+
+  // Auto-advance to next day after short delay
+  if (index < TOTAL_DAYS - 1) {
+    setTimeout(() => showDay(index + 1), 600);
+  }
+}
+
+function init() {
+  buildSidebar();
+  updateProgress();
+
+  // Restore button/msg state for all days (handles page refresh mid-progress)
+  for (let i = 0; i < TOTAL_DAYS; i++) {
+    refreshDayUI(i);
+  }
+
+  // If progress exists, show the first incomplete day; else show welcome
+  const firstIncomplete = progress.findIndex(v => !v);
+  const allDone = progress.every(Boolean);
+
+  if (allDone) {
+    showDay(TOTAL_DAYS - 1);
+    const cel = document.getElementById('celebrationBox');
+    if (cel) cel.style.display = 'block';
+  } else if (firstIncomplete > 0) {
+    showDay(firstIncomplete);
+  }
+  // else: welcome screen remains visible
+}
+
+init();
+</script>
+</body>
+</html>

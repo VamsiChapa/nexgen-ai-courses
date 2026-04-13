@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NexGen Teacher Preparation Guide — 15 Days</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#F8FAFC;color:#1E293B;line-height:1.6}
+:root{--navy:#0F172A;--indigo:#4F46E5;--purple:#7C3AED;--red:#DC2626;--green:#16A34A;--amber:#D97706;--muted:#64748B;--border:#E2E8F0;--card:#fff;--light:#F1F5F9}
+
+/* NAV */
+.toc{background:var(--navy);color:#E2E8F0;padding:2rem}
+.toc h2{color:#06B6D4;font-size:1rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:1rem}
+.toc a{display:block;color:#94A3B8;text-decoration:none;font-size:.85rem;padding:.2rem 0}
+.toc a:hover{color:#E2E8F0}
+
+/* HEADER */
+.cover{background:var(--navy);color:#fff;padding:4rem 3rem;text-align:center}
+.cover .school{font-size:1.1rem;color:#06B6D4;font-weight:600;letter-spacing:.05em;margin-bottom:.5rem}
+.cover h1{font-size:2.6rem;font-weight:700;margin-bottom:1rem}
+.cover .sub{font-size:1.1rem;color:#94A3B8;margin-bottom:2rem}
+.cover .badges{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
+.badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:.4rem 1rem;border-radius:999px;font-size:.8rem;color:#CBD5E1}
+
+/* SECTION */
+section{max-width:900px;margin:0 auto;padding:3rem 2rem}
+h2.section-title{font-size:1.5rem;font-weight:700;color:var(--navy);border-bottom:3px solid var(--indigo);padding-bottom:.5rem;margin-bottom:1.5rem}
+h3.sub-title{font-size:1.1rem;font-weight:600;color:var(--indigo);margin:1.5rem 0 .75rem}
+h4{font-size:.95rem;font-weight:600;color:var(--navy);margin:.75rem 0 .4rem}
+p{font-size:.92rem;color:#334155;margin-bottom:.75rem}
+ul,ol{padding-left:1.4rem;margin-bottom:.75rem}
+li{font-size:.92rem;color:#334155;margin-bottom:.3rem}
+strong{color:var(--navy)}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem}
+.card.indigo{border-left:4px solid var(--indigo)}
+.card.purple{border-left:4px solid var(--purple)}
+.card.red{border-left:4px solid var(--red)}
+.card.green{border-left:4px solid var(--green)}
+.card.amber{border-left:4px solid var(--amber)}
+.card.navy{border-left:4px solid var(--navy)}
+
+/* DAY BLOCKS */
+.day-block{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:1.5rem;overflow:hidden}
+.day-header{display:flex;align-items:center;gap:1rem;padding:1rem 1.5rem;background:var(--light)}
+.day-num{background:var(--indigo);color:#fff;font-size:.85rem;font-weight:700;padding:.3rem .8rem;border-radius:6px;white-space:nowrap}
+.day-title-text{font-weight:600;font-size:1rem;color:var(--navy)}
+.day-sub{font-size:.8rem;color:var(--muted)}
+.day-body{padding:1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.day-col h4{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.5rem;font-weight:600}
+.day-col ul{padding-left:1rem}
+.day-col li{font-size:.85rem;margin-bottom:.25rem;color:#334155}
+.tag{display:inline-block;padding:.15rem .5rem;border-radius:4px;font-size:.7rem;font-weight:600;margin:.2rem .1rem}
+.tag.t1{background:rgba(79,70,229,.1);color:var(--indigo)}
+.tag.t2{background:rgba(124,58,237,.1);color:var(--purple)}
+.tag.t3{background:rgba(220,38,38,.1);color:var(--red)}
+.tag.all{background:rgba(22,163,74,.1);color:var(--green)}
+.deliver{background:var(--light);border-radius:6px;padding:.5rem .8rem;font-size:.82rem;color:var(--navy);margin-top:.75rem}
+.deliver strong{color:var(--green)}
+
+/* ANALOGY */
+.analogy{background:#fff;border:1px solid var(--border);border-radius:8px;padding:1rem 1.2rem;margin-bottom:.75rem}
+.analogy .concept{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.3rem}
+.analogy .the-analogy{font-size:.9rem;color:#334155;font-style:italic;margin-bottom:.4rem;border-left:3px solid var(--indigo);padding-left:.75rem}
+.analogy .usage{font-size:.8rem;color:var(--muted)}
+
+/* PATTERN */
+.pattern{background:#fff;border:1px solid var(--border);border-radius:8px;padding:1.2rem;margin-bottom:1rem}
+.pattern-num{background:var(--navy);color:#fff;font-size:.75rem;font-weight:700;padding:.2rem .6rem;border-radius:4px;display:inline-block;margin-bottom:.5rem}
+.pattern-name{font-weight:600;font-size:.95rem;color:var(--navy);margin-bottom:.4rem}
+.steps{counter-reset:step}
+.step{display:flex;gap:.75rem;margin-bottom:.4rem;font-size:.85rem;color:#334155;align-items:flex-start}
+.step::before{content:counter(step);counter-increment:step;background:var(--indigo);color:#fff;font-size:.7rem;font-weight:700;border-radius:50%;min-width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem}
+
+/* CODE */
+.code{background:#0D1117;color:#E6EDF3;font-family:'JetBrains Mono',monospace;font-size:.78rem;padding:1rem;border-radius:8px;overflow-x:auto;white-space:pre;line-height:1.6;margin:.75rem 0}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:.85rem;margin-bottom:1rem}
+th{background:var(--navy);color:#E2E8F0;padding:.6rem .8rem;text-align:left;font-weight:600;font-size:.8rem}
+td{padding:.5rem .8rem;border-bottom:1px solid var(--border);color:#334155;vertical-align:top}
+tr:hover td{background:var(--light)}
+
+/* LESSON PLAN */
+.lesson-block{background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:.75rem;overflow:hidden}
+.lesson-time{background:var(--navy);color:#E2E8F0;font-size:.75rem;font-weight:600;padding:.3rem .75rem;display:inline-block}
+.lesson-content{padding:.75rem 1rem}
+.lesson-content h5{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.3rem}
+.lesson-content p{font-size:.82rem;margin-bottom:.3rem}
+.say{background:rgba(79,70,229,.07);border-left:3px solid var(--indigo);padding:.4rem .7rem;font-size:.82rem;font-style:italic;color:#334155;margin:.4rem 0;border-radius:0 4px 4px 0}
+
+/* WARN BOX */
+.warn{background:#FEF3C7;border:1px solid #FDE68A;border-radius:8px;padding:1rem 1.2rem;font-size:.85rem;color:#92400E;margin-bottom:1rem}
+.warn strong{color:#92400E}
+.info{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:8px;padding:1rem 1.2rem;font-size:.85rem;color:#1E40AF;margin-bottom:1rem}
+
+/* TRACK COLORS */
+.t1-block{border-left:4px solid var(--indigo)}
+.t2-block{border-left:4px solid var(--purple)}
+.t3-block{border-left:4px solid var(--red)}
+
+/* CHECKLIST */
+.checklist li{list-style:none;padding-left:0}
+.checklist li::before{content:"☐ ";color:var(--muted)}
+
+/* DIVIDER */
+.phase-divider{background:var(--navy);color:#fff;padding:1rem 2rem;margin:2rem -2rem;border-radius:8px}
+.phase-divider h3{font-size:1.1rem;font-weight:600}
+.phase-divider p{font-size:.85rem;color:#94A3B8;margin:0}
+
+/* PRINT */
+@media print{body{font-size:12px}.toc{display:none}section{padding:1.5rem 1rem}h2.section-title{font-size:1.2rem}}
+@media(max-width:700px){.day-body{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="school">NEx-gEN School of Computers · Srikakulam</div>
+  <h1>Teacher Preparation Guide</h1>
+  <p class="sub">A complete 15-day programme to study, understand, and confidently teach all 3 AI tracks simultaneously</p>
+  <div class="badges">
+    <span class="badge">Track 1 — Python & AI Basics</span>
+    <span class="badge">Track 2 — Data Science & ML</span>
+    <span class="badge">Track 3 — Engineering AI</span>
+    <span class="badge">In-Person Classroom</span>
+    <span class="badge">4–5 Hours/Day</span>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <h2>Contents</h2>
+  <a href="#who">Who This Guide Is For</a>
+  <a href="#mindset">The Teacher Mindset</a>
+  <a href="#plan">15-Day Study Plan</a>
+  <a href="#teaching-patterns">Teaching Patterns</a>
+  <a href="#analogies">Analogy Bank</a>
+  <a href="#track-notes">Track-Specific Teaching Notes</a>
+  <a href="#day1-plans">Day 1 Lesson Plans</a>
+  <a href="#faq">Common Student Questions</a>
+  <a href="#classroom">Classroom Management</a>
+  <a href="#survival">Survival Guide</a>
+</div>
+
+<!-- WHO THIS IS FOR -->
+<section id="who">
+  <h2 class="section-title">Who This Guide Is For</h2>
+  <div class="card green">
+    <p>You are a fresh engineering graduate who is about to teach Python, Data Science, Machine Learning, and AI to three different groups of students — all at the same time. You have 15 days to prepare. You are <strong>not expected to be an expert on Day 1</strong> — you are expected to be <strong>one week ahead of your students</strong>.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem">
+    <div class="card t1-block">
+      <div class="tag t1">Track 1</div>
+      <h4>Your Students</h4>
+      <p>10th grade, 15–16 years old. Many will be touching a programming language for the first time. They need encouragement, simplicity, and a lot of repetition.</p>
+    </div>
+    <div class="card t2-block">
+      <div class="tag t2">Track 2</div>
+      <h4>Your Students</h4>
+      <p>Inter/12th grade, 17–18 years old. More confident, some may know basic Python. They are career-aware. Connect lessons to job prospects and real tools.</p>
+    </div>
+    <div class="card t3-block">
+      <div class="tag t3">Track 3</div>
+      <h4>Your Students</h4>
+      <p>Engineering students, 18–22 years old. They may push back, ask hard questions, and know some things you don't. Treat them as peers, not juniors.</p>
+    </div>
+  </div>
+
+  <div class="warn">
+    <strong>The honest truth:</strong> You will not master every topic before you teach it. That's fine. What you must do: study each topic <em>the week before it comes up in class</em>, run every code demo yourself before showing it, and be completely honest when a student asks something you don't know. Say: "That's a great question — let me research it and get back to you tomorrow." Students respect honesty more than fake confidence.
+  </div>
+</section>
+
+<!-- TEACHER MINDSET -->
+<section id="mindset">
+  <h2 class="section-title">The Teacher Mindset</h2>
+
+  <h3 class="sub-title">Your Three Roles</h3>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem">
+    <div class="card navy">
+      <h4>The Guide</h4>
+      <p>You don't hand students the answer. You ask questions that lead them toward discovering it themselves. "What do you think will happen if we change this line?"</p>
+    </div>
+    <div class="card indigo">
+      <h4>The Translator</h4>
+      <p>You take complex technical concepts and convert them into language and analogies the student already understands. Your analogy bank is your most important tool.</p>
+    </div>
+    <div class="card green">
+      <h4>The Safety Net</h4>
+      <p>Students are afraid of looking stupid in front of peers. Your job is to make errors normal, questions welcome, and confusion something to share — not hide.</p>
+    </div>
+  </div>
+
+  <h3 class="sub-title">The Golden Rules of Teaching Code</h3>
+  <ol>
+    <li><strong>Never write code on a slide.</strong> Write every line live in front of students. They need to see the process, not just the result.</li>
+    <li><strong>Make intentional mistakes.</strong> Type the wrong variable name, forget a colon, get an off-by-one error. Read the error message aloud and debug it in real time. This is the most valuable thing you can teach.</li>
+    <li><strong>Type slowly.</strong> You know the shortcut. They don't. Type every character deliberately.</li>
+    <li><strong>Narrate your thinking.</strong> Say out loud what you're about to do before you type it. "I'm going to create a variable to store the student's name. I'll call it student_name because…"</li>
+    <li><strong>Stop and check every 10 minutes.</strong> Ask the class: "Everyone caught up? Any errors?" before moving on.</li>
+    <li><strong>Never take the keyboard.</strong> When a student is stuck, sit beside them and ask questions. Let them type the fix themselves.</li>
+    <li><strong>Celebrate small wins.</strong> First successful print statement. First loop that works. These matter enormously to beginners.</li>
+  </ol>
+</section>
+
+<!-- 15-DAY PLAN -->
+<section id="plan">
+  <h2 class="section-title">The 15-Day Study Plan</h2>
+  <p>Each day is 4–5 hours. The plan is split into two parts: <strong>Study Time</strong> (understanding the content yourself) and <strong>Teaching Prep Time</strong> (converting what you learned into classroom-ready material). Never skip teaching prep — knowing something and being able to explain it are completely different skills.</p>
+
+  <div class="info">
+    <strong>How to use this plan:</strong> Each day tells you what to study, what to run hands-on in code, what teaching materials to prepare, and what your end-of-day deliverable is (something tangible that proves you're ready to teach that topic).
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="phase-divider">
+    <h3>Phase 1 — Days 1 to 3: Python Mastery + Track 1 Teaching Prep</h3>
+    <p>You need to be able to teach Python to a complete beginner. Even if you know Python, teaching it to a 15-year-old is a different skill.</p>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-num">Day 1</span>
+      <div>
+        <div class="day-title-text">Python Fundamentals — Variables, Control Flow, Functions</div>
+        <div class="day-sub"><span class="tag t1">Track 1</span> This is your primary focus today</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="day-col">
+        <h4>📚 Study (2.5 hours)</h4>
+        <ul>
+          <li>Open Google Colab and create a new notebook</li>
+          <li>Write Python from scratch: variables, int/float/str/bool</li>
+          <li>Practice if/elif/else with 5 different real examples</li>
+          <li>Write 10 loops: for, while, nested, with break/continue</li>
+          <li>Write 8 functions — some with default params, some returning multiple values</li>
+          <li>Study strings deeply: all methods, f-strings, slicing</li>
+        </ul>
+        <h4>🎯 Hands-On Code</h4>
+        <ul>
+          <li>Build a grade calculator from scratch (input → if/elif → grade)</li>
+          <li>Build a number guessing game (while loop + random)</li>
+          <li>Build a simple calculator (functions for add, sub, mul, div)</li>
+        </ul>
+      </div>
+      <div class="day-col">
+        <h4>🎓 Teaching Prep (2 hours)</h4>
+        <ul>
+          <li>Write your "Why Python?" 3-minute opening speech (what Python is used for, why it's the best first language)</li>
+          <li>Prepare 5 analogies for: variable, function, loop, list, if-else (use the Analogy Bank section)</li>
+          <li>Write a list of 10 mistakes beginners make and how to explain them kindly</li>
+          <li>Plan the exact sequence of Day 1 Track 1 class (use the Day 1 Lesson Plan template)</li>
+        </ul>
+        <div class="deliver"><strong>Deliverable:</strong> A working grade calculator + number guesser + your 3-minute "Why Python" speech ready to deliver</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-num">Day 2</span>
+      <div>
+        <div class="day-title-text">Lists, Dicts, OOP, File Handling, Error Handling</div>
+        <div class="day-sub"><span class="tag t1">Track 1 Module 1</span> <span class="tag t2">Track 2 Module 1</span></div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="day-col">
+        <h4>📚 Study (2.5 hours)</h4>
+        <ul>
+          <li>Lists: all methods, list comprehension, slicing, sorting</li>
+          <li>Dicts: CRUD, nested dicts, .items() .keys() .values()</li>
+          <li>OOP: write 3 classes from scratch — Student, BankAccount, Car</li>
+          <li>File I/O: read, write, append, with-block</li>
+          <li>Try-except: catch TypeError, ValueError, FileNotFoundError</li>
+          <li>Lambda, map, filter — understand when and why</li>
+        </ul>
+        <h4>🎯 Hands-On Code</h4>
+        <ul>
+          <li>Student class with grade method and class roster (list of objects)</li>
+          <li>Contact book program using a dictionary (CRUD from terminal)</li>
+          <li>Simple CSV reader that handles missing files gracefully</li>
+        </ul>
+      </div>
+      <div class="day-col">
+        <h4>🎓 Teaching Prep (2 hours)</h4>
+        <ul>
+          <li>Prepare the "List vs Dict" decision framework — when do you use which?</li>
+          <li>Write the OOP explanation using the Blueprint analogy (see Analogy Bank)</li>
+          <li>Prepare 5 common error messages students will see and what each means in plain English</li>
+          <li>Write exercises for Days 6–10 of Track 1 (you'll be ahead of students)</li>
+        </ul>
+        <div class="deliver"><strong>Deliverable:</strong> Contact book program + Student class demo + 5 error message explanations</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-num">Day 3</span>
+      <div>
+        <div class="day-title-text">NumPy, Pandas, Matplotlib — The Data Science Stack</div>
+        <div class="day-sub"><span class="tag t1">Track 1 Module 2</span> <span class="tag t2">Track 2 Module 1</span></div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="day-col">
+        <h4>📚 Study (2.5 hours)</h4>
+        <ul>
+          <li>NumPy: creating arrays, shape, dtype, broadcasting, math operations</li>
+          <li>Pandas: create DataFrame, load CSV, filter, sort, groupby, describe()</li>
+          <li>Pandas: handle missing values, drop duplicates, astype()</li>
+          <li>Matplotlib: line, bar, scatter, histogram, pie — with labels, titles, legends</li>
+          <li>Download a real dataset from Kaggle (student performance / Titanic)</li>
+          <li>Do a full EDA: load → shape → describe → nulls → visualise</li>
+        </ul>
+        <h4>🎯 Hands-On Code</h4>
+        <ul>
+          <li>Load student marks CSV → clean → calculate class average by subject → bar chart</li>
+          <li>NumPy: create a 5×5 marks matrix, find row/col averages</li>
+        </ul>
+      </div>
+      <div class="day-col">
+        <h4>🎓 Teaching Prep (2 hours)</h4>
+        <ul>
+          <li>Prepare the "Excel vs Pandas" comparison — show same operation in Excel and Pandas side by side</li>
+          <li>Write the "Why NumPy is faster than lists" explanation (vectorisation analogy)</li>
+          <li>Create a classroom dataset: 30 fake students with marks in 5 subjects (save as CSV) — this will be your demo dataset for Tracks 1 and 2</li>
+          <li>Prepare 3 chart examples that tell a story (not just random data)</li>
+        </ul>
+        <div class="deliver"><strong>Deliverable:</strong> Working EDA notebook on real dataset + classroom demo CSV file created</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase-divider">
+    <h3>Phase 2 — Days 4 to 6: Machine Learning Core</h3>
+    <p>The heart of Track 2 and the foundation of Track 3. You need hands-on fluency with every algorithm, not just theory.</p>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-num">Day 4</span>
+      <div>
+        <div class="day-title-text">Statistics, Probability & The ML Workflow</div>
+        <div class="day-sub"><span class="tag t2">Track 2 Module 1 Days 5–9</span> <span class="tag t3">Track 3 Day 8</span></div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="day-col">
+        <h4>📚 Study (2.5 hours)</h4>
+        <ul>
+          <li>Statistics: mean, median, mode, std deviation, variance — compute by hand AND with NumPy</li>
+          <li>Normal distribution — what it means, why it matters in ML</li>
+          <li>Correlation vs causation — this comes up every single class</li>
+          <li>Hypothesis testing: what a t-test does, what p-value means in plain English</li>
+          <li>The 5-step ML workflow: Data → Clean → Split → Train → Evaluate</li>
+          <li>Train/test split: why it exists, what data leakage means</li>
+        </ul>
+        <h4>🎯 Hands-On Code</h4>
+        <ul>
+          <li>Calculate all stats on your classroom dataset by hand then verify with NumPy/Pandas</li>
+          <li>Plot histograms and box plots to visualise distributions</li>
+          <li>Use scipy.stats.ttest_ind on two groups in your classroom data</li>
+        </ul>
+      </div>
+      <div class="day-col">
+        <h4>🎓 Teaching Prep (2 hours)</h4>
+        <ul>
+          <li>Write the "What is data leakage?" analogy (exam paper leak story)</li>
+          <li>Prepare: "Correlation vs Causation" with 3 funny real examples</li>
+          <li>Write the p-value explanation without using math jargon</li>
+          <li>Create the "ML Workflow" visual — one diagram that shows the entire pipeline</li>
+        </ul>
+        <div class="deliver"><strong>Deliverable:</strong> ML Workflow diagram + p-value plain-English explanation ready to deliver</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-num">Day 5</span>
+      <div>
+        <div class="day-title-text">Core ML Algorithms — Regression to Ensemble Methods</div>
+        <div class="day-sub"><span class="tag t1">Track 1 Module 3</span> <span class="tag t2">Track 2 Module 2</span></div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="day-col">
+        <h4>📚 Study (2.5 hours)</h4>
+        <ul>
+          <li>Linear Regression: the equation, cost function, sklearn implementation</li>
+          <li>Logistic Regression: how sigmoid works, why it's a classifier not regressor</li>
+          <li>Decision Trees: how splits work, entropy/gini, visualise a tree</li>
+          <li>Random Forest: why averaging trees works, feature importance</li>
+          <li>Overfitting vs underfitting — experiment with max_depth</li>
+          <li>Model evaluation: accuracy, precision, recall, F1, confusion matrix</li>
+          <li>Cross-validation: why it's better than a single train/test split</li>
+        </ul>
+        <h4>🎯 Hands-On Code</h4>
+        <ul>
+          <li>Train all 4 algorithms on Iris AND breast cancer datasets</li>
+          <li>Plot confusion matrix for each</li>
+          <li>Deliberately overfit a decision tree (no depth limit) and show the problem</li>
+        </ul>
+      </div>
+      <div class="day-col">
+        <h4>🎓 Teaching Prep (2 hours)</h4>
+        <ul>
+          <li>Build the "Which algorithm to use?" decision flowchart (see Teaching Notes)</li>
+          <li>Prepare the gradient descent "walking down a hill" live demo (animate it on the board)</li>
+          <li>Write the overfitting/underfitting explanation using the "memorising vs understanding" student analogy</li>
+          <li>Prepare Track 1 Module 3 content: how to explain ML to a 10th grader in 10 minutes</li>
+        </ul>
+        <div class="deliver"><strong>Deliverable:</strong> All 4 algorithms running + overfitting demo + "Which Algorithm" flowchart</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-num">Day 6</span>
+      <div>
+        <div class="day-title-text">Advanced ML — Boosting, NLP Basics, Pipelines, Deployment</div>
+        <div class="day-sub"><span class="tag t2">Track 2 Module 2 Days 22–28</span></div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="day-col">
+        <h4>📚 Study (2.5 hours)</h4>
+        <ul>
+          <li>XGBoost and LightGBM: install, train, tune — understand why they outperform RF</li>
+          <li>K-Means clustering: how it works, choosing k, elbow method</li>
+          <li>PCA: what it does, when to use it, plot explained variance</li>
+          <li>TF-IDF text classification: bag of words → TF-IDF → classifier pipeline</li>
+          <li>sklearn Pipeline: why it prevents data leakage, how to build one</li>
+          <li>GridSearchCV and RandomSearchCV: when to use each</li>
+        </ul>
+        <h4>🎯 Hands-On Code</h4>
+        <ul>
+          <li>XGBoost on Titanic dataset — feature engineering + tuning</li>
+          <li>Build a spam classifier with TF-IDF + LogisticRegression in a Pipeline</li>
+          <li>K-Means on the Iris dataset (pretend you don't have labels)</li>
+        </ul>
+      </div>
+      <div class="day-col">
+        <h4>🎓 Teaching Prep (2 hours)</h4>
+        <ul>
+          <li>Prepare the "Why Pipeline prevents data leakage" example (the exam analogy)</li>
+          <li>Write the K-Means step-by-step visual (centroids moving on a board)</li>
+          <li>Prepare Track 2 capstone demo: the AI-Assisted Data Report from Day 36</li>
+          <li>Write the "PCA in plain English" explanation (reducing 10 photos to their 2 most important features)</li>
+        </ul>
+        <div class="deliver"><strong>Deliverable:</strong> Spam classifier pipeline + Titanic XGBoost notebook</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase-divider">
+    <h3>Phase 3 — Days 7 to 9: Deep Learning & Neural Networks</h3>
+    <p>This is core Track 3 content. If you're new to PyTorch and neural networks, give these days your full focus. No shortcuts here.</p>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-num">Day 7</span>
+      <div>
+        <div class="day-title-text">Neural Networks from Scratch + PyTorch Fundamentals</div>
+        <div class="day-sub"><span class="tag t3">Track 3 Days 1–2</span> <span class="tag t1">Track 1 Day 29</span></div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="day-col">
+        <h4>📚 Study (2.5 hours)</h4>
+        <ul>
+          <li>Build a 2-layer neural network in pure NumPy (forward + backward pass)</li>
+          <li>Understand: activation functions (ReLU, Sigmoid, Softmax) and when to use each</li>
+          <li>PyTorch: tensors, autograd, nn.Module, training loop</li>
+          <li>Implement the XOR problem in PyTorch — it's the "Hello World" of NNs</li>
+          <li>Watch: 3Blue1Brown "Neural Networks" series (Chapters 1–4, total ~60 min)</li>
+          <li>Loss functions: MSE, CrossEntropy, BCE — when to use which</li>
+        </ul>
+        <h4>🎯 Hands-On Code</h4>
+        <ul>
+          <li>NumPy neural network on XOR — see weights converge</li>
+          <li>Same network in PyTorch — compare the code structure</li>
+          <li>MNIST digit classifier in PyTorch (MLP, not CNN yet)</li>
+        </ul>
+      </div>
+      <div class="day-col">
+        <h4>🎓 Teaching Prep (2 hours)</h4>
+        <ul>
+          <li>Draw the "neuron" diagram by hand — practice drawing it 5 times until it's clean and fast</li>
+          <li>Prepare the backpropagation "chain rule" intuition — you don't need the full math, just the concept</li>
+          <li>Write the "Why PyTorch over NumPy" explanation (autograd saves hours)</li>
+          <li>Prepare Track 1 Day 29 lesson: MLPClassifier on digits (simpler version for beginners)</li>
+        </ul>
+        <div class="deliver"><strong>Deliverable:</strong> NumPy NN + PyTorch MNIST working notebooks side by side</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-num">Day 8</span>
+      <div>
+        <div class="day-title-text">CNNs, Transfer Learning, RNNs, Transformers</div>
+        <div class="day-sub"><span class="tag t3">Track 3 Days 3–6</span></div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="day-col">
+        <h4>📚 Study (2.5 hours)</h4>
+        <ul>
+          <li>CNN intuition: convolution kernel sliding over an image — what it detects</li>
+          <li>Build a CNN in PyTorch for MNIST (Conv → ReLU → MaxPool → FC)</li>
+          <li>Transfer Learning: load ResNet18, freeze layers, replace head, fine-tune</li>
+          <li>LSTM intuition: gates, hidden state, why it solves vanishing gradients</li>
+          <li>Attention mechanism: why transformers replaced RNNs, QKV explanation</li>
+          <li>Read the "Attention is All You Need" abstract and Figure 1</li>
+        </ul>
+        <h4>🎯 Hands-On Code</h4>
+        <ul>
+          <li>CNN on CIFAR-10 — observe how accuracy improves over epochs</li>
+          <li>Transfer learning: ResNet18 fine-tuned on 2-class custom dataset</li>
+          <li>Multi-head attention implementation from Track 3 Day 6</li>
+        </ul>
+      </div>
+      <div class="day-col">
+        <h4>🎓 Teaching Prep (2 hours)</h4>
+        <ul>
+          <li>Prepare "CNN as a filter" visual: draw a 3×3 kernel sliding over an image on the whiteboard</li>
+          <li>Write the "Transfer Learning as pre-trained intern" analogy</li>
+          <li>Prepare the LSTM "gates" explanation using a water tank analogy</li>
+          <li>Write the transformer attention explanation for engineers (they can handle the math)</li>
+        </ul>
+        <div class="deliver"><strong>Deliverable:</strong> CIFAR-10 CNN notebook + Transfer Learning notebook both running</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-num">Day 9</span>
+      <div>
+        <div class="day-title-text">MLflow, FastAPI Serving, Docker, Model Monitoring</div>
+        <div class="day-sub"><span class="tag t3">Track 3 Days 10–13</span> <span class="tag t2">Track 2 Day 26</span></div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="day-col">
+        <h4>📚 Study (2.5 hours)</h4>
+        <ul>
+          <li>MLflow: set up locally, log params/metrics/artifacts, open the UI</li>
+          <li>FastAPI: create a /predict endpoint, Pydantic request/response models, test with curl</li>
+          <li>Docker: pull a Python image, write a Dockerfile, build and run locally</li>
+          <li>Data drift: understand what it means and why models degrade</li>
+          <li>EvidentlyAI: generate a drift report for two distributions</li>
+        </ul>
+        <h4>🎯 Hands-On Code</h4>
+        <ul>
+          <li>MLflow: run 5 experiments with different RF hyperparameters, compare in UI</li>
+          <li>FastAPI: serve your breast cancer classifier from Day 5</li>
+          <li>Docker: containerise the FastAPI service (follow Track 3 Day 12 code)</li>
+        </ul>
+      </div>
+      <div class="day-col">
+        <h4>🎓 Teaching Prep (2 hours)</h4>
+        <ul>
+          <li>Prepare "Why MLflow?" demo — show what happens without it (chaos), then with it (order)</li>
+          <li>Write the "Model Serving" explanation: trained model → production API → users</li>
+          <li>Prepare the Docker analogy: "shipping container for code"</li>
+          <li>Practice the full Track 3 Module 1 capstone walkthrough (you need to demo it)</li>
+        </ul>
+        <div class="deliver"><strong>Deliverable:</strong> MLflow experiment comparison running + FastAPI /predict endpoint responding to curl</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase-divider">
+    <h3>Phase 4 — Days 10 to 12: LLM Engineering + Agent Systems</h3>
+    <p>This is the most cutting-edge content. If you've never used LLM APIs before, be prepared to spend real focused time here. These topics move fast.</p>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-num">Day 10</span>
+      <div>
+        <div class="day-title-text">LLM APIs — OpenAI, Gemini, Claude + RAG Pipeline</div>
+        <div class="day-sub"><span class="tag t2">Track 2 Module 3</span> <span class="tag t3">Track 3 Days 16–20</span> <span class="tag t1">Track 1 Day 30</span></div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="day-col">
+        <h4>📚 Study (2.5 hours)</h4>
+        <ul>
+          <li>Get API keys: OpenAI (or use Gemini free tier), Google AI Studio (free)</li>
+          <li>OpenAI Chat Completions: system/user/assistant messages, temperature, max_tokens</li>
+          <li>Streaming: implement streaming response in Python</li>
+          <li>Gemini API: text generation, multi-turn chat, multimodal (image + text)</li>
+          <li>Embeddings: generate embeddings, compute cosine similarity manually</li>
+          <li>RAG pipeline: chunk text → embed → FAISS index → retrieve → generate</li>
+        </ul>
+        <h4>🎯 Hands-On Code</h4>
+        <ul>
+          <li>Multi-turn chatbot in CLI with OpenAI/Gemini (maintains history)</li>
+          <li>RAG system over 10 paragraphs about NexGen courses — ask questions</li>
+          <li>Compare GPT-4o-mini vs Gemini Flash on same prompts</li>
+        </ul>
+      </div>
+      <div class="day-col">
+        <h4>🎓 Teaching Prep (2 hours)</h4>
+        <ul>
+          <li>Prepare "RAG vs pure LLM" live demo: ask the same question with and without RAG, show hallucination vs grounded answer</li>
+          <li>Write the "tokens and context window" explanation (the whiteboard analogy)</li>
+          <li>Prepare Track 1 Day 30 lesson: simple chatbot for 10th graders — keep it exciting</li>
+          <li>Write the "Why RAG?" one-paragraph pitch for Track 2 students</li>
+        </ul>
+        <div class="deliver"><strong>Deliverable:</strong> Working RAG chatbot over NexGen course content — this becomes a live demo in class</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-num">Day 11</span>
+      <div>
+        <div class="day-title-text">Prompt Engineering + Function Calling + LangChain</div>
+        <div class="day-sub"><span class="tag t3">Track 3 Days 18, 21, 26–30</span> <span class="tag t2">Track 2 Days 29–35</span></div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="day-col">
+        <h4>📚 Study (2.5 hours)</h4>
+        <ul>
+          <li>Prompt patterns: zero-shot, few-shot, chain-of-thought, self-consistency</li>
+          <li>Function calling: define a tool schema, parse tool_call responses, return results</li>
+          <li>LangChain LCEL: prompt | llm | parser pipe syntax</li>
+          <li>Prompt security: injection attacks, input sanitisation, system prompt leakage</li>
+          <li>Prompt versioning: why it matters, simple registry pattern</li>
+          <li>LLM cost optimisation: model routing, token counting with tiktoken</li>
+        </ul>
+        <h4>🎯 Hands-On Code</h4>
+        <ul>
+          <li>Build a calculator + weather tool-calling chatbot</li>
+          <li>Test 5 prompt injection attacks on your own chatbot and patch them</li>
+          <li>LangChain: summarise-then-critique chain using LCEL</li>
+        </ul>
+      </div>
+      <div class="day-col">
+        <h4>🎓 Teaching Prep (2 hours)</h4>
+        <ul>
+          <li>Prepare the "prompt injection" live demo — show how easy it is, then how to defend</li>
+          <li>Write the "function calling flow" diagram: user → LLM → tool_call → your code → result → LLM → answer</li>
+          <li>Prepare Track 2 Module 3 Day 31 lesson: first time students use an LLM API — make it exciting, not intimidating</li>
+          <li>Chain-of-thought demo: same question with and without "think step by step"</li>
+        </ul>
+        <div class="deliver"><strong>Deliverable:</strong> Tool-calling chatbot working + prompt injection demo ready</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-num">Day 12</span>
+      <div>
+        <div class="day-title-text">AI Agents — Architecture, Memory, LangGraph, AutoGen</div>
+        <div class="day-sub"><span class="tag t3">Track 3 Days 31–40</span></div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="day-col">
+        <h4>📚 Study (2.5 hours)</h4>
+        <ul>
+          <li>Agent architecture: perceive → think → act → loop</li>
+          <li>Build the basic agent loop from Track 3 Day 31 (calculator + date tools)</li>
+          <li>Memory: in-context vs external — implement the AgentMemory class</li>
+          <li>LangGraph: install, build a 3-node research → write → review graph</li>
+          <li>AutoGen: install, set up AssistantAgent + UserProxyAgent conversation</li>
+          <li>Guardrails: input sanitisation + OpenAI Moderation API</li>
+        </ul>
+        <h4>🎯 Hands-On Code</h4>
+        <ul>
+          <li>Full agent loop with 3 tools: calculator, web search (mock), file writer</li>
+          <li>LangGraph: researcher → writer → reviewer pipeline</li>
+          <li>Guardrails: test 10 adversarial inputs and document what was caught</li>
+        </ul>
+      </div>
+      <div class="day-col">
+        <h4>🎓 Teaching Prep (2 hours)</h4>
+        <ul>
+          <li>Prepare "Agent as an intern" analogy — write out the full story version</li>
+          <li>LangGraph vs simple agent loop: when to use which</li>
+          <li>Draw the LangGraph state machine diagram on paper — practice it until you can reproduce it in 3 minutes on the whiteboard</li>
+          <li>Prepare Track 3 Module 4 Day 31 lesson plan</li>
+        </ul>
+        <div class="deliver"><strong>Deliverable:</strong> Working 3-tool agent + LangGraph pipeline both functional</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase-divider">
+    <h3>Phase 5 — Days 13 to 15: Teaching Polish + Dry Runs</h3>
+    <p>The most overlooked phase. Knowing the content is not the same as being able to teach it. These days are non-negotiable.</p>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-num">Day 13</span>
+      <div>
+        <div class="day-title-text">Build All Demo Notebooks + Prepare Day 1–5 Lesson Plans</div>
+        <div class="day-sub"><span class="tag all">All Tracks</span></div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="day-col">
+        <h4>📚 Create Teaching Notebooks (3 hours)</h4>
+        <ul>
+          <li>Track 1 Day 1 notebook: clean, commented, with intentional errors to demo</li>
+          <li>Track 2 Day 1 notebook: environment setup + first EDA</li>
+          <li>Track 3 Day 1 notebook: neural network from scratch in NumPy</li>
+          <li>Each notebook should have a "Demo Flow" comment at the top — the exact order of what you show and say</li>
+          <li>Test every cell. Make sure everything runs. Print the outputs to confirm.</li>
+        </ul>
+      </div>
+      <div class="day-col">
+        <h4>🎓 Teaching Prep (1.5 hours)</h4>
+        <ul>
+          <li>Write the Day 1 lesson plan for each track (use the template below)</li>
+          <li>Prepare your "About Me" introduction — 2 minutes, connect to AI</li>
+          <li>Write how you'll handle: a student who finishes early, a student who is completely stuck, a student who asks a question you can't answer</li>
+        </ul>
+        <div class="deliver"><strong>Deliverable:</strong> 3 clean demo notebooks + 3 Day 1 lesson plans</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-num">Day 14</span>
+      <div>
+        <div class="day-title-text">Full Dry Run — Teach to Yourself or a Friend</div>
+        <div class="day-sub"><span class="tag all">All Tracks</span></div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="day-col">
+        <h4>Morning (2.5 hours) — Track 1 + Track 2 Dry Run</h4>
+        <ul>
+          <li>Set a timer. Deliver Track 1 Day 1 as if a class is watching — full 45-minute session</li>
+          <li>Record yourself on your phone (you don't need to watch it all — just know where you stumbled)</li>
+          <li>Repeat for Track 2 Day 1</li>
+          <li>Note: what did you rush? Where did you lose your place? What analogy didn't land?</li>
+        </ul>
+      </div>
+      <div class="day-col">
+        <h4>Afternoon (2 hours) — Track 3 Dry Run + Fix</h4>
+        <ul>
+          <li>Deliver Track 3 Day 1 (Neural Network from scratch) — full session</li>
+          <li>Fix any demo errors you discovered in the dry run</li>
+          <li>Rewrite any analogy that felt unclear when you said it out loud</li>
+          <li>Check: can you set up Google Colab from scratch in under 3 minutes on the classroom projector? Practice this.</li>
+        </ul>
+        <div class="deliver"><strong>Deliverable:</strong> Fixed notebooks + list of things to improve</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="day-block">
+    <div class="day-header">
+      <span class="day-num">Day 15</span>
+      <div>
+        <div class="day-title-text">Buffer Day — Fix Gaps + Prepare Emergency Plans</div>
+        <div class="day-sub"><span class="tag all">All Tracks</span></div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="day-col">
+        <h4>Morning (2 hours) — Address Gaps</h4>
+        <ul>
+          <li>Go back to any topic that still feels shaky — spend 90 minutes on it</li>
+          <li>Priority order if you're tight on time: LangGraph → PyTorch → Statistics</li>
+          <li>Test ALL demo code one more time on the exact machine you'll use in class</li>
+          <li>Download all packages while on good internet (pip install everything in advance)</li>
+        </ul>
+      </div>
+      <div class="day-col">
+        <h4>Afternoon (2 hours) — Emergency Prep</h4>
+        <ul>
+          <li>What if internet goes down? Have offline demos ready (pre-run cells with saved outputs)</li>
+          <li>What if the projector fails? Have printed code snippets for the first 3 lessons</li>
+          <li>What if a student asks something you don't know? Practise saying: "Great question — let me dig into that tonight and we'll cover it tomorrow."</li>
+          <li>Pack your teaching kit: laptop, charger, HDMI adapter, backup pen drive with all notebooks</li>
+        </ul>
+        <div class="deliver"><strong>Deliverable:</strong> Everything ready. You're prepared to start teaching tomorrow.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEACHING PATTERNS -->
+<section id="teaching-patterns">
+  <h2 class="section-title">Teaching Patterns — Use These Every Day</h2>
+  <p>These are repeatable classroom structures. Once students know these patterns, they know what to expect. Predictability reduces anxiety and increases learning.</p>
+
+  <div class="pattern">
+    <span class="pattern-num">Pattern 1</span>
+    <div class="pattern-name">The 3-Act Lesson (use for every new concept)</div>
+    <div class="steps">
+      <div class="step">The Problem (3–5 min): Show students a task they cannot do yet. "I want to calculate the average marks of 30 students. Let me write that 30 times..." [actually start to type it]. Let them feel the pain of not having the tool.</div>
+      <div class="step">The Solution (10–15 min): Introduce the concept. Show the code. Narrate every line. Ask students to predict what will happen before you run each block.</div>
+      <div class="step">Students Try It (10–15 min): Give an exercise that is slightly different from your demo. They cannot copy-paste — they must adapt. Circulate the room. Observe, don't immediately help.</div>
+    </div>
+  </div>
+
+  <div class="pattern">
+    <span class="pattern-num">Pattern 2</span>
+    <div class="pattern-name">Error-First Teaching (use 2–3 times per session)</div>
+    <div class="steps">
+      <div class="step">Intentionally write wrong code. "Let me try this…" [type: priint("Hello")]</div>
+      <div class="step">Read the error message aloud, completely, from top to bottom.</div>
+      <div class="step">Ask the class: "What is Python telling us? Which line? What word?" Let them spot it.</div>
+      <div class="step">Fix it together. Say: "You will see this error a hundred times. Now you know exactly what it means."</div>
+    </div>
+    <div class="say">"An error message is Python's way of telling you exactly what went wrong. It's not a failure — it's feedback. The best programmers don't avoid errors — they read them carefully."</div>
+  </div>
+
+  <div class="pattern">
+    <span class="pattern-num">Pattern 3</span>
+    <div class="pattern-name">The Predict-Then-Run (for every code block you demo)</div>
+    <div class="steps">
+      <div class="step">Write the code without running it.</div>
+      <div class="step">Ask: "Before I run this — what do you think will happen? Tell your neighbour."</div>
+      <div class="step">Run it. Compare result with predictions. Discuss why predictions were right or wrong.</div>
+    </div>
+    <p style="font-size:.85rem;color:var(--muted);margin-top:.5rem">This forces active thinking rather than passive watching. Students who predict wrong learn more than students who were told the answer.</p>
+  </div>
+
+  <div class="pattern">
+    <span class="pattern-num">Pattern 4</span>
+    <div class="pattern-name">The Fist-to-Five Check (use after every concept)</div>
+    <div class="steps">
+      <div class="step">After explaining a concept, say: "Show me how confident you feel — 1 finger if you're completely lost, 5 if you could explain it to someone else right now."</div>
+      <div class="step">If mostly 1–2: Stop. Explain differently using a different analogy.</div>
+      <div class="step">If mostly 3: Quick Q&A round. Ask 3 students to restate the concept in their own words.</div>
+      <div class="step">If mostly 4–5: Move on. Pair a 5 with a 2 for the exercise.</div>
+    </div>
+  </div>
+
+  <div class="pattern">
+    <span class="pattern-num">Pattern 5</span>
+    <div class="pattern-name">The Opening Hook (first 5 minutes of every session)</div>
+    <div class="steps">
+      <div class="step">Show a real-world application of what they're about to learn. For Day 1: show a YouTube recommendation. For ML day: show a fraud detection stat. For LLM day: show a ChatGPT conversation.</div>
+      <div class="step">Ask: "How do you think this works?" Let 2–3 students guess.</div>
+      <div class="step">Say: "By the end of today, you'll know exactly how this is built."</div>
+    </div>
+  </div>
+
+  <div class="pattern">
+    <span class="pattern-num">Pattern 6</span>
+    <div class="pattern-name">The Session Close (last 5 minutes of every session)</div>
+    <div class="steps">
+      <div class="step">Ask 2–3 random students: "Without looking at your screen — what are the 3 things we covered today?"</div>
+      <div class="step">Recap in 60 seconds. Write the key terms on the board.</div>
+      <div class="step">Preview tomorrow: "Tomorrow we're going to do X. Here's why it's exciting…" Leave them curious.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ANALOGY BANK -->
+<section id="analogies">
+  <h2 class="section-title">Analogy Bank — One Analogy Per Key Concept</h2>
+  <p>Memorise these. A good analogy delivered confidently will be remembered by students years after they've forgotten the syntax. Use the analogy <em>before</em> showing the code — never after.</p>
+
+  <h3 class="sub-title">Python Fundamentals</h3>
+
+  <div class="analogy">
+    <div class="concept">Variable</div>
+    <div class="the-analogy">"A variable is a labelled jar in your kitchen. You write 'Sugar' on the jar and put sugar inside. Later, whenever you need sugar, you go to the jar by its label — not by counting 'third jar on the left.'"</div>
+    <div class="usage">Use when introducing variables on Day 1. Draw the jar on the board.</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">Function</div>
+    <div class="the-analogy">"A function is a recipe. You write the recipe once. You can cook that dish a hundred times without rewriting the recipe. You give it ingredients (parameters) and it gives you a dish (return value). The recipe doesn't know who is cooking it or when."</div>
+    <div class="usage">Use when introducing functions. Ask: "What happens if you change one ingredient? The recipe changes for everyone."</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">Loop</div>
+    <div class="the-analogy">"Imagine your teacher asks you to write 'I will not talk in class' 100 times on the blackboard. Without loops, you'd write that line 100 times in your code. With a for loop, you write it once and say 'do this 100 times.'"</div>
+    <div class="usage">Actually start writing the 100 lines. On line 3, stop and say "this is going to take forever — there must be a better way."</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">List</div>
+    <div class="the-analogy">"A list is your shopping list. You can add items to it, remove items, cross things off, and go through it one by one. The order matters — bread is item 0, milk is item 1."</div>
+    <div class="usage">Contrast immediately with: "If I asked you to find your 6th friend by phone number, you'd struggle. That's why we have dictionaries."</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">Dictionary</div>
+    <div class="the-analogy">"A dictionary is your contact book. You don't look up friends by position ('let me check my 4th contact'). You look them up by name. The name is the key; the phone number is the value."</div>
+    <div class="usage">Ask: "Should a student's grade report use a list or a dictionary? Why?" Let them reason it out.</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">Class and Object</div>
+    <div class="the-analogy">"A class is an architectural blueprint for a house. The blueprint says: 4 rooms, 2 bathrooms, a kitchen. Every house built from that blueprint has the same structure — but each house has different furniture, different paint, different people living in it. The class is the blueprint. Each object is an individual house."</div>
+    <div class="usage">Draw a blueprint and 3 different houses built from it. All same structure, all different details.</div>
+  </div>
+
+  <h3 class="sub-title">Machine Learning</h3>
+
+  <div class="analogy">
+    <div class="concept">ML Training</div>
+    <div class="the-analogy">"Teaching a child to recognise cats. You don't sit down and explain: 'A cat has four legs, fur, whiskers, and says meow.' You show them 10,000 photos of cats and say 'cat' each time. Eventually they just know. The model learns patterns from examples — not rules written by humans."</div>
+    <div class="usage">Perfect for Track 1 Day 21 and Track 2 Day 13. Ask: "What happens if all 10,000 photos are of orange cats? They'll think black cats aren't cats. This is bias."</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">Overfitting</div>
+    <div class="the-analogy">"A student who photocopies every past exam paper and memorises every question and answer word-for-word. In the exam, they can answer any question from the past papers perfectly. But the moment a new question appears — they're lost. They memorised instead of understood. That's an overfitting model."</div>
+    <div class="usage">Show this live: train a decision tree with no depth limit. It gets 100% on training data and ~70% on test. Then show max_depth=3 — lower train accuracy but higher test accuracy.</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">Gradient Descent</div>
+    <div class="the-analogy">"You're blindfolded on a hilly landscape. Your goal is to reach the lowest point in the valley. You can't see anything, but you can feel which direction the ground slopes under your feet. So you take a small step downhill. Then another. Then another. Eventually you reach the bottom. Gradient descent is this: small steps in the direction of decreasing loss."</div>
+    <div class="usage">Draw the hills on the board. Mark the loss value at several points. Show how taking too large a step (high learning rate) can jump over the valley.</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">Random Forest</div>
+    <div class="the-analogy">"You're making a big financial decision. Instead of asking one advisor, you ask 100 different experts — each with slightly different information and slightly different approaches. You take the majority vote. 100 imperfect opinions, averaged together, are better than one 'expert' opinion. That's a random forest."</div>
+    <div class="usage">Point out: each tree in the forest is trained on a random subset of data and random subset of features. This is what makes them different from each other.</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">Loss Function</div>
+    <div class="the-analogy">"The loss function is your teacher's red pen. Every wrong answer gets a red mark. The total number of red marks is your loss. The goal of training is to reduce the number of red marks to as few as possible."</div>
+    <div class="usage">Simple and memorable. Students immediately understand the direction: lower loss = better model.</div>
+  </div>
+
+  <h3 class="sub-title">Deep Learning</h3>
+
+  <div class="analogy">
+    <div class="concept">Neural Network</div>
+    <div class="the-analogy">"Your eye sees light — photons. Your brain converts those photons to edges. Then edges to shapes. Then shapes to objects. Then 'that's a face.' Then 'that's Priya.' A neural network does the same thing: each layer finds a more complex pattern than the last. The first layer finds edges in a photo. The last layer says 'this is a cat.'"</div>
+    <div class="usage">Draw the layered processing on the board: pixels → edges → shapes → object → label.</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">Convolution (CNN)</div>
+    <div class="the-analogy">"Imagine you have a small magnifying glass (3×3 pixels). You slide this glass across an entire photo, pixel by pixel. The glass is looking for one specific pattern — say, a horizontal edge. Every time it finds that pattern, it says 'yes, here.' After scanning the whole photo, you have a map of where that pattern appeared. That map is the feature map. Different glasses look for different patterns."</div>
+    <div class="usage">Physically slide your hand across the whiteboard while explaining this. The physical gesture helps students visualise the sliding window.</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">Transfer Learning</div>
+    <div class="the-analogy">"Imagine you hire an intern who has spent 3 years at a top hospital learning to read X-rays. Now you want them to read MRI scans. You don't retrain them from scratch. They already know anatomy, patterns, what's normal vs abnormal. You just teach them what's specific to MRIs. That's transfer learning: a model trained on millions of images, now fine-tuned for your specific task."</div>
+    <div class="usage">This is the best analogy for Track 3 Day 4. Emphasise: the fine-tuning takes hours, not the months it took to train the original model.</div>
+  </div>
+
+  <h3 class="sub-title">LLMs and AI Tools</h3>
+
+  <div class="analogy">
+    <div class="concept">Token</div>
+    <div class="the-analogy">"A token is the smallest chunk an LLM processes — roughly three-quarters of a word. 'Unbelievable' might be tokenised as 'Un', 'believ', 'able' — three tokens. You pay per token. A 100-word essay is roughly 130 tokens."</div>
+    <div class="usage">Use the OpenAI tokenizer website to show real tokenisation live in class.</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">Context Window</div>
+    <div class="the-analogy">"The context window is the LLM's whiteboard. It can only see what's written on the whiteboard right now. Everything that happened before the whiteboard was erased is forgotten. A 128K token context window is a very large whiteboard — it can hold roughly 300 pages of text."</div>
+    <div class="usage">Ask: "What happens if your conversation gets longer than the context window?" Students often don't know about this limitation.</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">Temperature</div>
+    <div class="the-analogy">"Temperature 0 is a very careful accountant. Every time you ask them a question, they give you the same safe, predictable answer. Temperature 1 is a creative poet — they surprise you every time. The same question gets different answers. For factual tasks, use low temperature. For creative tasks, use higher temperature."</div>
+    <div class="usage">Demo this live: ask the same question with temp=0 three times (same answer), then with temp=1 three times (different each time).</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">RAG (Retrieval-Augmented Generation)</div>
+    <div class="the-analogy">"Open-book exam vs closed-book exam. A standard LLM is like a closed-book exam — it can only answer from what it memorised during training. RAG is like an open-book exam — before answering, the model searches its reference books (your documents), reads the relevant pages, then answers. More accurate, more current, less hallucination."</div>
+    <div class="usage">This is the most important analogy for Track 2 Module 3 and Track 3. Students immediately understand why RAG is better.</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">Embeddings</div>
+    <div class="the-analogy">"Imagine plotting every word in the English language on a giant map. Similar words land close together on the map. 'King' and 'queen' are nearby. 'Dog' and 'puppy' are nearby. 'Dog' and 'justice' are far apart. An embedding is the coordinates (the location) of a word on this map. We can then measure similarity by measuring distance."</div>
+    <div class="usage">Draw a 2D map on the board with a few words plotted. Show how the vector distance captures meaning.</div>
+  </div>
+
+  <div class="analogy">
+    <div class="concept">AI Agent</div>
+    <div class="the-analogy">"An agent is a smart intern. You give the intern a task: 'Research the top 5 AI companies and write a one-page summary.' The intern has tools: a laptop (web search), a calculator, a notepad (file writer). They don't ask you how to do it step by step — they figure out which tools to use, in what order, and bring you the finished report. The LLM is the intern's brain. The tools are the intern's hands."</div>
+    <div class="usage">This is the opening analogy for Track 3 Module 4. Write it on the board and refer back to it throughout the agent module.</div>
+  </div>
+</section>
+
+<!-- TRACK-SPECIFIC NOTES -->
+<section id="track-notes">
+  <h2 class="section-title">Track-Specific Teaching Notes</h2>
+
+  <h3 class="sub-title">Track 1 — Teaching 10th Grade Students (Age 15–16)</h3>
+  <div class="card t1-block">
+    <h4>The Mindset</h4>
+    <p>These students have never written a line of code. They are excited but easily discouraged. One confusing session can make them decide "programming is not for me" — which is not true. Your single most important job: keep them feeling capable.</p>
+    <h4>Pacing</h4>
+    <ul>
+      <li>Go slower than you think is necessary. Then go slower.</li>
+      <li>Introduce one concept per hour, maximum.</li>
+      <li>Spend 20–30% of every session reviewing the previous session.</li>
+      <li>Never assume they remember something from two days ago — always ask first.</li>
+    </ul>
+    <h4>Classroom Energy</h4>
+    <ul>
+      <li>Start every session with a 2-minute fun demo (a Python animation, a short game, "can AI write a poem about cricket?")</li>
+      <li>Use their names in code examples: <code>student_name = "Priya"</code></li>
+      <li>Cheer loudly when someone gets their first program running.</li>
+      <li>Never let a student sit with a red error for more than 3 minutes without help.</li>
+    </ul>
+    <h4>When They're Stuck</h4>
+    <ul>
+      <li>Don't fix it for them. Sit beside them and ask: "What is this line supposed to do?" Walk them to the answer.</li>
+      <li>Pair them: confident student + struggling student. Rotate pairs every week.</li>
+      <li>If the whole class is stuck on the same thing — you went too fast. Go back.</li>
+    </ul>
+    <h4>The Capstone (Days 33–45)</h4>
+    <p>This is their proudest moment. Make it special. Let them choose their own dataset (help them find one on Kaggle that interests them — cricket stats, Bollywood movies, food prices). A student who analyses something they care about builds something they'll show their parents.</p>
+  </div>
+
+  <h3 class="sub-title">Track 2 — Teaching Inter/12th Grade Students (Age 17–18)</h3>
+  <div class="card t2-block">
+    <h4>The Mindset</h4>
+    <p>These students are thinking about their careers. They want to know: "Will this get me a job?" Connect every concept to a real industry application and a real job role.</p>
+    <h4>Pacing</h4>
+    <ul>
+      <li>Faster than Track 1, but don't skip foundations. Many 12th graders have surface-level Python knowledge that breaks under pressure.</li>
+      <li>Assume they know: basic Python syntax, Excel, basic math.</li>
+      <li>Do not assume: NumPy, Pandas, any ML, any API usage.</li>
+    </ul>
+    <h4>Motivating This Cohort</h4>
+    <ul>
+      <li>Show real job listings that require these skills. "A Data Analyst at Infosys/Wipro needs exactly what we're building today."</li>
+      <li>Show salary ranges for Data Analysts vs non-technical roles.</li>
+      <li>Connect the AI Tools module (ChatGPT/Gemini APIs) to real productivity gains: "A developer who can use AI APIs builds 3× faster."</li>
+    </ul>
+    <h4>The ChatGPT/Gemini Module (Days 29–36)</h4>
+    <p>This is the most exciting module for this cohort. They've all used ChatGPT as users — now they're building with it. The moment they make their first API call and see a response, their engagement spikes. Lean into this. Build the chatbot demo on Day 31 as if it's the star of the show — because it is.</p>
+  </div>
+
+  <h3 class="sub-title">Track 3 — Teaching Engineering Students (Age 18–22)</h3>
+  <div class="card t3-block">
+    <h4>The Mindset</h4>
+    <p>These students are your intellectual equals in many areas. Some may know things you don't. This is not a threat — it's an asset. Create a culture of peer learning where the strong students teach each other.</p>
+    <h4>How to Handle Students Who Know More Than You</h4>
+    <ul>
+      <li>When a student corrects you: "You're right — thanks for that. Let's look at it your way." Never defensive.</li>
+      <li>When a student asks something you don't know: "I don't know the answer off the top of my head. Let's find out together." Open your browser and look it up live.</li>
+      <li>Nominate the strong students as "Teaching Assistants" during exercises. They teach better to peers than you teach to them.</li>
+    </ul>
+    <h4>Depth and Rigour</h4>
+    <ul>
+      <li>Don't dumb down the math. Show the attention formula. Show the backprop derivation. They can handle it.</li>
+      <li>Require them to read research papers. Even one abstract per week builds the habit.</li>
+      <li>Push back on lazy answers. If they say "the model just learns the patterns" — ask "but how exactly?"</li>
+    </ul>
+    <h4>The Capstone (Days 41–45)</h4>
+    <p>Raise the bar. A working demo is the baseline, not the goal. Ask for: a GitHub repo with a proper README, a live deployed endpoint (even if it's on a free service), and a 15-minute technical presentation where they can be asked any question about any architectural decision they made.</p>
+  </div>
+</section>
+
+<!-- DAY 1 LESSON PLANS -->
+<section id="day1-plans">
+  <h2 class="section-title">Day 1 Lesson Plans — Ready to Use</h2>
+  <p>These are full lesson plans for the first day of each track. Follow them closely for your first session. After that, use them as templates.</p>
+
+  <h3 class="sub-title" style="color:var(--indigo)">Track 1 Day 1 — Welcome to Python (3 hours)</h3>
+
+  <div class="lesson-block">
+    <span class="lesson-time">0:00 – 0:10 | Opening</span>
+    <div class="lesson-content">
+      <h5>The Hook</h5>
+      <p>Show a 30-second clip of something built with Python: a game, an animation, YouTube data analysis showing which videos get recommended. Ask: "How do you think this was built?"</p>
+      <div class="say">"Every tool you used on your phone today — the map that found your route, the video that was recommended to you, the filter on your selfie — was built using code. Today, you start learning to build those things."</div>
+    </div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">0:10 – 0:30 | Setup</span>
+    <div class="lesson-content">
+      <h5>Google Colab Setup</h5>
+      <p>Walk every student through: open browser → go to colab.research.google.com → sign in → New Notebook. Every student must have a working notebook before you proceed. Do not move on until everyone is ready.</p>
+      <div class="say">"This is your coding environment. Think of it as a smart notebook where you write code in one cell and Python runs it immediately below."</div>
+    </div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">0:30 – 0:50 | First Program</span>
+    <div class="lesson-content">
+      <h5>print() — Live Coding</h5>
+      <p>Type slowly. Narrate every character.</p>
+      <div class="say">"I'm going to type our first instruction to Python. The word 'print' tells Python: show this on screen. The round brackets hold what we want to show. The quotes tell Python this is text, not code."</div>
+      <p>Type: <code>print("Hello, World!")</code> — run it. Let the class react to the output.</p>
+      <p>Then: intentionally type <code>Print("Hello")</code> — show the error. Read it aloud. Fix it. "Python is case-sensitive. print is not the same as Print."</p>
+    </div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">0:50 – 1:20 | Variables</span>
+    <div class="lesson-content">
+      <h5>Variables — The Jar Analogy</h5>
+      <p>Draw a jar on the board. Label it "name". Put "Priya" inside it. Then draw another: "age" = 16.</p>
+      <div class="say">"Instead of writing 'Priya' every time I need her name, I store it in a variable called 'name'. Now whenever I want her name, I just say 'name'."</div>
+      <p>Type: <code>name = "Priya"</code> then <code>age = 16</code> then <code>print(name)</code> then <code>print(age)</code></p>
+      <p>Show type(): <code>print(type(name))</code> — "Python says: this is a str, a string, a piece of text."</p>
+    </div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">1:20 – 1:30 | Break</span>
+    <div class="lesson-content"><p>10-minute break. Walk around and check that every student's Colab is working. Help anyone with setup issues.</p></div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">1:30 – 2:00 | Input + Math</span>
+    <div class="lesson-content">
+      <h5>input() and Arithmetic</h5>
+      <div class="say">"What if we want the user to type their own name instead of us hardcoding it?"</div>
+      <p>Type: <code>name = input("What is your name? ")</code> → run → type your name → show the result.</p>
+      <p>Then arithmetic: <code>print(2 + 3)</code>, <code>print(10 * 5)</code>. Show <code>**</code> for power.</p>
+      <p>Build mini age calculator: <code>age = int(input("Your age: "))</code> → <code>print("Next year:", age + 1)</code></p>
+    </div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">2:00 – 2:40 | Student Exercise</span>
+    <div class="lesson-content">
+      <h5>Exercise — Hands On</h5>
+      <p>"Build a program that asks for your name, age, and favourite subject, then prints a personalised message like: 'Hello Priya! You are 16 years old and love Science.'"</p>
+      <p>Circulate. Don't help immediately — give 2 minutes for them to struggle productively first. Then guide with questions, not answers.</p>
+    </div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">2:40 – 3:00 | Wrap Up</span>
+    <div class="lesson-content">
+      <h5>Review + Preview</h5>
+      <p>Ask 3 students: "Without looking at your screen — what are the two things we learned today?" (print and variables)</p>
+      <div class="say">"Tomorrow we'll make programs that make decisions — programs that can say 'if your marks are above 80, you get an A.' Programming that thinks. See you tomorrow."</div>
+    </div>
+  </div>
+
+  <h3 class="sub-title" style="color:var(--purple);margin-top:2rem">Track 2 Day 1 — Python Environment + First EDA (3 hours)</h3>
+
+  <div class="lesson-block">
+    <span class="lesson-time">0:00 – 0:15 | Opening</span>
+    <div class="lesson-content">
+      <h5>The Hook — Real Data, Real Decisions</h5>
+      <div class="say">"Netflix has 230 million subscribers. Every second, they're analysing what you watch, when you pause, what you rewind. A team of data scientists uses Python to turn that data into the 'You might also like…' recommendation. Today, you start building the skills that get you on that team."</div>
+      <p>Show a salary benchmark slide: Data Analyst entry (₹4–6 LPA), Senior DA (₹12–18 LPA), ML Engineer (₹18–40 LPA). "This is the roadmap. These 45 days are the first step."</p>
+    </div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">0:15 – 0:45 | Setup</span>
+    <div class="lesson-content">
+      <h5>Jupyter / Colab Setup + Quick Python Review</h5>
+      <p>Colab setup (same as Track 1). Then 20-minute Python warmup: f-strings, list comprehensions, functions — because 12th graders may have seen Python but need fluency, not introduction.</p>
+    </div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">0:45 – 1:30 | Pandas First Look</span>
+    <div class="lesson-content">
+      <h5>Load a Real Dataset — Live Demo</h5>
+      <div class="say">"Real data is never clean. It's messy, it has missing values, it has typos. The first thing every data scientist does with a new dataset is understand what they have. Let's do that together."</div>
+      <p>Load the Titanic dataset (or your classroom CSV). Show: .shape, .head(), .describe(), .isnull().sum(), .value_counts() for a categorical column. Ask "What story does this data tell?" before showing any chart.</p>
+    </div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">1:30 – 2:15 | First Visualisation</span>
+    <div class="lesson-content">
+      <h5>Matplotlib — Charts That Tell a Story</h5>
+      <p>Plot survival rate by gender (Titanic) or average marks by city (classroom data). Show how a chart reveals in 2 seconds what a table takes 2 minutes to understand.</p>
+      <div class="say">"A chart is a compression of data into insight. Your job as a data scientist is to find the story in the numbers and show it clearly."</div>
+    </div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">2:15 – 2:55 | Student Exercise</span>
+    <div class="lesson-content">
+      <h5>Exercise</h5>
+      <p>"Load the dataset. Answer these 5 questions using Pandas (no manual counting): 1) How many rows and columns? 2) Which column has the most missing values? 3) What is the average age? 4) How many unique values in the 'City' column? 5) Create one chart that tells an interesting story about the data."</p>
+    </div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">2:55 – 3:00 | Wrap Up</span>
+    <div class="lesson-content">
+      <div class="say">"Tomorrow: we go deeper on cleaning this data — because right now it has problems. Then we'll apply our first machine learning model. By the end of next week, you'll have trained a model that predicts survival on the Titanic."</div>
+    </div>
+  </div>
+
+  <h3 class="sub-title" style="color:var(--red);margin-top:2rem">Track 3 Day 1 — Neural Network from Scratch (3 hours)</h3>
+
+  <div class="lesson-block">
+    <span class="lesson-time">0:00 – 0:10 | Opening</span>
+    <div class="lesson-content">
+      <div class="say">"By the end of Day 15, you will have: trained a neural network from scratch, built an image classifier, fine-tuned a pre-trained model, and deployed it as an API. By Day 45, you will have built a production-grade AI agent with RAG, tools, guardrails, and a web UI. That's the 45-day arc. Today, we start at the bottom: one neuron."</div>
+    </div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">0:10 – 0:40 | Theory — The Neuron</span>
+    <div class="lesson-content">
+      <h5>From Biology to Math</h5>
+      <p>Draw a biological neuron: dendrites → cell body → axon. Then draw an artificial neuron: inputs → weighted sum → activation → output. Show the math: z = w₁x₁ + w₂x₂ + b, then a = ReLU(z).</p>
+      <div class="say">"The weights are the knowledge. When a neural network trains, it's just adjusting these numbers — millions of times — until the outputs match the targets."</div>
+    </div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">0:40 – 1:30 | Live Coding — NumPy Neural Net</span>
+    <div class="lesson-content">
+      <h5>Build the XOR Solver from Scratch</h5>
+      <p>Type the full NeuralNet class from Track 3 Day 1 live. Explain every method. Run it. Show the outputs converging. This is the most important demo of Module 1.</p>
+      <div class="say">"Notice: I didn't write any rules about what makes XOR true or false. I just showed it 4 examples and a loss function. The network figured out the rest. That's machine learning."</div>
+    </div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">1:30 – 1:40 | Break</span>
+    <div class="lesson-content"><p>10-minute break. This session is dense. Students need it.</p></div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">1:40 – 2:20 | PyTorch Comparison</span>
+    <div class="lesson-content">
+      <h5>Same Network, PyTorch Version</h5>
+      <p>Show the Track 3 Day 2 PyTorch code. Compare side-by-side with the NumPy version. Ask: "What does autograd give us that we had to write manually in NumPy?"</p>
+    </div>
+  </div>
+  <div class="lesson-block">
+    <span class="lesson-time">2:20 – 3:00 | Exercise + Discussion</span>
+    <div class="lesson-content">
+      <h5>Exercise</h5>
+      <p>"Add a second hidden layer to the NumPy network. Train it on XOR. Does it converge faster or slower? Why?"</p>
+      <p>Discussion: "What would happen if you used no activation function? Try it." (The network collapses to a linear function — this is a key insight.)</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <h2 class="section-title">Common Student Questions + How to Answer Them</h2>
+
+  <table>
+    <tr><th>Question</th><th>Track</th><th>The Best Answer</th></tr>
+    <tr><td>"Why do we need Python when we have ChatGPT?"</td><td><span class="tag t1">T1</span><span class="tag t2">T2</span></td><td>ChatGPT IS built in Python. Knowing Python means you can build the next ChatGPT, not just use someone else's. Users vs builders — which do you want to be?</td></tr>
+    <tr><td>"What's the difference between AI and ML?"</td><td><span class="tag all">All</span></td><td>AI is the goal (machines that think). ML is one method to get there (machines that learn from data). All ML is AI, but not all AI uses ML. Rule-based systems are AI without ML.</td></tr>
+    <tr><td>"Will AI take my job?"</td><td><span class="tag t2">T2</span><span class="tag t3">T3</span></td><td>AI will take jobs that involve repetitive, rule-based tasks. It creates new jobs for people who can build and use AI. You're in the right room — you're training to be in the second group.</td></tr>
+    <tr><td>"Why is my accuracy 100%? Did I do something wrong?"</td><td><span class="tag t1">T1</span><span class="tag t2">T2</span></td><td>Probably overfitting. Check if you accidentally trained and tested on the same data. A real model almost never gets 100% — that's a red flag, not a celebration.</td></tr>
+    <tr><td>"How do LLMs actually work? Do they understand?"</td><td><span class="tag t2">T2</span><span class="tag t3">T3</span></td><td>They predict the next most likely token, billions of times, based on patterns seen in training data. They do not "understand" in the way humans do. But the pattern matching is so deep that the output often appears like understanding.</td></tr>
+    <tr><td>"Which is better — PyTorch or TensorFlow?"</td><td><span class="tag t3">T3</span></td><td>PyTorch won. In 2024, ~80% of research papers use PyTorch. TensorFlow is still used in production but the gap is narrowing. We use PyTorch. If you encounter TensorFlow at work, the concepts are identical — only the syntax differs.</td></tr>
+    <tr><td>"Can I use AI to write my assignment?"</td><td><span class="tag all">All</span></td><td>You can use AI as a tutor — to explain concepts, suggest approaches, review your code. You cannot use it to write code you don't understand, because you can't debug what you don't understand. And in an exam, there's no AI. So build the skill yourself.</td></tr>
+    <tr><td>"I don't understand backpropagation at all."</td><td><span class="tag t3">T3</span></td><td>Neither did anyone the first time. You don't need to derive it from scratch to use it. Understand the intuition: we measure how wrong we were, then we adjust every weight in the direction that reduces that wrongness. The chain rule does the accounting. Run the code. See the loss decrease. Trust the process. Come back to the math in Week 3.</td></tr>
+  </table>
+</section>
+
+<!-- CLASSROOM MANAGEMENT -->
+<section id="classroom">
+  <h2 class="section-title">Classroom Management</h2>
+
+  <h3 class="sub-title">The First 10 Minutes Rule</h3>
+  <p>Start on time. Always. If you wait for latecomers, you train students to arrive late. Start with your hook at the exact scheduled time. The latecomers miss the hook — that's their consequence.</p>
+
+  <h3 class="sub-title">Handling a Student Who Is Far Behind</h3>
+  <ol>
+    <li>Identify them early — by Day 3, you'll know who needs extra help.</li>
+    <li>Pair them with a stronger student during exercises.</li>
+    <li>Give them 10 minutes of 1-on-1 attention during the break.</li>
+    <li>If they're completely lost: give them a simplified version of the exercise to build confidence first.</li>
+    <li>Do not let them sit in silent frustration for an entire session. That turns into dropout.</li>
+  </ol>
+
+  <h3 class="sub-title">Handling a Disruptive Student</h3>
+  <p>For Track 1 (teenagers): Channel the energy, don't suppress it. If they're talking, give them a task: "Great — come up and run this code for the class." Make them part of the solution.</p>
+  <p>For Track 3 (engineers): Intellectual disruption ("that's wrong, here's a better way") — engage it, never shut it down. Non-productive disruption — address it privately, not publicly.</p>
+
+  <h3 class="sub-title">Energy Management (For You)</h3>
+  <div class="warn">
+    <strong>You will be teaching 3 batches simultaneously.</strong> This is exhausting. Protect your energy deliberately.
+    <ul style="margin-top:.5rem">
+      <li>Prepare everything the night before — never the morning of. Morning stress kills classroom energy.</li>
+      <li>Keep a glass of water on the table at all times.</li>
+      <li>Between batches: 15 minutes of silence. No screens.</li>
+      <li>Do not skip meals. Teaching on an empty stomach crashes your ability to think on your feet.</li>
+      <li>Keep a notebook: after each session, write one thing that worked and one thing to improve.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- LOCAL EXAMPLES -->
+<section id="local-examples">
+  <h2 class="section-title">Classroom Examples — Local, Relatable, Memorable</h2>
+  <p>Generic examples (Iris flowers, Titanic passengers) work but don't excite students in Srikakulam. Below are ready-to-use examples anchored in contexts your students actually live in. Use these when introducing any concept — they create instant engagement because students can picture the real situation.</p>
+
+  <h3 class="sub-title">Python Fundamentals — Localised Examples</h3>
+
+  <div class="card indigo">
+    <h4>Variables — Ration Shop Stock</h4>
+    <p>Instead of abstract variables, model a ration shop: <code>rice_kg = 50</code>, <code>dal_kg = 30</code>, <code>oil_litres = 20</code>. Ask: "If 5 kg of rice is distributed today, how much is left?" Students write <code>rice_kg = rice_kg - 5</code>. Immediately relatable, immediately purposeful.</p>
+  </div>
+
+  <div class="card indigo">
+    <h4>If-Else — Andhra Pradesh Board Exam Grading</h4>
+    <p>Use the actual AP SSC/Inter grading system: A1 (91–100), A2 (81–90), B1 (71–80), B2 (61–70), C1 (51–60), C2 (41–50), D (35–40), E (fail). Students build the exact grading logic they know from their own mark sheets. This makes the exercise personal and verifiable — they can test it with their own marks.</p>
+    <div class="code">marks = int(input("Enter your SSC marks (0-100): "))
+if marks >= 91:
+    grade = "A1 — Outstanding"
+elif marks >= 81:
+    grade = "A2 — Excellent"
+elif marks >= 71:
+    grade = "B1 — Very Good"
+elif marks >= 61:
+    grade = "B2 — Good"
+elif marks >= 51:
+    grade = "C1 — Satisfactory"
+elif marks >= 41:
+    grade = "C2 — Satisfactory"
+elif marks >= 35:
+    grade = "D — Pass"
+else:
+    grade = "E — Fail"
+print(f"Your grade: {grade}")</div>
+  </div>
+
+  <div class="card indigo">
+    <h4>Lists — APSRTC Bus Schedule</h4>
+    <p>Model bus timings from Srikakulam to Vizag: <code>bus_timings = ["6:00 AM", "8:30 AM", "11:00 AM", "2:00 PM", "5:30 PM", "8:00 PM"]</code>. Exercise: "The 11:00 AM bus is cancelled. Remove it. Add a new 3:00 PM service. Print the final schedule." Real, structured, and immediately useful.</p>
+  </div>
+
+  <div class="card indigo">
+    <h4>Dictionaries — Kirana Shop Inventory</h4>
+    <p>A local kirana shop: <code>inventory = {"Rice": 200, "Dal": 80, "Oil": 45, "Sugar": 100, "Salt": 60}</code>. Ask: "A customer buys 5 kg of rice and 2 kg of dal. Update the inventory. Check if any item has fallen below 50 kg (reorder threshold)." Every student in class has seen a kirana shop work exactly this way.</p>
+  </div>
+
+  <h3 class="sub-title">Machine Learning — Localised Examples</h3>
+
+  <div class="card purple">
+    <h4>Linear Regression — Vizag Property Prices</h4>
+    <p>Instead of abstract housing data, use: "In Vizag, a 600 sq ft flat costs ₹40L. A 1000 sq ft flat costs ₹65L. A 1500 sq ft flat costs ₹95L. Build a model that predicts the price of a 1200 sq ft flat." Students can verify the prediction intuitively because they've seen these prices discussed at home.</p>
+  </div>
+
+  <div class="card purple">
+    <h4>Classification — Crop Disease Detection</h4>
+    <p>Srikakulam district is agricultural. "A farmer wants to know: is my paddy crop healthy or diseased? Based on: leaf colour (1=yellow, 2=brown, 3=green), moisture level (1–10), days since last rain. Train a classifier." This hits home — many students have farmer families. It also connects AI to a real local problem.</p>
+  </div>
+
+  <div class="card purple">
+    <h4>Clustering — Grouping Students by Study Pattern</h4>
+    <p>Use K-Means on a classroom dataset: study hours per day, attendance percentage, and marks. Let the algorithm find natural groups. Then ask: "What would you name these groups?" Students often discover: "Late starters" (low attendance, high marks at end), "Consistent workers", "At-risk students". This is K-Means made personal.</p>
+  </div>
+
+  <div class="card purple">
+    <h4>NLP — Telugu-English Code Switching</h4>
+    <p>Train a language detector on sentences that mix Telugu and English (as Andhra students actually speak). "Nenu Python nerchukuntunnanu — what language is this?" A multilingual NLP example nobody else in India is using in classrooms. Ask: "What challenges does code-switching create for NLP systems?"</p>
+  </div>
+
+  <h3 class="sub-title">LLMs and Agents — Localised Examples</h3>
+
+  <div class="card red">
+    <h4>RAG — NexGen Course Q&amp;A Bot</h4>
+    <p>Build the RAG demo using the actual NexGen course documents as the knowledge base. Students ask questions like "What does Track 3 cover?" and "How long is the Data Science course?" — the bot answers from real content they've seen. This makes the demo tangible and the answer verifiable. They can immediately see when the bot is right or wrong.</p>
+  </div>
+
+  <div class="card red">
+    <h4>Function Calling — AP EAMCET Rank Predictor</h4>
+    <p>Build a chatbot with tools: get_cutoff_rank(college, branch) and get_seat_availability(college, branch, category). Students ask: "I have rank 8500. Can I get CSE at JNTU Kakinada under OC category?" The LLM calls the tools with the right parameters and answers. This problem is deeply relevant to every engineering student in the room — many of their younger siblings will face this.</p>
+  </div>
+
+  <div class="card red">
+    <h4>AI Agent — Auto Cricket Score Analyser</h4>
+    <p>Build an agent with tools: get_match_score(match_id), get_player_stats(player_name), compare_players(p1, p2). Ask: "Compare Virat Kohli's T20 performance in the last 6 months vs Rohit Sharma." The agent figures out which tools to call in what order. Cricket grabs every student in Andhra Pradesh — engagement is immediate and 100%.</p>
+  </div>
+
+  <div class="card red">
+    <h4>Prompt Engineering — Government Scheme Summariser</h4>
+    <p>Use chain-of-thought to summarise AP government welfare schemes (YSR Rythu Bharosa, Amma Vodi, etc.) from long official PDFs. The exercise: "Write a prompt that extracts: scheme name, who qualifies, benefit amount, how to apply — from any government notice." Students build something immediately useful to their communities.</p>
+  </div>
+
+  <h3 class="sub-title">Industry Connections to Make in Class</h3>
+  <table>
+    <tr><th>Concept</th><th>Local/India Industry Connection</th><th>How to Use It</th></tr>
+    <tr><td>Data Analysis</td><td>APSRTC analyses route usage data to decide which routes to add/cancel</td><td>Show as opening hook for Pandas lesson</td></tr>
+    <tr><td>ML Classification</td><td>AP Rythu Bharosa scheme — the government uses data to identify eligible farmers</td><td>Use as the motivation for why classification matters</td></tr>
+    <tr><td>Computer Vision</td><td>NHAI (National Highways) uses cameras + CV to detect potholes automatically</td><td>Show as the "what we're building towards" for CNN day</td></tr>
+    <tr><td>NLP</td><td>Truecaller (Indian product) identifies spam calls using NLP on call patterns</td><td>Every student uses Truecaller — instant relatability</td></tr>
+    <tr><td>Recommendation Systems</td><td>Swiggy decides which restaurant to show first based on your past orders + location</td><td>Use as opening hook for Track 2 Day 24</td></tr>
+    <tr><td>LLMs</td><td>Infosys, TCS, Wipro are all building internal AI tools using GPT/Gemini APIs</td><td>Career motivation: "This is what your future employer is using right now"</td></tr>
+    <tr><td>AI Agents</td><td>Zepto's 10-minute delivery is orchestrated by an AI agent that manages inventory, riders, and routing in real-time</td><td>Open Track 3 Module 4 with this</td></tr>
+  </table>
+</section>
+
+<!-- SURVIVAL GUIDE -->
+<section id="survival">
+  <h2 class="section-title">Survival Guide — What To Do When Things Go Wrong</h2>
+
+  <table>
+    <tr><th>Situation</th><th>What To Do</th></tr>
+    <tr><td>Demo code doesn't run</td><td>Stay calm. Read the error out loud. Debug it live. Say: "This is exactly what real engineers deal with every day. Watch how I debug this." This is actually a teaching opportunity — don't waste it.</td></tr>
+    <tr><td>Internet goes down during LLM API demo</td><td>Pre-run and save the notebook with outputs visible. Show the saved output. "Imagine this was the live API response." Continue with the concept. Test the real API after class.</td></tr>
+    <tr><td>A student asks a question you can't answer</td><td>"That's a great question. I don't have the answer right now. Let me research it tonight and I'll start tomorrow's session with the answer." Write it down visibly. Actually come back with the answer tomorrow. Trust is built by following through.</td></tr>
+    <tr><td>Half the class is stuck on an exercise</td><td>Stop the exercise. Say: "Looks like I moved too fast. Let's look at this together." Go back to the concept. Don't blame the students.</td></tr>
+    <tr><td>You're behind schedule</td><td>Never rush to cover content. Cover less, cover it well. An unfinished topic understood is better than a finished topic that nobody learned. Adjust the next session.</td></tr>
+    <tr><td>A student says "this is too hard, I can't do this"</td><td>Sit with them. "Show me exactly where you got stuck." Almost always: one specific misunderstood step is the block. Fix that step and the whole concept unlocks. Remind them of something they built earlier: "You built X — that was harder than this."</td></tr>
+    <tr><td>You made a mistake in yesterday's lesson</td><td>Correct it openly at the start of today's session. "Yesterday I said X — I was wrong. The correct answer is Y. Here's why." This models intellectual honesty. Students respect it.</td></tr>
+  </table>
+
+  <h3 class="sub-title" style="margin-top:1.5rem">Your Week 1 Daily Checklist</h3>
+  <div class="card green">
+    <ul class="checklist">
+      <li>All demo notebooks tested and running the night before</li>
+      <li>Classroom projector + HDMI adapter confirmed working</li>
+      <li>Google Colab accessible from classroom network</li>
+      <li>Your opening hook ready (app demo, stat, real-world example)</li>
+      <li>Analogy prepared for each new concept</li>
+      <li>Exercise designed — slightly different from demo, not copy-paste</li>
+      <li>Know the names of at least 3 students per track by Day 3</li>
+      <li>Backup plan ready if internet fails</li>
+      <li>Post-session: one reflection note written</li>
+    </ul>
+  </div>
+
+  <div style="background:var(--navy);color:#fff;border-radius:10px;padding:2rem;margin-top:2rem;text-align:center">
+    <div style="font-size:1.2rem;font-weight:700;margin-bottom:.75rem">A Final Word</div>
+    <p style="color:#94A3B8;font-size:.92rem;max-width:600px;margin:0 auto">You don't need to be perfect. You need to be prepared, honest, and present. The students in your class are there because they believe in the possibility of learning these skills. Your job is to protect that belief — especially on the hard days when the code won't run and nobody understands backpropagation and the internet is down. On those days, your calm confidence is the lesson. Everything else is just content.</p>
+    <div style="margin-top:1.5rem;color:#06B6D4;font-size:.85rem;font-weight:600">NEx-gEN School of Computers · Srikakulam · www.nex-gen.in</div>
+    <div style="color:#475569;font-size:.75rem;margin-top:.25rem">ISO 9001:2015 Certified | Empowering Futures Through Quality Education</div>
+  </div>
+</section>
+
+</body>
+</html>
