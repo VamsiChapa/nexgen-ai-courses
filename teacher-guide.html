@@ -1481,9 +1481,23 @@ print(f"Your grade: {grade}")</div>
 </div><!-- /#tg-content -->
 
 <script>
-// Credentials injected at build time — see inject_creds.py
-var TG_USERS  = (function(){ try { return JSON.parse(atob('eyJibVY0WjJWdSI6IiIsImRISmhhVzVsY2pFPSI6IiIsImRtRnRjMms9IjoiIn0=')); } catch(e){ return {}; } })();
-var TG_MASTER = '';
+// CI-injected credentials (%%PLACEHOLDERS%% replaced by inject_creds.py).
+// Fallback to hardcoded credentials when injection has not run.
+var TG_USERS = (function () {
+  var ub = 'eyJibVY0WjJWdSI6IlZISmhhVzVBTWpBeU5BPT0iLCJkSEpoYVc1bGNqRT0iOiJUbVY0UjJWdVFEQXdNUT09IiwiZG1GdGMyaz0iOiJRV1J0YVc1QVRtVjRSMlZ1TWpBeU5BPT0ifQ==';
+  if (ub.indexOf('%%') === -1) {
+    try { return JSON.parse(atob(ub)); } catch (e) {}
+  }
+  var u = {};
+  u[btoa('nexgen')]   = btoa('Train@2024');
+  u[btoa('trainer1')] = btoa('NexGen@001');
+  u[btoa('vamsi')]    = btoa('Admin@NexGen2024');
+  return u;
+})();
+var TG_MASTER = (function () {
+  var mb = 'TlhHTkBNYXN0ZXIyNA==';
+  return mb.indexOf('%%') === -1 ? mb : btoa('NXGN@Master24');
+})();
 
 function tgLogin() {
   const u = document.getElementById('tg-user').value.trim();
