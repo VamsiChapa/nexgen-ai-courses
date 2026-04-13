@@ -1481,12 +1481,9 @@ print(f"Your grade: {grade}")</div>
 </div><!-- /#tg-content -->
 
 <script>
-const TG_USERS = {
-  [btoa('nexgen')]:   btoa('Train@2024'),
-  [btoa('trainer1')]: btoa('NexGen@001'),
-  [btoa('vamsi')]:    btoa('Admin@NexGen2024'),
-};
-const TG_MASTER = btoa('NXGN@Master24');
+// Credentials injected at build time — see inject_creds.py
+var TG_USERS  = (function(){ try { return JSON.parse(atob('%%USERS_B64%%')); } catch(e){ return {}; } })();
+var TG_MASTER = '%%MASTER_B64%%';
 
 function tgLogin() {
   const u = document.getElementById('tg-user').value.trim();

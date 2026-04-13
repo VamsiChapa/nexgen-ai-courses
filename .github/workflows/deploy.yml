@@ -1,0 +1,44 @@
+name: Build & Deploy Portal
+
+# Triggers on every push to main, or manually via Actions tab
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write   # needed to push to gh-pages branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # Reads CRED_NEXGEN, CRED_TRAINER1, CRED_VAMSI, MASTER_CODE from
+      # GitHub repository secrets and injects them into the HTML files.
+      # Source code (this branch) only ever contains %%PLACEHOLDER%% strings.
+      - name: Inject credentials into HTML
+        env:
+          CRED_NEXGEN:   ${{ secrets.CRED_NEXGEN }}
+          CRED_TRAINER1: ${{ secrets.CRED_TRAINER1 }}
+          CRED_VAMSI:    ${{ secrets.CRED_VAMSI }}
+          MASTER_CODE:   ${{ secrets.MASTER_CODE }}
+        run: python3 inject_creds.py
+
+      # Deploys the ./dist folder to the gh-pages branch.
+      # GitHub Pages must be set to serve from the gh-pages branch root.
+      - name: Deploy to GitHub Pages (gh-pages branch)
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: false
+          commit_message: "Deploy: inject credentials and publish [skip ci]"
