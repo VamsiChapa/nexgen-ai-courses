@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NexGen AI — Trainer Briefing Card</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── SCREEN VIEW ── */
+body {
+  font-family: 'Inter', sans-serif;
+  background: #E2E8F0;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 32px 16px;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.18);
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── HEADER ── */
+.header {
+  background: #0F172A;
+  padding: 20px 28px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.header-left {}
+.logo { font-size: 1.5rem; font-weight: 900; color: #fff; letter-spacing: -.02em; }
+.logo span { color: #6366F1; }
+.tagline { font-size: .7rem; color: #94A3B8; font-weight: 500; margin-top: 1px; letter-spacing: .04em; text-transform: uppercase; }
+.header-badge {
+  background: rgba(99,102,241,.2); border: 1px solid rgba(99,102,241,.4);
+  border-radius: 20px; padding: 5px 14px;
+  font-size: .68rem; font-weight: 700; color: #A5B4FC;
+  letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
+}
+.header-right { text-align: right; }
+.header-url { font-size: .72rem; color: #64748B; font-family: 'JetBrains Mono', monospace; }
+.header-url a { color: #818CF8; text-decoration: none; }
+.iso { font-size: .62rem; color: #475569; margin-top: 2px; }
+
+/* ── BODY ── */
+.body { padding: 18px 28px 20px; }
+
+/* ── INTRO ROW ── */
+.intro-row {
+  background: linear-gradient(135deg, rgba(99,102,241,.07) 0%, rgba(34,211,238,.04) 100%);
+  border: 1px solid rgba(99,102,241,.15);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.intro-row p {
+  font-size: .78rem;
+  color: #334155;
+  line-height: 1.6;
+}
+.intro-row strong { color: #0F172A; }
+.intro-icon { font-size: 1.6rem; flex-shrink: 0; }
+
+/* ── SECTION TITLE ── */
+.sec-title {
+  font-size: .65rem;
+  font-weight: 800;
+  color: #94A3B8;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sec-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #E2E8F0;
+}
+
+/* ── THREE TRACKS ── */
+.tracks-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+.track-card {
+  border-radius: 8px;
+  padding: 11px 12px;
+  border: 1px solid;
+  position: relative;
+  overflow: hidden;
+}
+.track-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 8px 8px 0 0;
+}
+.t1 { background: rgba(79,70,229,.05); border-color: rgba(79,70,229,.2); }
+.t1::before { background: #4F46E5; }
+.t2 { background: rgba(124,58,237,.05); border-color: rgba(124,58,237,.2); }
+.t2::before { background: #7C3AED; }
+.t3 { background: rgba(220,38,38,.05); border-color: rgba(220,38,38,.2); }
+.t3::before { background: #DC2626; }
+.track-label { font-size: .6rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 3px; }
+.t1 .track-label { color: #4338CA; }
+.t2 .track-label { color: #6D28D9; }
+.t3 .track-label { color: #B91C1C; }
+.track-title { font-size: .8rem; font-weight: 700; color: #0F172A; margin-bottom: 3px; }
+.track-audience { font-size: .68rem; color: #64748B; margin-bottom: 6px; }
+.track-modules { font-size: .67rem; color: #475569; line-height: 1.55; }
+.track-modules li { margin-left: 12px; }
+
+/* ── TWO COL ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+
+/* ── PORTAL TABS ── */
+.tab-list { display: flex; flex-direction: column; gap: 4px; }
+.tab-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  background: #F8FAFC; border: 1px solid #E2E8F0;
+  border-radius: 6px; padding: 7px 10px;
+}
+.tab-icon { font-size: .9rem; flex-shrink: 0; margin-top: 1px; }
+.tab-name { font-size: .72rem; font-weight: 700; color: #0F172A; }
+.tab-desc { font-size: .67rem; color: #64748B; line-height: 1.4; }
+
+/* ── 15-DAY PHASES ── */
+.phase-list { display: flex; flex-direction: column; gap: 4px; }
+.phase-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  border-radius: 6px; padding: 6px 10px; border: 1px solid;
+}
+.phase-num {
+  width: 20px; height: 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .62rem; font-weight: 800; flex-shrink: 0; color: #fff;
+}
+.phase-info {}
+.phase-days { font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.phase-title { font-size: .72rem; font-weight: 700; color: #0F172A; }
+.phase-desc { font-size: .65rem; color: #64748B; line-height: 1.4; }
+
+.ph1 { background: rgba(79,70,229,.05); border-color: rgba(79,70,229,.15); }
+.ph1 .phase-num { background: #4F46E5; }
+.ph1 .phase-days { color: #4338CA; }
+.ph2 { background: rgba(124,58,237,.05); border-color: rgba(124,58,237,.15); }
+.ph2 .phase-num { background: #7C3AED; }
+.ph2 .phase-days { color: #6D28D9; }
+.ph3 { background: rgba(220,38,38,.05); border-color: rgba(220,38,38,.15); }
+.ph3 .phase-num { background: #DC2626; }
+.ph3 .phase-days { color: #B91C1C; }
+.ph4 { background: rgba(217,119,6,.05); border-color: rgba(217,119,6,.15); }
+.ph4 .phase-num { background: #D97706; }
+.ph4 .phase-days { color: #B45309; }
+.ph5 { background: rgba(5,150,105,.05); border-color: rgba(5,150,105,.15); }
+.ph5 .phase-num { background: #059669; }
+.ph5 .phase-days { color: #047857; }
+
+/* ── TODAY'S SESSION ── */
+.session-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 6px; margin-bottom: 14px; }
+.session-block {
+  background: #0F172A; border-radius: 6px; padding: 8px 8px;
+  text-align: center;
+}
+.session-time { font-size: .6rem; color: #6366F1; font-weight: 700; margin-bottom: 2px; font-family: 'JetBrains Mono', monospace; }
+.session-item { font-size: .68rem; color: #E2E8F0; font-weight: 600; line-height: 1.3; }
+.session-sub { font-size: .6rem; color: #64748B; margin-top: 2px; line-height: 1.3; }
+
+/* ── LOGIN & RULES ── */
+.three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.box {
+  border-radius: 8px; padding: 10px 12px;
+  background: #F8FAFC; border: 1px solid #E2E8F0;
+}
+.box-title { font-size: .65rem; font-weight: 800; color: #0F172A; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; }
+.cred-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
+.cred-user { font-size: .68rem; font-family: 'JetBrains Mono', monospace; color: #4338CA; font-weight: 500; }
+.cred-pass { font-size: .68rem; font-family: 'JetBrains Mono', monospace; color: #64748B; }
+.rule-item { font-size: .67rem; color: #334155; line-height: 1.5; display: flex; gap: 5px; }
+.rule-item::before { content: '→'; color: #6366F1; flex-shrink: 0; font-weight: 700; }
+.analogy-item { font-size: .66rem; color: #334155; line-height: 1.5; }
+.analogy-item strong { color: #0F172A; }
+
+/* ── FOOTER ── */
+.footer {
+  background: #0F172A;
+  padding: 10px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.footer-contact { font-size: .68rem; color: #94A3B8; }
+.footer-contact strong { color: #E2E8F0; }
+.footer-contact a { color: #818CF8; text-decoration: none; }
+.footer-note { font-size: .62rem; color: #475569; text-align: right; }
+
+/* ── PRINT STYLES ── */
+@media print {
+  @page { size: A4; margin: 0; }
+  body { background: #fff; padding: 0; display: block; }
+  .page { box-shadow: none; border-radius: 0; width: 100%; min-height: 100vh; }
+  .print-btn { display: none !important; }
+}
+
+/* ── PRINT BUTTON (screen only) ── */
+.print-btn {
+  position: fixed; bottom: 24px; right: 24px;
+  background: #6366F1; color: #fff; border: none;
+  border-radius: 10px; padding: 12px 22px;
+  font-family: 'Inter', sans-serif; font-size: .9rem; font-weight: 700;
+  cursor: pointer; box-shadow: 0 4px 20px rgba(99,102,241,.5);
+  transition: opacity .2s;
+}
+.print-btn:hover { opacity: .85; }
+
+/* ── DIVIDER ── */
+.divider { border: none; border-top: 1px solid #E2E8F0; margin: 2px 0 14px; }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨️ Print / Save PDF</button>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo">Nex<span>Gen</span> AI Courses</div>
+      <div class="tagline">School of Computers · Srikakulam · ISO 9001:2015</div>
+    </div>
+    <div class="header-badge">Trainer Briefing Card</div>
+    <div class="header-right">
+      <div class="header-url"><a href="https://vamsichapa.github.io/nexgen-ai-courses/">vamsichapa.github.io/nexgen-ai-courses</a></div>
+      <div class="iso">Staff-only portal · Restricted access</div>
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- INTRO -->
+    <div class="intro-row">
+      <div class="intro-icon">🎯</div>
+      <p>You are teaching <strong>3 separate AI courses simultaneously</strong> to different student cohorts over <strong>45 days each</strong>. This card is your quick reference. The portal has everything you need — course materials, curated resources, a day-by-day study plan, classroom playbook, and teaching patterns. <strong>Bookmark the portal. Open it every day before class.</strong></p>
+    </div>
+
+    <!-- THREE TRACKS -->
+    <div class="sec-title">The Three Tracks You Will Teach</div>
+    <div class="tracks-row">
+      <div class="track-card t1">
+        <div class="track-label">Track 1</div>
+        <div class="track-title">Python & AI Basics</div>
+        <div class="track-audience">👨‍🎓 10th Grade students</div>
+        <ul class="track-modules">
+          <li>Python Fundamentals (Days 1–10)</li>
+          <li>Intermediate Python (Days 11–20)</li>
+          <li>AI Introduction (Days 21–32)</li>
+          <li>Beginner Capstone (Days 33–45)</li>
+        </ul>
+      </div>
+      <div class="track-card t2">
+        <div class="track-label">Track 2</div>
+        <div class="track-title">Data Science & ML</div>
+        <div class="track-audience">👨‍🎓 Intermediate / 12th Grade</div>
+        <ul class="track-modules">
+          <li>NumPy & Pandas (Days 1–10)</li>
+          <li>EDA & Visualisation (Days 11–20)</li>
+          <li>ML Algorithms (Days 21–35)</li>
+          <li>Data Science Capstone (Days 36–45)</li>
+        </ul>
+      </div>
+      <div class="track-card t3">
+        <div class="track-label">Track 3</div>
+        <div class="track-title">Advanced AI Engineering</div>
+        <div class="track-audience">👨‍🎓 Engineering / B.Tech</div>
+        <ul class="track-modules">
+          <li>Advanced ML & Deep Learning (Days 1–15)</li>
+          <li>LLM Engineering & APIs (Days 16–25)</li>
+          <li>Prompt Engineering (Days 26–30)</li>
+          <li>AI Agents + Capstone (Days 31–45)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- TODAY'S SESSION -->
+    <div class="sec-title">Today's 1-Hour Walkthrough Agenda</div>
+    <div class="session-grid">
+      <div class="session-block">
+        <div class="session-time">0:00–0:10</div>
+        <div class="session-item">Portal Overview</div>
+        <div class="session-sub">Login live, show all 5 tabs</div>
+      </div>
+      <div class="session-block">
+        <div class="session-time">0:10–0:20</div>
+        <div class="session-item">Course Access</div>
+        <div class="session-sub">Open each track, show day structure</div>
+      </div>
+      <div class="session-block">
+        <div class="session-time">0:20–0:35</div>
+        <div class="session-item">15-Day Plan + Resources</div>
+        <div class="session-sub">Walk through study schedule & links</div>
+      </div>
+      <div class="session-block">
+        <div class="session-time">0:35–0:50</div>
+        <div class="session-item">Playbook Tab</div>
+        <div class="session-sub">Show Day 1 script for all 3 tracks</div>
+      </div>
+      <div class="session-block">
+        <div class="session-time">0:50–1:00</div>
+        <div class="session-item">Q&A + Next Steps</div>
+        <div class="session-sub">Questions, assign Day 1 prep</div>
+      </div>
+    </div>
+
+    <!-- TWO COL: TABS + 15-DAY PLAN -->
+    <div class="two-col">
+
+      <!-- PORTAL TABS -->
+      <div>
+        <div class="sec-title">What Each Portal Tab Does</div>
+        <div class="tab-list">
+          <div class="tab-item">
+            <div class="tab-icon">📊</div>
+            <div>
+              <div class="tab-name">Overview</div>
+              <div class="tab-desc">Platform summary, quick-access links, your role explained</div>
+            </div>
+          </div>
+          <div class="tab-item">
+            <div class="tab-icon">📚</div>
+            <div>
+              <div class="tab-name">Course Access</div>
+              <div class="tab-desc">Direct links to all 3 tracks, prerequisite modules, and course PDFs</div>
+            </div>
+          </div>
+          <div class="tab-item">
+            <div class="tab-icon">🔗</div>
+            <div>
+              <div class="tab-name">Resource Library</div>
+              <div class="tab-desc">Day-by-day curated links: CS50P, Kaggle, StatQuest, Karpathy, DeepLearning.AI — all free</div>
+            </div>
+          </div>
+          <div class="tab-item">
+            <div class="tab-icon">📅</div>
+            <div>
+              <div class="tab-name">15-Day Plan</div>
+              <div class="tab-desc">Click to mark days complete. Progress bar tracks how far along you are</div>
+            </div>
+          </div>
+          <div class="tab-item">
+            <div class="tab-icon">🎓</div>
+            <div>
+              <div class="tab-name">Teacher Guide</div>
+              <div class="tab-desc">6 teaching patterns, AP analogy bank, Day 1 lesson scripts</div>
+            </div>
+          </div>
+          <div class="tab-item">
+            <div class="tab-icon">📋</div>
+            <div>
+              <div class="tab-name">Playbook</div>
+              <div class="tab-desc">Daily classroom script: opening hook, code to demo, exercise, how to check understanding</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15-DAY PLAN -->
+      <div>
+        <div class="sec-title">Your 15-Day Preparation Plan</div>
+        <div class="phase-list">
+          <div class="phase-item ph1">
+            <div class="phase-num">1</div>
+            <div class="phase-info">
+              <div class="phase-days">Days 1–3</div>
+              <div class="phase-title">Python Foundations</div>
+              <div class="phase-desc">CS50P lectures, W3Schools, Corey Schafer. Prep kirana shop &amp; APSRTC analogies.</div>
+            </div>
+          </div>
+          <div class="phase-item ph2">
+            <div class="phase-num">2</div>
+            <div class="phase-info">
+              <div class="phase-days">Days 4–6</div>
+              <div class="phase-title">Data Science Essentials</div>
+              <div class="phase-desc">NumPy (Keith Galli), Kaggle Pandas, StatQuest regression, seaborn charts.</div>
+            </div>
+          </div>
+          <div class="phase-item ph3">
+            <div class="phase-num">3</div>
+            <div class="phase-info">
+              <div class="phase-days">Days 7–9</div>
+              <div class="phase-title">ML Algorithms</div>
+              <div class="phase-desc">Kaggle Intro to ML, StatQuest Decision Trees + Random Forests, scikit-learn docs.</div>
+            </div>
+          </div>
+          <div class="phase-item ph4">
+            <div class="phase-num">4</div>
+            <div class="phase-info">
+              <div class="phase-days">Days 10–12</div>
+              <div class="phase-title">Deep Learning &amp; NLP</div>
+              <div class="phase-desc">3Blue1Brown NN series, Karpathy micrograd, PyTorch quickstart, Transformers.</div>
+            </div>
+          </div>
+          <div class="phase-item ph5">
+            <div class="phase-num">5</div>
+            <div class="phase-info">
+              <div class="phase-days">Days 13–15</div>
+              <div class="phase-title">LLMs, Agents &amp; Rehearsal</div>
+              <div class="phase-desc">DeepLearning.AI prompt + LangChain courses, OpenAI API, full dress rehearsal all 3 tracks.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- THREE COL: LOGIN + GOLDEN RULES + LOCAL ANALOGIES -->
+    <div class="three-col">
+
+      <!-- LOGIN -->
+      <div class="box">
+        <div class="box-title">🔐 Portal Login</div>
+        <div style="font-size:.64rem; color:#64748B; margin-bottom:6px;">Use any credential below at the portal URL above</div>
+        <div class="cred-row"><span class="cred-user">nexgen</span><span class="cred-pass">Train@2024</span></div>
+        <div class="cred-row"><span class="cred-user">trainer1</span><span class="cred-pass">NexGen@001</span></div>
+        <div class="cred-row"><span class="cred-user">vamsi</span><span class="cred-pass">Admin@NexGen2024</span></div>
+        <div style="margin-top:8px; padding-top:7px; border-top:1px solid #E2E8F0;">
+          <div style="font-size:.6rem; color:#94A3B8; font-weight:600; text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px;">Teacher Guide (separate)</div>
+          <div style="font-size:.67rem; color:#334155; font-family:'JetBrains Mono',monospace;">Same credentials apply</div>
+          <div style="font-size:.62rem; color:#94A3B8; margin-top:2px;">Login once → both sites open</div>
+        </div>
+      </div>
+
+      <!-- GOLDEN RULES -->
+      <div class="box">
+        <div class="box-title">⚡ Golden Rules</div>
+        <div class="rule-item">Study each day's material <strong>before</strong> teaching it. One day ahead minimum.</div>
+        <div class="rule-item">Open the Playbook before every class. Use the hook word-for-word.</div>
+        <div class="rule-item">Fist-to-Five after every concept. Re-teach if 30%+ show 0–2 fingers.</div>
+        <div class="rule-item">"I'll verify and come back" beats a confident wrong answer.</div>
+        <div class="rule-item">Use local analogies first, technical term second — never reverse.</div>
+        <div class="rule-item">Print code on paper as backup. Power cuts happen.</div>
+      </div>
+
+      <!-- LOCAL ANALOGIES -->
+      <div class="box">
+        <div class="box-title">🗺️ Quick Analogy Bank</div>
+        <div class="analogy-item"><strong>Variable:</strong> School register notebook page</div>
+        <div class="analogy-item"><strong>List:</strong> Kirana shop inventory list</div>
+        <div class="analogy-item"><strong>Function:</strong> Amma's sambar recipe</div>
+        <div class="analogy-item"><strong>If/Else:</strong> AP SSC pass/fail/compartment</div>
+        <div class="analogy-item"><strong>DataFrame:</strong> APSRTC bus schedule sheet</div>
+        <div class="analogy-item"><strong>Regression:</strong> Vizag property price vs size</div>
+        <div class="analogy-item"><strong>Clustering:</strong> Student study-group patterns</div>
+        <div class="analogy-item"><strong>Neural Net:</strong> AP EAMCET rank predictor</div>
+        <div class="analogy-item"><strong>RAG:</strong> Open-book exam with course PDFs</div>
+        <div class="analogy-item"><strong>Agent:</strong> Cricket score bot that tweets itself</div>
+      </div>
+
+    </div>
+
+  </div><!-- /body -->
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-contact">
+      Curated by <strong>Vamsi Chapa</strong> · Solutions Architect ·
+      <a href="mailto:chapavamsi1731@gmail.com">chapavamsi1731@gmail.com</a> ·
+      Reach out for access issues, content updates, or new tracks
+    </div>
+    <div class="footer-note">
+      NExGen School of Computers · Srikakulam<br>
+      ISO 9001:2015 Certified
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+</body>
+</html>
