@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NexGen AI Trainer Portal — Staff Access Only</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── DARK THEME (default) ── */
+    :root {
+      --bg: #0F172A; --card: #1E293B; --border: #334155; --accent: #6366F1;
+      --accent2: #22D3EE; --text: #F1F5F9; --muted: #94A3B8;
+      --t1: #4F46E5; --t2: #7C3AED; --t3: #DC2626;
+      --green: #22C55E; --amber: #F59E0B;
+      --code-bg: #0F172A; --shadow: rgba(0,0,0,.5);
+      --hero-bg: rgba(99,102,241,.12); --hero-border: rgba(99,102,241,.25);
+    }
+    /* ── LIGHT THEME ── */
+    [data-theme="light"] {
+      --bg: #F8FAFC; --card: #FFFFFF; --border: #E2E8F0; --accent: #4F46E5;
+      --accent2: #0891B2; --text: #0F172A; --muted: #64748B;
+      --t1: #4338CA; --t2: #6D28D9; --t3: #B91C1C;
+      --green: #16A34A; --amber: #D97706;
+      --code-bg: #F1F5F9; --shadow: rgba(0,0,0,.12);
+      --hero-bg: rgba(79,70,229,.06); --hero-border: rgba(79,70,229,.2);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background .2s, color .2s; }
+
+    /* ── THEME TOGGLE ── */
+    .theme-toggle {
+      display: flex; align-items: center; gap: 4px; background: var(--bg);
+      border: 1px solid var(--border); border-radius: 8px; padding: 4px; cursor: pointer;
+    }
+    .theme-btn {
+      background: none; border: none; padding: 4px 8px; border-radius: 6px;
+      cursor: pointer; font-size: .8rem; color: var(--muted); transition: all .15s;
+      font-family: 'Poppins', sans-serif;
+    }
+    .theme-btn.active { background: var(--accent); color: #fff; }
+    .theme-btn:hover:not(.active) { color: var(--text); }
+
+    /* ── AUTH GATE ── */
+    #auth-gate {
+      position: fixed; inset: 0; background: var(--bg);
+      display: flex; align-items: center; justify-content: center; z-index: 9999;
+    }
+    .auth-box {
+      background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+      padding: 48px 40px; width: 100%; max-width: 440px; text-align: center;
+      box-shadow: 0 25px 60px rgba(0,0,0,.5);
+    }
+    .auth-logo { font-size: 2rem; font-weight: 800; margin-bottom: 4px; }
+    .auth-logo span { color: var(--accent); }
+    .auth-subtitle { color: var(--muted); font-size: .85rem; margin-bottom: 8px; }
+    .auth-badge {
+      display: inline-block; background: rgba(99,102,241,.15); color: var(--accent);
+      border: 1px solid rgba(99,102,241,.3); border-radius: 20px;
+      padding: 4px 14px; font-size: .75rem; font-weight: 600; margin-bottom: 32px; letter-spacing: .05em;
+    }
+    .auth-box h2 { font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; }
+    .auth-box p.hint { color: var(--muted); font-size: .82rem; margin-bottom: 28px; }
+    .auth-field { margin-bottom: 16px; text-align: left; }
+    .auth-field label { display: block; font-size: .78rem; font-weight: 600; color: var(--muted); margin-bottom: 6px; letter-spacing: .05em; text-transform: uppercase; }
+    .auth-field input {
+      width: 100%; background: #0F172A; border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 14px; color: var(--text);
+      font-family: 'Poppins', sans-serif; font-size: .9rem; outline: none;
+      transition: border-color .2s;
+    }
+    .auth-field input:focus { border-color: var(--accent); }
+    .btn-login {
+      width: 100%; background: var(--accent); color: #fff; border: none;
+      border-radius: 8px; padding: 13px; font-family: 'Poppins', sans-serif;
+      font-size: .95rem; font-weight: 700; cursor: pointer; margin-top: 8px;
+      transition: opacity .2s;
+    }
+    .btn-login:hover { opacity: .85; }
+    #auth-error {
+      display: none; color: #FCA5A5; background: rgba(220,38,38,.1);
+      border: 1px solid rgba(220,38,38,.3); border-radius: 6px;
+      padding: 10px 14px; font-size: .82rem; margin-top: 14px;
+    }
+    .auth-contact {
+      margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border);
+      font-size: .78rem; color: var(--muted);
+    }
+    .auth-contact a { color: var(--accent); text-decoration: none; }
+    .auth-contact a:hover { text-decoration: underline; }
+
+    /* ── PORTAL LAYOUT ── */
+    #portal { display: none; flex-direction: column; min-height: 100vh; }
+
+    /* header */
+    .p-header {
+      background: var(--card); border-bottom: 1px solid var(--border);
+      padding: 0 32px; display: flex; align-items: center; justify-content: space-between;
+      height: 64px; position: sticky; top: 0; z-index: 100;
+    }
+    .p-header-logo { font-size: 1.2rem; font-weight: 800; }
+    .p-header-logo span { color: var(--accent); }
+    .p-header-right { display: flex; align-items: center; gap: 16px; }
+    #welcome-name { font-size: .82rem; color: var(--muted); }
+    .btn-logout {
+      background: transparent; border: 1px solid var(--border); border-radius: 6px;
+      padding: 6px 14px; color: var(--muted); font-family: 'Poppins', sans-serif;
+      font-size: .78rem; cursor: pointer; transition: all .2s;
+    }
+    .btn-logout:hover { border-color: var(--accent); color: var(--text); }
+
+    /* tabs */
+    .p-tabs {
+      background: var(--card); border-bottom: 1px solid var(--border);
+      display: flex; padding: 0 32px; gap: 4px; overflow-x: auto;
+    }
+    .p-tab {
+      padding: 16px 20px; font-size: .85rem; font-weight: 600; color: var(--muted);
+      cursor: pointer; border-bottom: 3px solid transparent;
+      transition: all .2s; white-space: nowrap; background: none; border-top: none;
+      border-left: none; border-right: none; font-family: 'Poppins', sans-serif;
+    }
+    .p-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .p-tab:hover:not(.active) { color: var(--text); }
+
+    /* content */
+    .p-content { flex: 1; padding: 40px 32px; max-width: 1200px; margin: 0 auto; width: 100%; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* section titles */
+    .section-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; }
+    .section-sub { color: var(--muted); font-size: .9rem; margin-bottom: 32px; }
+
+    /* cards */
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 24px; margin-bottom: 20px;
+    }
+    .card-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .card-body { color: var(--muted); font-size: .88rem; line-height: 1.7; }
+
+    /* grid */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+
+    /* track cards */
+    .track-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 28px; position: relative; overflow: hidden; transition: transform .2s, box-shadow .2s;
+    }
+    .track-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,.4); }
+    .track-accent { position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 14px 14px 0 0; }
+    .track-badge {
+      display: inline-block; border-radius: 20px; padding: 4px 12px;
+      font-size: .72rem; font-weight: 700; margin-bottom: 14px; letter-spacing: .04em;
+    }
+    .track-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+    .track-card p { color: var(--muted); font-size: .84rem; margin-bottom: 16px; line-height: 1.6; }
+    .track-links { display: flex; flex-direction: column; gap: 8px; }
+    .track-link {
+      display: flex; align-items: center; gap: 8px; padding: 9px 14px;
+      border-radius: 8px; font-size: .82rem; font-weight: 600;
+      text-decoration: none; transition: opacity .2s;
+    }
+    .track-link:hover { opacity: .8; }
+    .track-link svg { flex-shrink: 0; }
+
+    /* stat pills */
+    .stat-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 28px; }
+    .stat-pill {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 20px; display: flex; align-items: center; gap: 10px;
+    }
+    .stat-pill .num { font-size: 1.4rem; font-weight: 800; }
+    .stat-pill .lbl { font-size: .75rem; color: var(--muted); line-height: 1.3; }
+
+    /* resource day accordion */
+    .res-day {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      margin-bottom: 10px; overflow: hidden;
+    }
+    .res-day-header {
+      padding: 14px 20px; cursor: pointer; display: flex; align-items: center;
+      justify-content: space-between; font-weight: 600; font-size: .9rem;
+      transition: background .15s; user-select: none;
+    }
+    .res-day-header:hover { background: rgba(255,255,255,.04); }
+    .res-day-header .day-label { display: flex; align-items: center; gap: 10px; }
+    .res-day-header .phase-tag {
+      font-size: .68rem; font-weight: 700; padding: 2px 8px; border-radius: 10px;
+      letter-spacing: .05em;
+    }
+    .res-day-body { display: none; padding: 0 20px 16px; }
+    .res-day.open .res-day-body { display: block; }
+    .res-day.open .chevron { transform: rotate(180deg); }
+    .chevron { transition: transform .2s; flex-shrink: 0; }
+    .res-item {
+      display: flex; align-items: flex-start; gap: 12px; padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+    .res-item:last-child { border-bottom: none; }
+    .res-icon {
+      width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; font-size: .9rem; flex-shrink: 0; margin-top: 2px;
+    }
+    .res-info { flex: 1; }
+    .res-title { font-size: .85rem; font-weight: 600; margin-bottom: 2px; }
+    .res-title a { color: var(--text); text-decoration: none; }
+    .res-title a:hover { color: var(--accent); }
+    .res-meta { font-size: .75rem; color: var(--muted); display: flex; gap: 10px; flex-wrap: wrap; }
+    .badge-free { background: rgba(34,197,94,.15); color: #4ADE80; border: 1px solid rgba(34,197,94,.3); border-radius: 10px; padding: 1px 7px; }
+    .badge-paid { background: rgba(245,158,11,.15); color: #FCD34D; border: 1px solid rgba(245,158,11,.3); border-radius: 10px; padding: 1px 7px; }
+
+    /* 15-day plan */
+    .plan-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+    .plan-day {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 16px; cursor: pointer; transition: all .2s; position: relative;
+    }
+    .plan-day:hover { border-color: var(--accent); }
+    .plan-day.done { border-color: var(--green); }
+    .plan-day.done .pd-num { color: var(--green); }
+    .pd-num { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+    .pd-phase { font-size: .7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px; }
+    .pd-title { font-size: .82rem; font-weight: 600; margin-bottom: 6px; }
+    .pd-tasks { font-size: .75rem; color: var(--muted); line-height: 1.6; }
+    .pd-check {
+      position: absolute; top: 12px; right: 12px; width: 22px; height: 22px;
+      border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center;
+      justify-content: center; transition: all .2s; font-size: .7rem;
+    }
+    .plan-day.done .pd-check { background: var(--green); border-color: var(--green); }
+
+    /* teacher guide embed */
+    .guide-section { margin-bottom: 32px; }
+    .guide-section h3 {
+      font-size: 1.1rem; font-weight: 700; margin-bottom: 16px;
+      padding-bottom: 10px; border-bottom: 1px solid var(--border);
+    }
+    .guide-pattern {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 20px; margin-bottom: 12px;
+    }
+    .guide-pattern h4 { font-size: .95rem; font-weight: 700; margin-bottom: 6px; color: var(--accent); }
+    .guide-pattern p { font-size: .85rem; color: var(--muted); line-height: 1.7; }
+    .guide-pattern ul { margin-top: 8px; padding-left: 18px; }
+    .guide-pattern ul li { font-size: .84rem; color: var(--muted); margin-bottom: 4px; line-height: 1.6; }
+    .guide-link-btn {
+      display: inline-flex; align-items: center; gap: 8px; background: var(--accent);
+      color: #fff; text-decoration: none; border-radius: 8px;
+      padding: 12px 24px; font-weight: 700; font-size: .9rem; transition: opacity .2s;
+    }
+    .guide-link-btn:hover { opacity: .85; }
+
+    /* overview hero */
+    .hero-banner {
+      background: linear-gradient(135deg, rgba(99,102,241,.15) 0%, rgba(34,211,238,.08) 100%);
+      border: 1px solid rgba(99,102,241,.25); border-radius: 16px;
+      padding: 36px 40px; margin-bottom: 32px;
+    }
+    .hero-banner h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 8px; }
+    .hero-banner p { color: var(--muted); font-size: .95rem; line-height: 1.7; max-width: 700px; }
+
+    /* contact bar */
+    .contact-bar {
+      background: rgba(99,102,241,.08); border: 1px solid rgba(99,102,241,.2);
+      border-radius: 10px; padding: 16px 24px; display: flex; align-items: center;
+      gap: 16px; flex-wrap: wrap; margin-top: 32px;
+    }
+    .contact-bar svg { color: var(--accent); flex-shrink: 0; }
+    .contact-bar p { font-size: .85rem; color: var(--muted); }
+    .contact-bar a { color: var(--accent); font-weight: 600; text-decoration: none; }
+    .contact-bar a:hover { text-decoration: underline; }
+
+    /* phase headers */
+    .phase-header {
+      display: flex; align-items: center; gap: 12px; margin: 28px 0 16px;
+    }
+    .phase-header .ph-label {
+      font-size: .72rem; font-weight: 700; padding: 4px 12px; border-radius: 12px;
+      letter-spacing: .05em;
+    }
+    .phase-header h3 { font-size: 1rem; font-weight: 700; }
+
+    /* scrollable resource container */
+    .resource-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .rf-btn {
+      background: var(--card); border: 1px solid var(--border); border-radius: 20px;
+      padding: 6px 16px; font-size: .78rem; font-weight: 600; cursor: pointer;
+      color: var(--muted); font-family: 'Poppins', sans-serif; transition: all .2s;
+    }
+    .rf-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* overview quick-access */
+    .quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 32px; }
+    .quick-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+      padding: 18px 20px; cursor: pointer; transition: all .2s; text-decoration: none; color: var(--text);
+      display: flex; align-items: center; gap: 14px;
+    }
+    .quick-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .quick-icon {
+      width: 40px; height: 40px; border-radius: 10px; display: flex;
+      align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0;
+    }
+    .quick-info .qt { font-size: .82rem; font-weight: 700; }
+    .quick-info .qs { font-size: .75rem; color: var(--muted); }
+
+    @media (max-width: 640px) {
+      .p-content { padding: 24px 16px; }
+      .p-header { padding: 0 16px; }
+      .p-tabs { padding: 0 16px; }
+      .auth-box { padding: 32px 24px; }
+      .hero-banner { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ AUTH GATE ═══════════════ -->
+<div id="auth-gate">
+  <div class="auth-box">
+    <div class="auth-logo">Nex<span>Gen</span> AI</div>
+    <div class="auth-subtitle">School of Computers, Srikakulam</div>
+    <div class="auth-badge">🔒 STAFF PORTAL — RESTRICTED ACCESS</div>
+    <h2>Trainer Sign In</h2>
+    <p class="hint">Enter your credentials to access course materials and the teacher guide.</p>
+    <div class="auth-field">
+      <label>Username</label>
+      <input type="text" id="auth-user" placeholder="Enter username" autocomplete="username" />
+    </div>
+    <div class="auth-field">
+      <label>Password / Access Code</label>
+      <input type="password" id="auth-pass" placeholder="Enter password" autocomplete="current-password" />
+    </div>
+    <button class="btn-login" id="btn-login">Sign In →</button>
+    <div id="auth-error">Incorrect credentials. Contact Vamsi Chapa for access.</div>
+    <div class="auth-contact">
+      Don't have access? Contact<br>
+      <strong>Vamsi Chapa</strong> —
+      <a href="mailto:chapavamsi1731@gmail.com">chapavamsi1731@gmail.com</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PORTAL ═══════════════ -->
+<div id="portal">
+  <!-- Header -->
+  <header class="p-header">
+    <div class="p-header-logo">Nex<span>Gen</span> AI Trainer Portal</div>
+    <div class="p-header-right">
+      <span id="welcome-name"></span>
+      <div class="theme-toggle" title="Switch theme">
+        <button class="theme-btn" id="th-auto" onclick="setTheme('auto')">Auto</button>
+        <button class="theme-btn" id="th-light" onclick="setTheme('light')">☀️</button>
+        <button class="theme-btn" id="th-dark" onclick="setTheme('dark')">🌙</button>
+      </div>
+      <button class="btn-logout" id="btn-logout">Sign Out</button>
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="p-tabs">
+    <button class="p-tab active" onclick="showTab('overview', this)">📊 Overview</button>
+    <button class="p-tab" onclick="showTab('courses', this)">📚 Course Access</button>
+    <button class="p-tab" onclick="showTab('resources', this)">🔗 Resources</button>
+    <button class="p-tab" onclick="showTab('plan', this)">📅 15-Day Plan</button>
+    <button class="p-tab" onclick="showTab('guide', this)">🎓 Teacher Guide</button>
+    <button class="p-tab" onclick="showTab('playbook', this)">📋 Playbook</button>
+  </nav>
+
+  <!-- Content -->
+  <main class="p-content">
+
+    <!-- ── OVERVIEW ── -->
+    <div id="tab-overview" class="tab-panel active">
+      <div class="hero-banner">
+        <h2>Welcome to the NexGen AI Trainer Portal</h2>
+        <p>This is your central command centre for delivering all three AI learning tracks. Access course materials, curated learning resources, your 15-day prep plan, and comprehensive teaching patterns — all in one place. Everything here is staff-only.</p>
+      </div>
+
+      <div class="section-title">Quick Access</div>
+      <div class="quick-grid">
+        <a class="quick-card" onclick="showTab('courses', document.querySelectorAll('.p-tab')[1])">
+          <div class="quick-icon" style="background:rgba(79,70,229,.15); color:#818CF8">📚</div>
+          <div class="quick-info"><div class="qt">Course Access</div><div class="qs">3 tracks · 45 days each</div></div>
+        </a>
+        <a class="quick-card" onclick="showTab('resources', document.querySelectorAll('.p-tab')[2])">
+          <div class="quick-icon" style="background:rgba(34,211,238,.12); color:#22D3EE">🔗</div>
+          <div class="quick-info"><div class="qt">Resource Library</div><div class="qs">Day-by-day learning links</div></div>
+        </a>
+        <a class="quick-card" onclick="showTab('plan', document.querySelectorAll('.p-tab')[3])">
+          <div class="quick-icon" style="background:rgba(34,197,94,.12); color:#4ADE80">📅</div>
+          <div class="quick-info"><div class="qt">15-Day Prep Plan</div><div class="qs">Track your study progress</div></div>
+        </a>
+        <a class="quick-card" onclick="showTab('guide', document.querySelectorAll('.p-tab')[4])">
+          <div class="quick-icon" style="background:rgba(245,158,11,.12); color:#FCD34D">🎓</div>
+          <div class="quick-info"><div class="qt">Teacher Guide</div><div class="qs">Patterns, analogies, lesson plans</div></div>
+        </a>
+      </div>
+
+      <div class="section-title">Platform at a Glance</div>
+      <div class="stat-row">
+        <div class="stat-pill"><div class="num" style="color:var(--accent)">3</div><div class="lbl">Learning<br>Tracks</div></div>
+        <div class="stat-pill"><div class="num" style="color:var(--t1)">135</div><div class="lbl">Total<br>Lessons</div></div>
+        <div class="stat-pill"><div class="num" style="color:var(--t2)">15</div><div class="lbl">Trainer Prep<br>Days</div></div>
+        <div class="stat-pill"><div class="num" style="color:var(--t3)">90+</div><div class="lbl">Curated<br>Resources</div></div>
+        <div class="stat-pill"><div class="num" style="color:var(--green)">3</div><div class="lbl">Prereq<br>Modules</div></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">📋 Platform Overview</div>
+          <div class="card-body">
+            NexGen AI Courses is a structured, in-person AI training program for three distinct learner cohorts: 10th-grade students (Python & AI Basics), Intermediate / 12th-grade students (Data Science & ML), and Engineering undergraduates (Advanced AI). Each 45-day track is self-contained, with progressive daily lessons, code examples grounded in local AP context, and built-in capstone projects. All courses are delivered by you — the trainer — in classroom sessions.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">🗺️ Your Role as Trainer</div>
+          <div class="card-body">
+            You are simultaneously preparing and teaching three cohorts. The 15-Day Prep Plan is your study roadmap — it front-loads the concepts you need to teach first, and layers in harder material as you go. Use the Teacher Guide tab for lesson patterns (3-Act, Error-First, Predict-Then-Run) and local analogies (kirana shop inventory, APSRTC bus data, Vizag property prices, AP SSC grading). You don't need to be an expert on Day 1. You need to be one step ahead of each class.
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-bar">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        <p>Platform curated and maintained by <strong>Vamsi Chapa</strong>. For access requests or issues: <a href="mailto:chapavamsi1731@gmail.com">chapavamsi1731@gmail.com</a></p>
+      </div>
+    </div>
+
+    <!-- ── COURSE ACCESS ── -->
+    <div id="tab-courses" class="tab-panel">
+      <div class="section-title">Course Access</div>
+      <div class="section-sub">Three tracks, three cohorts. Each track is a standalone 45-day HTML course with localStorage progress tracking, daily code exercises, and module quizzes.</div>
+
+      <div class="grid-3">
+        <!-- Track 1 -->
+        <div class="track-card">
+          <div class="track-accent" style="background: linear-gradient(90deg, #4F46E5, #06B6D4)"></div>
+          <div class="track-badge" style="background:rgba(79,70,229,.15); color:#818CF8; border:1px solid rgba(79,70,229,.3)">TRACK 1</div>
+          <h3>Python & AI Basics</h3>
+          <p>For 10th-grade students. Covers Python fundamentals, intermediate Python for AI, AI introduction, and a beginner capstone project.</p>
+          <div style="font-size:.78rem; color:var(--muted); margin-bottom:16px">
+            📅 45 Days &nbsp;·&nbsp; 4 Modules &nbsp;·&nbsp; 🎯 10th Grade
+          </div>
+          <div class="track-links">
+            <a class="track-link" href="track-1/index.html" target="_blank" style="background:rgba(79,70,229,.15); color:#818CF8">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              Open Course
+            </a>
+            <a class="track-link" href="prerequisites/track-1-prereq.html" target="_blank" style="background:rgba(79,70,229,.08); color:#A5B4FC">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+              Prerequisite Module (7 Days)
+            </a>
+            <a class="track-link" href="docs/Track1-Python-AI-Basics.pdf" target="_blank" style="background:rgba(79,70,229,.08); color:#A5B4FC">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+              Course PDF
+            </a>
+          </div>
+        </div>
+
+        <!-- Track 2 -->
+        <div class="track-card">
+          <div class="track-accent" style="background: linear-gradient(90deg, #7C3AED, #EC4899)"></div>
+          <div class="track-badge" style="background:rgba(124,58,237,.15); color:#C084FC; border:1px solid rgba(124,58,237,.3)">TRACK 2</div>
+          <h3>Data Science & ML</h3>
+          <p>For Intermediate / 12th-grade students. Covers NumPy, Pandas, ML algorithms, model evaluation, and a data-driven capstone using AP datasets.</p>
+          <div style="font-size:.78rem; color:var(--muted); margin-bottom:16px">
+            📅 45 Days &nbsp;·&nbsp; 5 Modules &nbsp;·&nbsp; 🎯 Inter / 12th
+          </div>
+          <div class="track-links">
+            <a class="track-link" href="track-2/index.html" target="_blank" style="background:rgba(124,58,237,.15); color:#C084FC">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              Open Course
+            </a>
+            <a class="track-link" href="prerequisites/track-2-prereq.html" target="_blank" style="background:rgba(124,58,237,.08); color:#D8B4FE">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+              Prerequisite Module (7 Days)
+            </a>
+            <a class="track-link" href="docs/Track2-Data-Science-ML.pdf" target="_blank" style="background:rgba(124,58,237,.08); color:#D8B4FE">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+              Course PDF
+            </a>
+          </div>
+        </div>
+
+        <!-- Track 3 -->
+        <div class="track-card">
+          <div class="track-accent" style="background: linear-gradient(90deg, #DC2626, #F59E0B)"></div>
+          <div class="track-badge" style="background:rgba(220,38,38,.15); color:#FCA5A5; border:1px solid rgba(220,38,38,.3)">TRACK 3</div>
+          <h3>Advanced AI Engineering</h3>
+          <p>For Engineering students. Covers Advanced ML, Deep Learning, LLM engineering, Prompt Engineering, AI Agent architecture, and a production-grade capstone.</p>
+          <div style="font-size:.78rem; color:var(--muted); margin-bottom:16px">
+            📅 45 Days &nbsp;·&nbsp; 5 Modules &nbsp;·&nbsp; 🎯 B.Tech / Engineering
+          </div>
+          <div class="track-links">
+            <a class="track-link" href="track-3/index.html" target="_blank" style="background:rgba(220,38,38,.15); color:#FCA5A5">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              Open Course
+            </a>
+            <a class="track-link" href="prerequisites/track-3-prereq.html" target="_blank" style="background:rgba(220,38,38,.08); color:#FCA5A5">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+              Prerequisite Module (7 Days)
+            </a>
+            <a class="track-link" href="docs/Track3-Engineering-AI.pdf" target="_blank" style="background:rgba(220,38,38,.08); color:#FCA5A5">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+              Course PDF
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:24px">
+        <div class="card-title">📖 How the Courses Work</div>
+        <div class="card-body">
+          Each track is a single self-contained HTML file. Open it in a browser — no install needed. Students navigate day-by-day using the sidebar. Progress is saved automatically to <code style="background:var(--code-bg); padding:2px 6px; border-radius:4px; font-size:.82rem; border:1px solid var(--border)">localStorage</code>. Each day has: learning objectives, concept explanation, code example, hands-on exercise, key terms, and links to external resources. The Prerequisite Module (7 days) is a separate HTML file — assign it the week before the main track begins.
+        </div>
+      </div>
+
+      <div class="contact-bar">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        <p>Need access to additional course materials or want to request a new track? Contact <strong>Vamsi Chapa</strong>: <a href="mailto:chapavamsi1731@gmail.com">chapavamsi1731@gmail.com</a></p>
+      </div>
+    </div>
+
+    <!-- ── RESOURCE LIBRARY ── -->
+    <div id="tab-resources" class="tab-panel">
+      <div class="section-title">Resource Library</div>
+      <div class="section-sub">Curated external learning resources mapped to each day of your 15-day trainer prep. 1–2 hours of focused study per day. Free resources prioritised.</div>
+
+      <div class="resource-filter" id="res-filter">
+        <button class="rf-btn active" onclick="filterRes('all', this)">All Resources</button>
+        <button class="rf-btn" onclick="filterRes('track1', this)">Track 1</button>
+        <button class="rf-btn" onclick="filterRes('track2', this)">Track 2</button>
+        <button class="rf-btn" onclick="filterRes('track3', this)">Track 3</button>
+        <button class="rf-btn" onclick="filterRes('free', this)">Free Only</button>
+      </div>
+
+      <div id="res-container"></div>
+
+      <div class="contact-bar" style="margin-top:24px">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <p>All YouTube links open free content. DeepLearning.AI short courses are free to audit. Kaggle Learn is 100% free. Contact <a href="mailto:chapavamsi1731@gmail.com">chapavamsi1731@gmail.com</a> for paid resource access.</p>
+      </div>
+    </div>
+
+    <!-- ── 15-DAY PLAN ── -->
+    <div id="tab-plan" class="tab-panel">
+      <div class="section-title">15-Day Trainer Preparation Plan</div>
+      <div class="section-sub">Click a day card to mark it complete. Progress is saved in your browser. Study 4–5 hours/day. Teaching prep is built into each day — you learn it, then immediately prep to teach it.</div>
+
+      <div id="plan-progress-bar" style="margin-bottom:28px">
+        <div style="display:flex; justify-content:space-between; font-size:.82rem; color:var(--muted); margin-bottom:8px">
+          <span>Study Progress</span>
+          <span id="plan-pct">0 / 15 days complete</span>
+        </div>
+        <div style="background:var(--border); border-radius:6px; height:8px; overflow:hidden">
+          <div id="plan-bar" style="background:linear-gradient(90deg, var(--accent), var(--accent2)); height:100%; width:0%; transition:width .4s; border-radius:6px"></div>
+        </div>
+      </div>
+
+      <div id="plan-grid-container"></div>
+    </div>
+
+    <!-- ── TEACHER GUIDE ── -->
+    <div id="tab-guide" class="tab-panel">
+      <div class="section-title">Teacher Guide</div>
+      <div class="section-sub">Patterns, analogies, lesson structures, and classroom tactics. Everything you need to walk into the room with confidence.</div>
+
+      <div style="margin-bottom:24px">
+        <a href="teacher-guide.html" target="_blank" class="guide-link-btn">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          Open Full Teacher Guide (Detailed Version)
+        </a>
+      </div>
+
+      <div class="guide-section">
+        <h3>🎭 The 6 Core Teaching Patterns</h3>
+        <div class="guide-pattern">
+          <h4>1. 3-Act Lesson Structure</h4>
+          <p>Every lesson follows three acts. Act 1 — Hook (5 min): open with a local question (e.g., "How does APSRTC decide which bus route needs more buses?"). Act 2 — Teach & Code (30 min): explain concept → show code → students run it. Act 3 — Apply & Reflect (10 min): real-world task + Fist-to-Five confidence check.</p>
+        </div>
+        <div class="guide-pattern">
+          <h4>2. Error-First Teaching</h4>
+          <p>Start by showing broken code. Let students diagnose it. This builds debugging intuition faster than seeing correct code first. Example: show <code style="background:#0F172A; padding:1px 5px; border-radius:3px">print("hello"</code> (missing bracket) and ask "what's wrong?" before teaching print syntax.</p>
+        </div>
+        <div class="guide-pattern">
+          <h4>3. Predict-Then-Run</h4>
+          <p>Show a code block. Ask "what will this print?" — let students guess out loud. Then run it. Surprises create memory hooks. Works especially well for loops, conditionals, and list comprehensions.</p>
+        </div>
+        <div class="guide-pattern">
+          <h4>4. Fist-to-Five Check</h4>
+          <p>After every concept: ask students to hold up fingers (0 = lost, 5 = can explain it to someone else). Instant visual feedback. If more than 30% show 0–2, re-teach before moving on.</p>
+        </div>
+        <div class="guide-pattern">
+          <h4>5. Analogy-First Explanation</h4>
+          <p>Before any technical term, give the local analogy. "A variable is like a notebook page in the school register — it has a name and a value you can update." Students learn the concept, then the formal name, not the other way around.</p>
+        </div>
+        <div class="guide-pattern">
+          <h4>6. Opening Hook + Session Close</h4>
+          <p>Opening Hook: every session starts with a 2-sentence story or local problem. Session Close: every session ends with "Today you learned X. Tomorrow we'll use it to build Y." Consistency builds momentum.</p>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>🗺️ Local AP Analogy Bank</h3>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title">Track 1 Analogies (Python Basics)</div>
+            <div class="card-body">
+              <ul style="padding-left:16px; margin-top:4px">
+                <li><strong>Variables:</strong> School register notebook pages</li>
+                <li><strong>Lists:</strong> Kirana shop inventory list</li>
+                <li><strong>Loops:</strong> Checking each item on the ration list</li>
+                <li><strong>Functions:</strong> A recipe your amma follows every time</li>
+                <li><strong>If/Else:</strong> If AP SSC marks &gt; 60, proceed; else, repeat class</li>
+                <li><strong>Error handling:</strong> What the bus conductor does when the ticket machine jams</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Track 2 Analogies (Data Science)</div>
+            <div class="card-body">
+              <ul style="padding-left:16px; margin-top:4px">
+                <li><strong>DataFrames:</strong> APSRTC bus schedule spreadsheet</li>
+                <li><strong>Linear Regression:</strong> Predicting Vizag property prices from size</li>
+                <li><strong>Classification:</strong> AP SSC result — Pass / Fail / Distinction</li>
+                <li><strong>Clustering (K-Means):</strong> Grouping Srikakulam students by study hours</li>
+                <li><strong>Normalisation:</strong> Converting marks to percentages for fair comparison</li>
+                <li><strong>Train/Test split:</strong> Studying chapters 1–9, then writing exam on ch.10</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Track 3 Analogies (Advanced AI)</div>
+            <div class="card-body">
+              <ul style="padding-left:16px; margin-top:4px">
+                <li><strong>Neural networks:</strong> AP EAMCET rank predictor with 10K student data</li>
+                <li><strong>Transformers:</strong> A very attentive student who re-reads the full question paper before answering</li>
+                <li><strong>RAG:</strong> NexGen AI bot that reads all course PDFs before answering student questions</li>
+                <li><strong>Agents:</strong> Cricket score agent that checks the scoreboard, decides what to tweet, and posts it</li>
+                <li><strong>Prompt Engineering:</strong> How you phrase a question to get a better answer from the teacher</li>
+                <li><strong>Fine-tuning:</strong> Teaching a Hyderabad model to understand Srikakulam dialect</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Classroom Survival Tips</div>
+            <div class="card-body">
+              <ul style="padding-left:16px; margin-top:4px">
+                <li>Print the Day's code on paper as backup (power cuts happen)</li>
+                <li>"I'll verify and come back" beats a confident wrong answer</li>
+                <li>Keep a Telegram group for students to share code screenshots</li>
+                <li>Assign one "debug helper" student per row — peer learning</li>
+                <li>If a concept takes two sessions, that's fine. Depth beats speed.</li>
+                <li>End every Friday with "what surprised you this week?" — builds reflection habit</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-bar">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        <p>Questions about teaching methodology or course content? Reach <strong>Vamsi Chapa</strong>: <a href="mailto:chapavamsi1731@gmail.com">chapavamsi1731@gmail.com</a></p>
+      </div>
+    </div>
+
+    <!-- ── PLAYBOOK ── -->
+    <div id="tab-playbook" class="tab-panel">
+      <div class="section-title">Classroom Playbook</div>
+      <div class="section-sub">Week-by-week guide for what to teach, what to say, and how to check understanding — across all three tracks simultaneously.</div>
+
+      <div class="card" style="margin-bottom:24px; border-left:4px solid var(--accent)">
+        <div class="card-title">How to use this Playbook</div>
+        <div class="card-body">Each week card shows all three tracks running in parallel. In your school day: teach Track 1 (10th grade) → Track 2 (Inter) → Track 3 (Engineering). Each block tells you: <strong>what concept to cover, the opening hook to say out loud, the exact code to demo, the exercise to give, and how to check if they got it.</strong> Keep the Teacher Guide tab open for deeper analogies and patterns.</div>
+      </div>
+
+      <div id="playbook-container"></div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ── AUTH ──
+// Credentials are injected at build time by GitHub Actions (inject_creds.py).
+// The source file only contains %%PLACEHOLDER%% strings — no real passwords in git.
+var USERS  = (function(){ try { return JSON.parse(atob('eyJibVY0WjJWdSI6IiIsImRISmhhVzVsY2pFPSI6IiIsImRtRnRjMms9IjoiIn0=')); } catch(e){ return {}; } })();
+var MASTER = '';
+
+function tryLogin() {
+  var uEl = document.getElementById('auth-user');
+  var pEl = document.getElementById('auth-pass');
+  var errEl = document.getElementById('auth-error');
+  var u = uEl.value.trim();
+  var p = pEl.value;
+  if (!u || !p) { errEl.style.display = 'block'; return; }
+  var eu = btoa(u), ep = btoa(p);
+  if ((USERS[eu] && USERS[eu] === ep) || ep === MASTER) {
+    sessionStorage.setItem('ng_auth', '1');
+    sessionStorage.setItem('ng_user', u);
+    showPortal(u);
+  } else {
+    errEl.style.display = 'block';
+    pEl.value = '';
+  }
+}
+
+function showPortal(user) {
+  document.getElementById('auth-gate').style.display = 'none';
+  document.getElementById('portal').style.display = 'flex';
+  document.getElementById('welcome-name').textContent = 'Hello, ' + user + ' \uD83D\uDC4B';
+  buildResources();
+  buildPlan();
+  buildPlaybook();
+}
+
+function logout() {
+  sessionStorage.clear();
+  location.reload();
+}
+
+// ── BOOT ──
+document.addEventListener('DOMContentLoaded', function () {
+  // Wire up auth buttons via event listeners (no inline onclick needed)
+  var loginBtn = document.getElementById('btn-login');
+  var passInput = document.getElementById('auth-pass');
+  var logoutBtn = document.getElementById('btn-logout');
+  if (loginBtn) loginBtn.addEventListener('click', tryLogin);
+  if (passInput) passInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') tryLogin();
+  });
+  if (logoutBtn) logoutBtn.addEventListener('click', logout);
+
+  // Wire tab buttons
+  document.querySelectorAll('.p-tab').forEach(function (btn, i) {
+    var ids = ['overview', 'courses', 'resources', 'plan', 'guide', 'playbook'];
+    btn.addEventListener('click', function () { showTab(ids[i], btn); });
+  });
+
+  // Theme init
+  initTheme();
+
+  // Auto-login if session exists
+  if (sessionStorage.getItem('ng_auth') === '1') {
+    showPortal(sessionStorage.getItem('ng_user') || 'trainer');
+  }
+});
+
+// ── TABS ──
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.p-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+
+// ── RESOURCE DATA ──
+const RESOURCES = [
+  // Phase 1: Python Foundations (Days 1-3)
+  { day: 1, phase: 'P1', phaseLabel: 'Python Foundations', tracks: ['track1','track2','track3'],
+    title: 'Python for Everybody — Getting Started', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=8DvywoWv6fI', time: '60 min',
+    note: 'CS50P first lecture — clean intro to Python. Watch at 1.25x.' },
+  { day: 1, phase: 'P1', phaseLabel: 'Python Foundations', tracks: ['track1'],
+    title: 'W3Schools Python Tutorial (Variables, Data Types)', type: 'docs', free: true,
+    url: 'https://www.w3schools.com/python/python_variables.asp', time: '30 min',
+    note: 'Work through Variables, Strings, Numbers — do every Try-It-Yourself.' },
+  { day: 2, phase: 'P1', phaseLabel: 'Python Foundations', tracks: ['track1','track2'],
+    title: 'CS50P — Functions, Conditionals, Loops', type: 'video', free: true,
+    url: 'https://cs50.harvard.edu/python/2022/', time: '90 min',
+    note: 'Lectures 1 & 2. Run every code snippet yourself in a .py file.' },
+  { day: 2, phase: 'P1', phaseLabel: 'Python Foundations', tracks: ['track1'],
+    title: 'Kaggle Intro to Programming (Python)', type: 'kaggle', free: true,
+    url: 'https://www.kaggle.com/learn/intro-to-programming', time: '60 min',
+    note: 'Interactive — all in the browser. Do lessons 1–3.' },
+  { day: 3, phase: 'P1', phaseLabel: 'Python Foundations', tracks: ['track1','track2','track3'],
+    title: 'Python Lists, Dicts, Functions — Corey Schafer', type: 'video', free: true,
+    url: 'https://www.youtube.com/playlist?list=PL-osiE80TeTskrapNbzXhwoFUiLCjGgY7', time: '75 min',
+    note: 'Watch tutorials 4–7. Corey is the clearest Python explainer on YouTube.' },
+  { day: 3, phase: 'P1', phaseLabel: 'Python Foundations', tracks: ['track1','track2'],
+    title: 'Real Python — Python Basics Tutorials', type: 'docs', free: true,
+    url: 'https://realpython.com/tutorials/basics/', time: '45 min',
+    note: 'Pick: "Python Variables", "Strings and Character Data", "Lists and Tuples".' },
+
+  // Phase 2: NumPy, Pandas, Data (Days 4-6)
+  { day: 4, phase: 'P2', phaseLabel: 'Data Science Essentials', tracks: ['track2','track3'],
+    title: 'NumPy Tutorial — Keith Galli', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=GB9ByFAIAH4', time: '60 min',
+    note: 'Full NumPy crash course. Pay attention to array slicing — used daily in ML.' },
+  { day: 4, phase: 'P2', phaseLabel: 'Data Science Essentials', tracks: ['track2'],
+    title: 'Kaggle Learn — Pandas', type: 'kaggle', free: true,
+    url: 'https://www.kaggle.com/learn/pandas', time: '90 min',
+    note: 'Do all 6 lessons. Use the AP dataset analogy (APSRTC bus schedule) while teaching.' },
+  { day: 5, phase: 'P2', phaseLabel: 'Data Science Essentials', tracks: ['track2','track3'],
+    title: '3Blue1Brown — But what is a neural network?', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=aircAruvnKk', time: '20 min',
+    note: 'Visual intuition for how NNs work. Watch twice. First as a learner, second taking notes for teaching.' },
+  { day: 5, phase: 'P2', phaseLabel: 'Data Science Essentials', tracks: ['track2'],
+    title: 'StatQuest — Linear Regression Clearly Explained', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=7ArmBVF2dCs', time: '30 min',
+    note: 'Josh Starmer is the GOAT for stats intuition. Watch with a pen. Map the Vizag property price analogy.' },
+  { day: 6, phase: 'P2', phaseLabel: 'Data Science Essentials', tracks: ['track2','track3'],
+    title: 'Kaggle Learn — Data Visualisation', type: 'kaggle', free: true,
+    url: 'https://www.kaggle.com/learn/data-visualization', time: '60 min',
+    note: 'Do lessons 1–4. Learn seaborn — it is the charting library used in Track 2.' },
+  { day: 6, phase: 'P2', phaseLabel: 'Data Science Essentials', tracks: ['track2'],
+    title: 'StatQuest — Logistic Regression', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=yIYKR4sgzI8', time: '25 min',
+    note: 'Essential for Track 2 classification lessons. Pair with AP SSC pass/fail analogy.' },
+
+  // Phase 3: ML Algorithms (Days 7-9)
+  { day: 7, phase: 'P3', phaseLabel: 'ML Algorithms', tracks: ['track2','track3'],
+    title: 'Kaggle Learn — Intro to Machine Learning', type: 'kaggle', free: true,
+    url: 'https://www.kaggle.com/learn/intro-to-machine-learning', time: '90 min',
+    note: 'All 7 lessons. Decision Trees and Random Forests explained with interactive code. Essential for Track 2.' },
+  { day: 7, phase: 'P3', phaseLabel: 'ML Algorithms', tracks: ['track3'],
+    title: 'StatQuest — Decision Trees', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=7VeUPuFGJHk', time: '20 min',
+    note: 'Josh Starmer visual intuition. Shows you what the algorithm actually does step-by-step.' },
+  { day: 8, phase: 'P3', phaseLabel: 'ML Algorithms', tracks: ['track2','track3'],
+    title: 'StatQuest — Random Forests', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=J4Wdy0Wc_xQ', time: '20 min',
+    note: 'Bagging and variance explained visually. Follow with: K-Nearest Neighbours video.' },
+  { day: 8, phase: 'P3', phaseLabel: 'ML Algorithms', tracks: ['track2','track3'],
+    title: 'Kaggle Learn — Intermediate ML', type: 'kaggle', free: true,
+    url: 'https://www.kaggle.com/learn/intermediate-machine-learning', time: '60 min',
+    note: 'Missing values, pipelines, cross-validation. Real-world ML workflow.' },
+  { day: 9, phase: 'P3', phaseLabel: 'ML Algorithms', tracks: ['track2','track3'],
+    title: 'StatQuest — K-Means Clustering', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=4b5d3muPQmA', time: '15 min',
+    note: 'Use with student study-group clustering analogy (Srikakulam student hours data).' },
+  { day: 9, phase: 'P3', phaseLabel: 'ML Algorithms', tracks: ['track2','track3'],
+    title: 'Scikit-learn Docs — Getting Started', type: 'docs', free: true,
+    url: 'https://scikit-learn.org/stable/getting_started.html', time: '45 min',
+    note: 'Read the official intro. Learn: fit, predict, score. These 3 methods cover 80% of Track 2.' },
+
+  // Phase 4: Deep Learning & NLP (Days 10-12)
+  { day: 10, phase: 'P4', phaseLabel: 'Deep Learning & NLP', tracks: ['track3'],
+    title: '3Blue1Brown — Gradient Descent', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=IHZwWFHWa-w', time: '20 min',
+    note: 'Watch after the Neural Network video. These 4 episodes together are the best DL intro on the internet.' },
+  { day: 10, phase: 'P4', phaseLabel: 'Deep Learning & NLP', tracks: ['track3'],
+    title: 'DeepLearning.AI — Neural Networks and Deep Learning (Week 1)', type: 'video', free: true,
+    url: 'https://www.deeplearning.ai/courses/deep-learning-specialization/', time: '90 min',
+    note: 'Andrew Ng Week 1. Free to audit. Do the exercises — they appear almost verbatim in Track 3 lessons.' },
+  { day: 11, phase: 'P4', phaseLabel: 'Deep Learning & NLP', tracks: ['track3'],
+    title: 'Andrej Karpathy — micrograd from scratch', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=VMj-3S1tku0', time: '150 min',
+    note: 'Best backprop explanation ever made. Watch over 2 sessions if needed. Must-watch for Track 3 teaching.' },
+  { day: 11, phase: 'P4', phaseLabel: 'Deep Learning & NLP', tracks: ['track3'],
+    title: 'PyTorch Quickstart Tutorial', type: 'docs', free: true,
+    url: 'https://pytorch.org/tutorials/beginner/basics/quickstart_tutorial.html', time: '45 min',
+    note: 'Official tutorial. Run every code block in Google Colab. Understand: Tensor → Dataset → Model → Train Loop.' },
+  { day: 12, phase: 'P4', phaseLabel: 'Deep Learning & NLP', tracks: ['track3'],
+    title: '3Blue1Brown — Attention in Transformers', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=eMlx5fFNoYc', time: '30 min',
+    note: 'Visual intuition for Transformers before touching the code. Map the "attentive exam student" analogy.' },
+  { day: 12, phase: 'P4', phaseLabel: 'Deep Learning & NLP', tracks: ['track3'],
+    title: 'Andrej Karpathy — Let\'s build GPT from scratch', type: 'video', free: true,
+    url: 'https://www.youtube.com/watch?v=kCc8FmEb1nY', time: '120 min',
+    note: 'Full transformer implementation in PyTorch. Landmark video. Watch at least the first 45 min.' },
+
+  // Phase 5: LLMs, Agents & Teaching Prep (Days 13-15)
+  { day: 13, phase: 'P5', phaseLabel: 'LLMs, Agents & Teaching Prep', tracks: ['track3'],
+    title: 'DeepLearning.AI — ChatGPT Prompt Engineering for Developers', type: 'video', free: true,
+    url: 'https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/', time: '90 min',
+    note: 'Free short course. Isa Fulford + Andrew Ng. Covers zero-shot, few-shot, chain-of-thought directly.' },
+  { day: 13, phase: 'P5', phaseLabel: 'LLMs, Agents & Teaching Prep', tracks: ['track3'],
+    title: 'DeepLearning.AI — Building Systems with the ChatGPT API', type: 'video', free: true,
+    url: 'https://www.deeplearning.ai/short-courses/building-systems-with-chatgpt/', time: '60 min',
+    note: 'Free. Chains, evaluations, and system design with LLMs. Directly maps to Track 3 Days 16–25.' },
+  { day: 14, phase: 'P5', phaseLabel: 'LLMs, Agents & Teaching Prep', tracks: ['track3'],
+    title: 'DeepLearning.AI — LangChain for LLM Application Development', type: 'video', free: true,
+    url: 'https://www.deeplearning.ai/short-courses/langchain-for-llm-application-development/', time: '90 min',
+    note: 'Free. Chains + memory + agents intro. Maps to Track 3 module 4 (Building AI Agents).' },
+  { day: 14, phase: 'P5', phaseLabel: 'LLMs, Agents & Teaching Prep', tracks: ['track3'],
+    title: 'OpenAI API Docs — Quickstart', type: 'docs', free: true,
+    url: 'https://platform.openai.com/docs/quickstart', time: '45 min',
+    note: 'Understand: API key, chat completions, tokens, system/user roles. You will demo this live in class.' },
+  { day: 15, phase: 'P5', phaseLabel: 'LLMs, Agents & Teaching Prep', tracks: ['track1','track2','track3'],
+    title: 'Google AI Studio — Try Gemini API Free', type: 'docs', free: true,
+    url: 'https://aistudio.google.com/app/prompts/new_chat', time: '30 min',
+    note: 'Free API key for Gemini. Set up today — use as backup demo tool if OpenAI rate limits hit in class.' },
+  { day: 15, phase: 'P5', phaseLabel: 'LLMs, Agents & Teaching Prep', tracks: ['track1','track2','track3'],
+    title: 'Teaching Strategies — Reading the Room', type: 'docs', free: true,
+    url: 'https://www.edutopia.org/article/formative-assessment-strategies-every-teacher-should-know', time: '20 min',
+    note: 'Quick read. Reinforces the Fist-to-Five, Exit Ticket, and Think-Pair-Share patterns in the teacher guide.' },
+];
+
+let currentFilter = 'all';
+
+function filterRes(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.rf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  buildResources();
+}
+
+function buildResources() {
+  const container = document.getElementById('res-container');
+  if (!container) return;
+
+  // Group by day
+  const byDay = {};
+  RESOURCES.forEach(r => {
+    let show = true;
+    if (currentFilter === 'track1') show = r.tracks.includes('track1');
+    else if (currentFilter === 'track2') show = r.tracks.includes('track2');
+    else if (currentFilter === 'track3') show = r.tracks.includes('track3');
+    else if (currentFilter === 'free') show = r.free;
+    if (!show) return;
+    if (!byDay[r.day]) byDay[r.day] = { phase: r.phase, phaseLabel: r.phaseLabel, items: [] };
+    byDay[r.day].items.push(r);
+  });
+
+  const phaseColors = { P1: '#4F46E5', P2: '#7C3AED', P3: '#DC2626', P4: '#D97706', P5: '#059669' };
+  const typeIcon = { video: '▶️', kaggle: '📊', docs: '📄' };
+
+  let html = '';
+  Object.keys(byDay).sort((a,b) => +a - +b).forEach(day => {
+    const d = byDay[day];
+    const color = phaseColors[d.phase] || '#6366F1';
+    html += `
+      <div class="res-day" id="rday-${day}">
+        <div class="res-day-header" onclick="toggleDay('rday-${day}')">
+          <div class="day-label">
+            <span style="font-weight:800; color:${color}">Day ${day}</span>
+            <span class="phase-tag" style="background:${color}22; color:${color}; border:1px solid ${color}44">${d.phaseLabel}</span>
+          </div>
+          <svg class="chevron" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+        <div class="res-day-body">`;
+    d.items.forEach(r => {
+      const icon = typeIcon[r.type] || '🔗';
+      const iconBg = r.type === 'video' ? '#EF444422' : r.type === 'kaggle' ? '#20B2AA22' : '#6366F122';
+      html += `
+          <div class="res-item">
+            <div class="res-icon" style="background:${iconBg}">${icon}</div>
+            <div class="res-info">
+              <div class="res-title"><a href="${r.url}" target="_blank" rel="noopener">${r.title} ↗</a></div>
+              <div class="res-meta">
+                <span>⏱ ${r.time}</span>
+                ${r.free ? '<span class="badge-free">Free</span>' : '<span class="badge-paid">Paid</span>'}
+                <span style="font-size:.72rem; color:var(--muted)">${r.note}</span>
+              </div>
+            </div>
+          </div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  container.innerHTML = html || '<div class="card"><div class="card-body">No resources match the current filter.</div></div>';
+}
+
+function toggleDay(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+// ── 15-DAY PLAN ──
+const PLAN_DAYS = [
+  { day: 1, phase: 'P1', phaseColor: '#4F46E5', title: 'Python Core — Variables, Types, Operators',
+    tasks: '• W3Schools Python Variables\n• CS50P Lecture 0\n• Prep: 5 kirana shop examples' },
+  { day: 2, phase: 'P1', phaseColor: '#4F46E5', title: 'Control Flow — If/Else, Loops, Functions',
+    tasks: '• CS50P Lectures 1 & 2\n• Corey Schafer tutorials 4–5\n• Prep: APSRTC bus if/else demo' },
+  { day: 3, phase: 'P1', phaseColor: '#4F46E5', title: 'Data Structures — Lists, Dicts, Sets',
+    tasks: '• Corey Schafer tutorials 6–7\n• Kaggle Intro to Programming\n• Prep: Track 1 Day 4–6 lesson outlines' },
+  { day: 4, phase: 'P2', phaseColor: '#7C3AED', title: 'NumPy — Arrays, Operations, Indexing',
+    tasks: '• Keith Galli NumPy video (full)\n• Practice: 20 array exercises\n• Prep: Track 2 Day 1–5 outline' },
+  { day: 5, phase: 'P2', phaseColor: '#7C3AED', title: 'Pandas — DataFrames, GroupBy, Merge',
+    tasks: '• Kaggle Learn Pandas (all 6)\n• Load a real CSV (APSRTC data)\n• Prep: Track 2 Days 6–10' },
+  { day: 6, phase: 'P2', phaseColor: '#7C3AED', title: 'EDA & Visualisation — seaborn, matplotlib',
+    tasks: '• Kaggle Data Visualisation\n• Build 3 charts from local data\n• Prep: Capstone project brief' },
+  { day: 7, phase: 'P3', phaseColor: '#DC2626', title: 'ML Algorithms — Decision Trees, kNN',
+    tasks: '• Kaggle Intro to ML (all 7)\n• StatQuest Decision Trees\n• Prep: scikit-learn pipeline demo' },
+  { day: 8, phase: 'P3', phaseColor: '#DC2626', title: 'Ensemble & Clustering — RF, K-Means',
+    tasks: '• StatQuest Random Forests\n• StatQuest K-Means\n• Prep: Track 2 Days 21–30 lesson notes' },
+  { day: 9, phase: 'P3', phaseColor: '#DC2626', title: 'Model Evaluation — CV, Metrics, Pipelines',
+    tasks: '• Kaggle Intermediate ML\n• scikit-learn docs quickstart\n• Prep: Mock quiz for Track 2 Module 3' },
+  { day: 10, phase: 'P4', phaseColor: '#D97706', title: 'Neural Networks — Perceptron, Backprop',
+    tasks: '• 3Blue1Brown NN series (4 videos)\n• DeepLearning.AI DLS Week 1\n• Prep: micrograd teaching notes' },
+  { day: 11, phase: 'P4', phaseColor: '#D97706', title: 'Deep Learning — PyTorch, Training Loop',
+    tasks: '• Karpathy micrograd (first 90 min)\n• PyTorch Quickstart tutorial\n• Prep: Track 3 Days 1–15 outline' },
+  { day: 12, phase: 'P4', phaseColor: '#D97706', title: 'Transformers & Attention — Intuition',
+    tasks: '• 3Blue1Brown Attention video\n• Karpathy Build GPT (first 45 min)\n• Prep: LLM lesson hook stories' },
+  { day: 13, phase: 'P5', phaseColor: '#059669', title: 'LLMs & Prompt Engineering',
+    tasks: '• DeepLearning.AI Prompt Eng course\n• Build a few-shot prompt demo\n• Prep: Track 3 Days 26–30 slides' },
+  { day: 14, phase: 'P5', phaseColor: '#059669', title: 'AI Agents & API Integration',
+    tasks: '• DeepLearning.AI LangChain course\n• OpenAI API docs quickstart\n• Prep: Cricket agent demo code' },
+  { day: 15, phase: 'P5', phaseColor: '#059669', title: 'Full Dress Rehearsal — All 3 Tracks',
+    tasks: '• Set up Google AI Studio\n• Run Day 1 lesson for each track\n• Prepare emergency offline backups' },
+];
+
+function buildPlan() {
+  const container = document.getElementById('plan-grid-container');
+  if (!container) return;
+  const saved = JSON.parse(localStorage.getItem('ng_plan_done') || '{}');
+
+  let html = '<div class="plan-grid">';
+  PLAN_DAYS.forEach(d => {
+    const done = saved[d.day];
+    html += `
+      <div class="plan-day ${done ? 'done' : ''}" onclick="togglePlanDay(${d.day})" id="pd-${d.day}">
+        <div class="pd-phase" style="color:${d.phaseColor}">Phase ${d.phase.replace('P','')}</div>
+        <div class="pd-num">Day ${d.day}</div>
+        <div class="pd-title">${d.title}</div>
+        <div class="pd-tasks" style="white-space:pre-line">${d.tasks}</div>
+        <div class="pd-check">${done ? '✓' : ''}</div>
+      </div>`;
+  });
+  html += '</div>';
+  container.innerHTML = html;
+  updatePlanProgress();
+}
+
+function togglePlanDay(day) {
+  const saved = JSON.parse(localStorage.getItem('ng_plan_done') || '{}');
+  saved[day] = !saved[day];
+  localStorage.setItem('ng_plan_done', JSON.stringify(saved));
+  const el = document.getElementById('pd-' + day);
+  el.classList.toggle('done', !!saved[day]);
+  el.querySelector('.pd-check').textContent = saved[day] ? '✓' : '';
+  updatePlanProgress();
+}
+
+function updatePlanProgress() {
+  const saved = JSON.parse(localStorage.getItem('ng_plan_done') || '{}');
+  const done = Object.values(saved).filter(Boolean).length;
+  const pct = Math.round((done / 15) * 100);
+  const bar = document.getElementById('plan-bar');
+  const pctEl = document.getElementById('plan-pct');
+  if (bar) bar.style.width = pct + '%';
+  if (pctEl) pctEl.textContent = done + ' / 15 days complete';
+}
+
+// ── THEME ──
+function initTheme() {
+  var saved = localStorage.getItem('ng_theme') || 'auto';
+  applyTheme(saved);
+}
+
+function setTheme(t) {
+  localStorage.setItem('ng_theme', t);
+  applyTheme(t);
+}
+
+function applyTheme(t) {
+  var html = document.documentElement;
+  if (t === 'auto') {
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    html.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+  } else {
+    html.setAttribute('data-theme', t);
+  }
+  ['auto','light','dark'].forEach(function(id) {
+    var btn = document.getElementById('th-' + id);
+    if (btn) btn.classList.toggle('active', id === t);
+  });
+}
+
+// ── PLAYBOOK DATA ──
+var PLAYBOOK = [
+  {
+    week: 1, label: 'Week 1 — Environment Setup + Python Basics',
+    color: '#4F46E5',
+    days: [
+      { day: 1, tracks: [
+        { t: 'T1', topic: 'Python install + first program', hook: '"Open Python. Type 2+2. Press Enter. You just talked to a computer." — pause for effect.', code: 'print("Namaste, Srikakulam!")', exercise: 'Print your name, class, and school. 3 lines.', check: 'Everyone should see output. If screen is blank, check for typo in print.' },
+        { t: 'T2', topic: 'Python review + NumPy install', hook: '"You already know Python. Today we add a superpower — NumPy handles 1000 numbers as fast as 1."', code: 'import numpy as np\narr = np.array([10,20,30])\nprint(arr.mean())', exercise: 'Create an array of 5 student marks. Find mean, max, min.', check: 'Fist-to-Five. Anyone at 0-2 → pair them with a 4-5.' },
+        { t: 'T3', topic: 'Environment setup + PyTorch hello', hook: '"Every system we build this month will run on what you set up today. Take it slow."', code: 'import torch\nx = torch.tensor([1.0, 2.0, 3.0])\nprint(x, x.dtype)', exercise: 'Create a 2×3 tensor of zeros. Print shape.', check: 'Ask one student: "What is a tensor?" Correct answer: n-dimensional array.' },
+      ]},
+      { day: 2, tracks: [
+        { t: 'T1', topic: 'Variables and data types', hook: '"A variable is like a box with a label. The label is the name, the box holds the value."', code: 'name = "Ravi"\nmarks = 87\npercentage = marks / 100\nprint(name, percentage)', exercise: 'Create variables for 3 subjects. Calculate total and average.', check: 'Ask: "What is the difference between 87 and "87"?" Integer vs string.' },
+        { t: 'T2', topic: 'Pandas — loading a CSV', hook: '"Every dataset is a table. Pandas is Excel for programmers — but 1000x faster."', code: 'import pandas as pd\ndf = pd.read_csv("marks.csv")\nprint(df.head())\nprint(df.shape)', exercise: 'Load the provided CSV. How many rows? Which column has the highest average?', check: 'Show hands: who got the correct row count? Spot-check 2 students.' },
+        { t: 'T3', topic: 'Autograd — how gradients work', hook: '"This one idea — that computers can calculate slopes automatically — is why deep learning exists."', code: 'x = torch.tensor(3.0, requires_grad=True)\ny = x**2 + 2*x\ny.backward()\nprint(x.grad)  # dy/dx = 2x+2 = 8', exercise: 'Compute gradient of y = 3x³ at x=2. Verify with calculus.', check: 'Ask: "What does requires_grad=True tell PyTorch?" Track computation, calculate gradient.' },
+      ]},
+      { day: 3, tracks: [
+        { t: 'T1', topic: 'If/Else — decisions in code', hook: '"Your brain makes 35,000 decisions a day. An if-statement is one decision for a computer."', code: 'marks = 72\nif marks >= 60:\n    print("Pass")\nelif marks >= 35:\n    print("Compartment")\nelse:\n    print("Fail")', exercise: 'Write AP SSC grade calculator: D/C/B/A/A+ based on marks.', check: 'Test with marks=100, 75, 50, 34. All should give correct grade.' },
+        { t: 'T2', topic: 'Pandas — filtering and groupby', hook: '"You have 10,000 rows of APSRTC data. How do you find only the Srikakulam-to-Vizag routes? Filter."', code: 'pass_df = df[df["result"] == "Pass"]\nprint(pass_df.groupby("subject")["marks"].mean())', exercise: 'Filter students who scored above 80. Group by section, find average.', check: 'Walk around. Check everyone\'s groupby output — it should match your demo.' },
+        { t: 'T3', topic: 'Linear regression from scratch', hook: '"Before any fancy model — can you draw the best straight line through data points? That\'s all regression is."', code: 'W = torch.tensor(1.0, requires_grad=True)\nb = torch.tensor(0.0, requires_grad=True)\nfor i in range(100):\n    loss = ((W*X + b - Y)**2).mean()\n    loss.backward(); W.data -= 0.01*W.grad; b.data -= 0.01*b.grad\n    W.grad.zero_(); b.grad.zero_()', exercise: 'Fit a line to 20 random points. Print W and b after 200 epochs.', check: 'Ask: "What does loss going down mean?" — predictions are getting closer to truth.' },
+      ]},
+      { day: 4, tracks: [
+        { t: 'T1', topic: 'Loops — for and while', hook: '"Imagine checking 500 student marks one by one. A loop does that automatically. You write it once."', code: 'marks_list = [72, 85, 60, 45, 91]\nfor m in marks_list:\n    grade = "Pass" if m >= 35 else "Fail"\n    print(m, "->", grade)', exercise: 'Loop through 10 kirana shop prices. Print items above ₹100.', check: 'Everyone\'s loop should run without a red error. If red line — IndentationError. Fix together.' },
+        { t: 'T2', topic: 'Matplotlib — first charts', hook: '"Data without a chart is just numbers. The right chart makes the pattern obvious in 2 seconds."', code: 'import matplotlib.pyplot as plt\nsubjects = ["Math","Science","English"]\navg = [72, 68, 81]\nplt.bar(subjects, avg)\nplt.title("Average Marks by Subject")\nplt.show()', exercise: 'Create a line chart of Vizag monthly temperatures (make up data). Add title and labels.', check: 'Check: does the chart have a title? X-axis label? Y-axis label? All 3 required.' },
+        { t: 'T3', topic: 'Dataset pipeline — DataLoader', hook: '"A model is only as good as how you feed it data. DataLoader handles batching, shuffling, so you don\'t have to."', code: 'from torch.utils.data import DataLoader, TensorDataset\ndataset = TensorDataset(X_train, y_train)\nloader = DataLoader(dataset, batch_size=32, shuffle=True)\nfor X_batch, y_batch in loader:\n    print(X_batch.shape)', exercise: 'Create a DataLoader for 1000 random samples. Print the shape of 3 batches.', check: 'Batch shape should be [32, features]. If [1000, features] — batch_size not set correctly.' },
+      ]},
+      { day: 5, tracks: [
+        { t: 'T1', topic: 'Functions — write once, use anywhere', hook: '"Your amma\'s sambar recipe is a function. Same steps every time, different ingredients (inputs), same result (output)."', code: 'def calculate_grade(marks):\n    if marks >= 60: return "Pass"\n    elif marks >= 35: return "Compartment"\n    else: return "Fail"\n\nprint(calculate_grade(72))', exercise: 'Write a function that takes a price and discount%. Returns final price.', check: 'Call the function with 3 different inputs. All should return correct values.' },
+        { t: 'T2', topic: 'seaborn — better charts', hook: '"seaborn is matplotlib with a stylist. Same data, more insight with one line of code."', code: 'import seaborn as sns\nsns.boxplot(data=df, x="subject", y="marks")\nplt.title("Marks Distribution by Subject")\nplt.show()', exercise: 'Create a heatmap of subject correlations. Which two subjects are most correlated?', check: 'Can everyone read the heatmap? Key insight: high correlation = similar student performance.' },
+        { t: 'T3', topic: 'Neural net — first model in PyTorch', hook: '"Today you build a neural network with 4 lines of code. Took researchers 40 years to get to this."', code: 'import torch.nn as nn\nmodel = nn.Sequential(\n    nn.Linear(10, 64),\n    nn.ReLU(),\n    nn.Linear(64, 1)\n)\nprint(model)', exercise: 'Build a 3-layer net for EAMCET rank prediction (input: 6 subjects). Print parameter count.', check: 'Ask: "What does ReLU do?" Answer: kills negative values, adds non-linearity.' },
+      ]},
+    ]
+  },
+  {
+    week: 2, label: 'Week 2 — Intermediate Python + ML Foundations',
+    color: '#7C3AED',
+    days: [
+      { day: 6, tracks: [
+        { t: 'T1', topic: 'Lists and dictionaries', hook: '"A list is your ration card items. A dictionary is the card itself — item name maps to quantity."', code: 'shop = {"rice": 50, "oil": 120, "dal": 80}\nfor item, price in shop.items():\n    print(item, "costs ₹" + str(price))', exercise: 'Build a dictionary of 5 students and their marks. Print top scorer.', check: 'Ask: "How is a dict different from a list?" Dict has keys, list has positions.' },
+        { t: 'T2', topic: 'Linear Regression — scikit-learn', hook: '"If Vizag property prices follow a pattern with size, we can predict price for any new size. That\'s regression."', code: 'from sklearn.linear_model import LinearRegression\nmodel = LinearRegression()\nmodel.fit(X_train, y_train)\nprint("Score:", model.score(X_test, y_test))', exercise: 'Train linear regression on EAMCET data (rank vs marks). Predict rank for 150 marks.', check: 'Score should be above 0.7. If below: check if data is normalised.' },
+        { t: 'T3', topic: 'Training loop + loss curves', hook: '"A loss curve is your model\'s report card. If it keeps going down, you\'re learning. If it plateaus — problem."', code: 'losses = []\nfor epoch in range(100):\n    pred = model(X)\n    loss = criterion(pred, y)\n    optimizer.zero_grad(); loss.backward(); optimizer.step()\n    losses.append(loss.item())\nplt.plot(losses)', exercise: 'Train on EAMCET dataset. Plot loss vs epoch. Identify when it converges.', check: 'Loss curve should slope down, flatten near end. Spiky/increasing = learning rate too high.' },
+      ]},
+      { day: 7, tracks: [
+        { t: 'T1', topic: 'String operations', hook: '"Strings are everywhere — student names, school addresses, messages. Python gives you 30+ tools to work with them."', code: 'name = "  Ravi Kumar  "\nprint(name.strip())\nprint(name.upper())\nprint("Kumar" in name)', exercise: 'Clean a list of 5 messy names (extra spaces, wrong case). Normalise all to Title Case.', check: 'Run .strip().title() on all. Visually check output — no leading/trailing spaces.' },
+        { t: 'T2', topic: 'Decision Trees', hook: '"A decision tree is literally a flowchart. APSRTC deciding which routes to add? That\'s a decision tree in real life."', code: 'from sklearn.tree import DecisionTreeClassifier\ndt = DecisionTreeClassifier(max_depth=3)\ndt.fit(X_train, y_train)\nprint("Accuracy:", dt.score(X_test, y_test))', exercise: 'Train a DT to predict AP SSC pass/fail from 5 subjects. Print top 3 important features.', check: 'feature_importances_ should show Math or Science as top feature (usually).' },
+        { t: 'T3', topic: 'Validation + overfitting', hook: '"If you memorise the exam paper but can\'t solve a new problem — that\'s overfitting. Your model did the same."', code: 'train_losses, val_losses = [], []\nfor epoch in range(200):\n    # ... train step ...\n    with torch.no_grad():\n        val_loss = criterion(model(X_val), y_val)\n    val_losses.append(val_loss.item())', exercise: 'Plot train vs val loss. Identify the epoch where overfitting starts.', check: 'Overfitting: train loss keeps falling, val loss rises. Ask students to point to it on the chart.' },
+      ]},
+      { day: 8, tracks: [
+        { t: 'T1', topic: 'File handling — read and write', hook: '"Every real program reads files. Marks stored in Excel? Your Python script will read them automatically."', code: 'with open("marks.txt", "w") as f:\n    f.write("Ravi: 87\\nPriya: 92\\nKiran: 74")\n\nwith open("marks.txt") as f:\n    for line in f:\n        print(line.strip())', exercise: 'Write 10 student marks to a file. Read it back. Print the highest mark.', check: 'File should exist after write. Read should match what was written. Check with open(file).read().' },
+        { t: 'T2', topic: 'Random Forests', hook: '"One decision tree is one opinion. Random Forest asks 100 trees, takes the majority vote. Like asking 100 teachers."', code: 'from sklearn.ensemble import RandomForestClassifier\nrf = RandomForestClassifier(n_estimators=100)\nrf.fit(X_train, y_train)\nprint("RF Accuracy:", rf.score(X_test, y_test))', exercise: 'Compare DT vs RF accuracy on the same dataset. Which is higher and why?', check: 'RF should beat DT by 2-5%. Ask: "Why?" — reduces variance by averaging.' },
+        { t: 'T3', topic: 'CNN for image classification', hook: '"How does your phone unlock with your face? It uses a CNN — finds edges, then shapes, then your face."', code: 'cnn = nn.Sequential(\n    nn.Conv2d(1, 32, 3, padding=1), nn.ReLU(),\n    nn.MaxPool2d(2),\n    nn.Flatten(),\n    nn.Linear(32*14*14, 10)\n)', exercise: 'Train CNN on MNIST. Achieve >95% accuracy in 5 epochs.', check: 'Accuracy below 90% after 5 epochs: check learning rate (try 0.001) and batch size (64).' },
+      ]},
+      { day: 9, tracks: [
+        { t: 'T1', topic: 'Error handling — try/except', hook: '"What does the kirana shop owner do when the POS machine fails? Has a backup. That\'s your try-except."', code: 'try:\n    num = int(input("Enter marks: "))\n    print("Grade:", grade(num))\nexcept ValueError:\n    print("Please enter a number!")', exercise: 'Wrap your grade calculator in try-except. Test with "abc" as input.', check: 'Program should not crash on bad input. Should print friendly error message.' },
+        { t: 'T2', topic: 'Model evaluation — precision, recall, F1', hook: '"Accuracy alone lies. If 95% of AP EAMCET students pass, a model that always says Pass has 95% accuracy but is useless."', code: 'from sklearn.metrics import classification_report\nprint(classification_report(y_test, predictions))', exercise: 'Print full report for RF model. Which class has lowest F1? What does that mean?', check: 'Students should identify the weak class and explain: model struggles with borderline cases.' },
+        { t: 'T3', topic: 'Transfer learning — use a pre-trained model', hook: '"Why learn to walk before you run? Use ResNet — it already knows edges, textures, objects. You just teach the last layer."', code: 'import torchvision.models as models\nresnet = models.resnet18(pretrained=True)\nresnet.fc = nn.Linear(512, 2)  # your 2 classes\nfor param in resnet.parameters():\n    param.requires_grad = False\nresnet.fc.requires_grad_(True)', exercise: 'Fine-tune ResNet18 on a 2-class crop disease dataset. 10 epochs. Report accuracy.', check: 'Should reach >85% with frozen backbone. If below: unfreeze last 2 layers.' },
+      ]},
+      { day: 10, tracks: [
+        { t: 'T1', topic: 'Modules and imports', hook: '"Python comes with thousands of tools in boxes (modules). import is how you open the box."', code: 'import math\nimport random\n\nprint(math.sqrt(144))\nprint(random.choice(["Vizag", "Srikakulam", "Tirupati"]))', exercise: 'Use datetime module: print today\'s date, calculate how many days until December 31.', check: 'datetime.date.today() should return today. Subtraction should give a timedelta.' },
+        { t: 'T2', topic: 'Week 2 mini-project — marks analyser', hook: '"Today you build something real. A script that reads any marks CSV, shows charts, and prints top performers."', code: '# Students write the full pipeline:\n# load CSV → clean → analyse → visualise → report', exercise: 'Full project: load, describe, plot distribution, find top 10 students, save report.txt.', check: 'End of session: everyone demos their output chart. Peer feedback.' },
+        { t: 'T3', topic: 'Week 2 review — debug session', hook: '"Show me your worst error from this week. Best debugging story gets one free question answered in the exam."', code: '# Pair debug session — swap code with the person next to you', exercise: 'Each student introduces one deliberate bug. Partner finds and fixes it.', check: 'Error-First teaching in reverse: students see bugs as learning, not failure.' },
+      ]},
+    ]
+  },
+  {
+    week: 3, label: 'Week 3 — APIs, LLMs & Prompt Engineering',
+    color: '#DC2626',
+    days: [
+      { day: 11, tracks: [
+        { t: 'T1', topic: 'What is AI? — intuition session', hook: '"How does Google Photos know you\'re in the picture? AI. How does YouTube recommend videos? AI. Today: why this works."', code: '# No code today — concept session\n# Draw: Input → Model → Output on the board', exercise: 'Name 5 AI systems you used this week (phone, YouTube, Instagram, Maps, voice assistant).', check: 'Students should identify: recommendation, vision, speech. If stuck, give one example.' },
+        { t: 'T2', topic: 'K-Means clustering', hook: '"Group 500 students by study hours and performance. No labels — the algorithm finds the groups. That\'s clustering."', code: 'from sklearn.cluster import KMeans\nkmeans = KMeans(n_clusters=3, random_state=42)\nkmeans.fit(X)\nprint("Cluster centres:", kmeans.cluster_centers_)', exercise: 'Cluster Srikakulam students by 2 features. Visualise clusters with scatter plot. Name each group.', check: '3 visible clusters in the scatter plot. If overlapping: try different features.' },
+        { t: 'T3', topic: 'OpenAI API — first call', hook: '"You are about to send a message to one of the most powerful AI systems ever built, with 5 lines of Python."', code: 'from openai import OpenAI\nclient = OpenAI(api_key="your-key")\nresp = client.chat.completions.create(\n    model="gpt-4o-mini",\n    messages=[{"role":"user","content":"Explain transformers in Telugu"}]\n)\nprint(resp.choices[0].message.content)', exercise: 'Ask the API to explain any ML concept in simple Telugu/English. Print and read the response.', check: 'API should return text. Error 401: bad key. Error 429: rate limit — share one key per group.' },
+      ]},
+      { day: 12, tracks: [
+        { t: 'T1', topic: 'Introduction to AI tools', hook: '"ChatGPT wrote a code for me and I just ran it. Today: you do the same. AI + you = unstoppable."', code: '# Demo: ask ChatGPT to write a grade calculator\n# Copy → paste → run → understand each line', exercise: 'Use ChatGPT to generate a simple calculator. Run it. Explain each line back to the class.', check: 'Students should be able to explain (not just run) the generated code. Ask 2 students.' },
+        { t: 'T2', topic: 'PCA — reducing dimensions', hook: '"100 features is confusing. PCA finds the 2 most important directions in all that data. Like turning 3D into 2D."', code: 'from sklearn.decomposition import PCA\npca = PCA(n_components=2)\nX_2d = pca.fit_transform(X)\nplt.scatter(X_2d[:,0], X_2d[:,1], c=labels)', exercise: 'Apply PCA to the marks dataset (6 subjects → 2D). Plot. Do clusters appear?', check: 'Variance explained should be >60%. If below: data might not have strong patterns.' },
+        { t: 'T3', topic: 'Prompt engineering basics', hook: '"The same question asked differently gets a completely different answer. Prompting is the skill of asking the right question."', code: '# Zero-shot\n"Classify: positive, negative, or neutral: \'The sambar was amazing!\'" \n\n# Few-shot\n"Positive: great | Negative: terrible | Now classify: \'It was okay\'"', exercise: 'Write zero-shot, one-shot, and few-shot prompts for AP EAMCET result sentiment. Compare outputs.', check: 'Few-shot should outperform zero-shot. Ask students to explain why.' },
+      ]},
+      { day: 13, tracks: [
+        { t: 'T1', topic: 'Python + AI project — simple chatbot', hook: '"Today you build a chatbot in Python. No ML needed — just if-statements and a bit of creativity."', code: 'def chatbot(msg):\n    msg = msg.lower()\n    if "hello" in msg: return "Namaste!"\n    if "marks" in msg: return "Your marks are 87."\n    return "I don\'t understand. Try: hello, marks"\nwhile True:\n    print(chatbot(input("You: ")))', exercise: 'Add 5 more responses to your chatbot. Make it answer questions about your school.', check: 'Test with 10 different inputs. At least 5 should get meaningful responses.' },
+        { t: 'T2', topic: 'Train/test split + cross-validation', hook: '"You study chapters 1-9, exam is on 10. That\'s train/test split. Cross-validation does this 5 times, rotates the exam chapter."', code: 'from sklearn.model_selection import cross_val_score\nscores = cross_val_score(rf, X, y, cv=5)\nprint("CV Scores:", scores)\nprint("Mean:", scores.mean())', exercise: 'Run 5-fold CV on your Random Forest. Report mean and standard deviation.', check: 'Std deviation should be low (<0.05). High std = model is unstable.' },
+        { t: 'T3', topic: 'Chain-of-thought prompting', hook: '"Tell the model to think step-by-step. It literally solves harder problems when you say those three words."', code: 'prompt = """\nSolve this step-by-step:\nA student scored 145 in Maths and 132 in Physics in AP EAMCET.\nWhat is their predicted rank? Explain each step.\n"""', exercise: 'Compare direct answer vs chain-of-thought on 3 reasoning problems. Screenshot both.', check: 'CoT should give more accurate, explainable answers. Discuss: when would CoT fail?' },
+      ]},
+      { day: 14, tracks: [
+        { t: 'T1', topic: 'Intro to machine learning (concept)', hook: '"You learned from experience — got burned by hot chai, never touched again. ML is the same. Learn from examples."', code: '# Concept demo: show sklearn prediction in 10 lines\nfrom sklearn.neighbors import KNeighborsClassifier\nknn = KNeighborsClassifier(n_neighbors=3)\nknn.fit([[70,80],[40,35],[90,92]], [1,0,1])\nprint(knn.predict([[75,78]]))', exercise: 'Predict pass/fail for 5 new students using the KNN model. Discuss: is 3 neighbours right?', check: 'Correct predictions on obvious cases (90,92) → Pass; (20,30) → Fail.' },
+        { t: 'T2', topic: 'Hyperparameter tuning — GridSearchCV', hook: '"Which max_depth? Which n_estimators? GridSearch tries all combinations and finds the best. Let the computer decide."', code: 'from sklearn.model_selection import GridSearchCV\nparam_grid = {"max_depth":[3,5,7], "n_estimators":[50,100]}\ngrid = GridSearchCV(RandomForestClassifier(), param_grid, cv=5)\ngrid.fit(X_train, y_train)\nprint("Best:", grid.best_params_)', exercise: 'Run GridSearch on your RF model. How much did accuracy improve vs default?', check: 'Any improvement (even 0.5%) is valid. Ask: what is the cost of GridSearch? (time).' },
+        { t: 'T3', topic: 'Building a RAG system — part 1', hook: '"ChatGPT doesn\'t know about NexGen School. RAG gives it our documents to read before answering. Like open-book exam."', code: 'from langchain.vectorstores import FAISS\nfrom langchain.embeddings import OpenAIEmbeddings\nvectorstore = FAISS.from_texts(docs, OpenAIEmbeddings())\nretriever = vectorstore.as_retriever()', exercise: 'Load 3 paragraphs from a course PDF. Create embeddings. Search for "Python basics".', check: 'Retriever should return the most relevant paragraph. Test with 5 queries.' },
+      ]},
+      { day: 15, tracks: [
+        { t: 'T1', topic: 'Week 3 review + mini demo day', hook: '"Show me the coolest thing you built this week. Even a 5-line program counts."', code: '# Student demo session — 2 min each', exercise: 'Demo your chatbot or calculator to the class. Explain one thing you learned.', check: 'Goal: every student speaks at least one sentence about their code.' },
+        { t: 'T2', topic: 'ML pipeline — end to end', hook: '"A professional ML engineer doesn\'t build models, they build pipelines. Load → Clean → Train → Evaluate → Export."', code: 'from sklearn.pipeline import Pipeline\npipe = Pipeline([\n    ("scaler", StandardScaler()),\n    ("model", RandomForestClassifier())\n])\npipe.fit(X_train, y_train)', exercise: 'Build a full pipeline: scaler + RF. Save with pickle. Load and predict on new data.', check: 'Loaded model should give same predictions as trained model. If not: check scaler is inside pipe.' },
+        { t: 'T3', topic: 'RAG system — part 2 + full demo', hook: '"Today you demo a chatbot that knows NexGen course material. Students ask it questions. It answers from the PDFs."', code: 'from langchain.chains import RetrievalQA\nchain = RetrievalQA.from_chain_type(\n    llm=llm, retriever=retriever\n)\nprint(chain.run("What is covered in Track 1 Day 5?"))', exercise: 'Load all 3 course PDFs. Answer 5 real student questions from the chatbot. Evaluate quality.', check: 'Answers should cite the correct day/module. If hallucinating: reduce k in retriever.' },
+      ]},
+    ]
+  },
+  {
+    week: 4, label: 'Week 4 — AI Agents + Capstone Kickoff',
+    color: '#D97706',
+    days: [
+      { day: 16, tracks: [
+        { t: 'T1', topic: 'Capstone project briefing', hook: '"For the last 10 days you build something real. A Python program that solves an actual problem in your life."', code: '# Capstone options:\n# 1. Kirana shop billing system\n# 2. School marks tracker  \n# 3. Simple quiz app\n# 4. Weather report formatter', exercise: 'Choose capstone project. Write 5 sentences: what it does, who uses it, what input/output.', check: 'Everyone must have a chosen project and a 1-sentence description by end of session.' },
+        { t: 'T2', topic: 'Capstone kickoff — Data Science project', hook: '"Real data science has one goal: answer a business question with data. What question will your project answer?"', code: '# Capstone: AP student performance predictor\n# 1. Load dataset  2. EDA  3. Feature engineering\n# 4. Train model   5. Evaluate  6. Dashboard', exercise: 'Write project brief: question, dataset, algorithm, success metric. 1 page.', check: 'Success metric must be measurable. "Good accuracy" is not a metric. "F1 > 0.80" is.' },
+        { t: 'T3', topic: 'AI Agents — what and why', hook: '"An LLM answers one question. An agent answers a question, then takes an action, then checks the result, then tries again."', code: 'tools = [search_tool, calculator_tool, weather_tool]\nagent = initialize_agent(tools, llm,\n    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION)', exercise: 'Build a simple agent with 2 tools: web search + calculator. Ask it: "What is the population of Srikakulam × 2?"', check: 'Agent should use search first, then calculator. If it skips tools: check tool descriptions.' },
+      ]},
+      { day: 17, tracks: [
+        { t: 'T1', topic: 'Capstone — Day 1 build', hook: '"Start with the simplest possible version. One function. One output. Build from there."', code: '# Guide: plan → skeleton → one function at a time', exercise: 'Write skeleton: main function + 3 sub-functions with comments. No real code yet.', check: 'Skeleton should run without errors (functions can return None). Structure first.' },
+        { t: 'T2', topic: 'Feature engineering', hook: '"Raw data rarely has the right shape. Feature engineering is like cooking — you transform ingredients into something useful."', code: 'df["total_marks"] = df[subjects].sum(axis=1)\ndf["pass_rate"] = (df[subjects] >= 35).sum(axis=1) / len(subjects)\ndf["is_distinction"] = (df["total_marks"] >= 450).astype(int)', exercise: 'Create 3 new features from the marks dataset. Show correlation with target variable.', check: 'New features should have higher correlation than raw marks. If not: features are not useful.' },
+        { t: 'T3', topic: 'Agent tools — custom functions', hook: '"The power of agents is custom tools. You can give an agent your own functions to call."', code: 'from langchain.tools import tool\n\n@tool\ndef get_eamcet_rank(marks: int) -> str:\n    """Returns predicted EAMCET rank from total marks."""\n    return f"Estimated rank: {max(1, 200000 - marks * 1000)}"', exercise: 'Build a custom tool that calculates AP SSC grade. Add it to your agent. Test with 3 mark values.', check: 'Agent should call your tool when asked about grades. If it answers from memory: tool description needs work.' },
+      ]},
+    ]
+  },
+];
+
+function buildPlaybook() {
+  var container = document.getElementById('playbook-container');
+  if (!container) return;
+  var trackColors = { T1: 'var(--t1)', T2: 'var(--t2)', T3: 'var(--t3)' };
+  var trackLabels = { T1: 'Track 1 · 10th Grade', T2: 'Track 2 · Intermediate', T3: 'Track 3 · Engineering' };
+  var html = '';
+
+  PLAYBOOK.forEach(function(week) {
+    html += '<div style="margin-bottom:32px">';
+    html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">';
+    html += '<div style="background:' + week.color + ';color:#fff;font-size:.75rem;font-weight:700;padding:4px 12px;border-radius:12px">WEEK ' + week.week + '</div>';
+    html += '<h3 style="font-size:1rem;font-weight:700">' + week.label + '</h3></div>';
+
+    week.days.forEach(function(d) {
+      html += '<div class="res-day" id="pb-' + week.week + '-' + d.day + '" style="margin-bottom:10px">';
+      html += '<div class="res-day-header" onclick="toggleDay(\'pb-' + week.week + '-' + d.day + '\')">';
+      html += '<div class="day-label"><span style="font-weight:800;color:' + week.color + '">Day ' + d.day + '</span>';
+      html += '<span class="phase-tag" style="background:' + week.color + '22;color:' + week.color + ';border:1px solid ' + week.color + '44">' + week.label.split('—')[1].trim().split(' ').slice(0,3).join(' ') + '</span></div>';
+      html += '<svg class="chevron" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>';
+      html += '</div><div class="res-day-body">';
+      html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;padding-top:8px">';
+
+      d.tracks.forEach(function(tr) {
+        var tc = trackColors[tr.t] || '#6366F1';
+        html += '<div style="background:var(--bg);border:1px solid var(--border);border-left:3px solid ' + tc + ';border-radius:8px;padding:16px">';
+        html += '<div style="font-size:.7rem;font-weight:700;color:' + tc + ';text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px">' + trackLabels[tr.t] + '</div>';
+        html += '<div style="font-size:.9rem;font-weight:700;margin-bottom:10px">' + tr.topic + '</div>';
+        html += '<div style="font-size:.75rem;color:var(--muted);margin-bottom:6px;font-weight:600;text-transform:uppercase;letter-spacing:.05em">Opening Hook</div>';
+        html += '<div style="font-size:.82rem;font-style:italic;color:var(--text);background:var(--card);padding:8px 12px;border-radius:6px;margin-bottom:10px;border-left:2px solid ' + tc + '">' + tr.hook + '</div>';
+        html += '<div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.05em">Code to Demo</div>';
+        html += '<pre style="background:var(--code-bg);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:.72rem;overflow-x:auto;margin-bottom:10px;white-space:pre-wrap;line-height:1.5">' + tr.code + '</pre>';
+        html += '<div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.05em">Exercise to Give</div>';
+        html += '<div style="font-size:.82rem;color:var(--text);margin-bottom:10px">' + tr.exercise + '</div>';
+        html += '<div style="font-size:.75rem;color:var(--muted);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.05em">How to Check Understanding</div>';
+        html += '<div style="font-size:.8rem;color:var(--green);background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:6px;padding:8px 10px">' + tr.check + '</div>';
+        html += '</div>';
+      });
+
+      html += '</div></div></div>';
+    });
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+}
+</script>
+</body>
+</html>
