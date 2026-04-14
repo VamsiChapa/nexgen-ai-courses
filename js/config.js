@@ -6,8 +6,8 @@
 
 // ── Supabase ─────────────────────────────────────────────────────────
 // Get these from: Supabase Dashboard → Project Settings → API
-const SUPABASE_URL      = 'https://YOUR_PROJECT_ID.supabase.co';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL      = 'https://mugfmtyierkevpjytfec.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im11Z2ZtdHlpZXJrZXZwanl0ZmVjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMjcwMzYsImV4cCI6MjA5MTcwMzAzNn0.zFD6iEypMGzSIcRGz6t9zIMHARIQZmNJkLc713TVpU8';
 
 // ── EmailJS ───────────────────────────────────────────────────────────
 // Get these from: https://www.emailjs.com/ (free: 200 emails/month)
