@@ -236,11 +236,26 @@ function renderDashboard() {
       ${trackCard('track3','Track 3','Advanced AI Engineering','Engineering / B.Tech',t3Done,45,'#DC2626','track-3/index.html')}
     </div>
 
+    <!-- Getting started banner for new trainers -->
+    ${prepDone === 0 ? `
+    <div style="background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(99,102,241,.1));border:1px solid rgba(245,158,11,.3);border-radius:12px;padding:20px 24px;margin-bottom:28px;display:flex;align-items:flex-start;gap:16px">
+      <div style="font-size:1.8rem;flex-shrink:0">👋</div>
+      <div>
+        <div style="font-weight:700;font-size:.95rem;margin-bottom:6px">Welcome to the Trainer Portal!</div>
+        <div style="font-size:.8rem;color:var(--muted);line-height:1.7">
+          Start with the <strong style="color:#F1F5F9">Briefing Card</strong> for a 1-page overview, then read the <strong style="color:#F1F5F9">Teacher Guide</strong> for full lesson patterns.
+          Use the <strong style="color:#F1F5F9">15-Day Prep Plan</strong> below to track your preparation — click each day card to mark it done.
+          The <strong style="color:#F1F5F9">Trainer Portal</strong> has your playbook, resources, and course access in one place.
+        </div>
+      </div>
+    </div>` : ''}
+
     <!-- Quick links -->
     <div class="sec">Quick Links</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:28px">
-      ${qLink('🎓','Teacher Guide','Full teaching patterns & analogies','teacher-guide.html','rgba(99,102,241,.08)')}
-      ${qLink('📋','Briefing Card','1-page printable reference card','briefing-card.html','rgba(34,211,238,.08)')}
+      ${qLink('🏠','Trainer Portal','Playbook, resources & course overview','index.html','rgba(99,102,241,.08)')}
+      ${qLink('🎓','Teacher Guide','Full teaching patterns & analogies','teacher-guide.html','rgba(34,211,238,.08)')}
+      ${qLink('📋','Briefing Card','1-page printable reference card','briefing-card.html','rgba(16,185,129,.08)')}
       ${qLink('📄','Track 1 PDF','Python & AI Basics course PDF','docs/Track1-Python-AI-Basics.pdf','rgba(79,70,229,.08)')}
       ${qLink('📄','Track 2 PDF','Data Science & ML course PDF','docs/Track2-Data-Science-ML.pdf','rgba(124,58,237,.08)')}
       ${qLink('📄','Track 3 PDF','Advanced AI Engineering PDF','docs/Track3-Engineering-AI.pdf','rgba(220,38,38,.08)')}
