@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NexGen AI Trainer Portal — Staff Access Only</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -686,83 +688,52 @@
 </div>
 
 <script>
-// ── AUTH ──
-// When GitHub Actions runs inject_creds.py, the %%PLACEHOLDERS%% below are replaced
-// with base64-encoded credentials from repository secrets.
-// Until then (or for local use), the fallback block provides working credentials.
-var USERS = (function () {
-  var ub = '%%USERS_B64%%';
-  if (ub.indexOf('%%') === -1) {            // injected by CI — use it
-    try { return JSON.parse(atob(ub)); } catch (e) {}
-  }
-  // Fallback: hardcoded credentials (active when CI injection has not run)
-  var u = {};
-  u[btoa('nexgen')]   = btoa('Train@2024');
-  u[btoa('trainer1')] = btoa('NexGen@001');
-  u[btoa('vamsi')]    = btoa('Admin@NexGen2024');
-  return u;
-})();
-var MASTER = (function () {
-  var mb = '%%MASTER_B64%%';
-  return mb.indexOf('%%') === -1 ? mb : btoa('NXGN@Master24');
-})();
-
-function tryLogin() {
-  var uEl = document.getElementById('auth-user');
-  var pEl = document.getElementById('auth-pass');
-  var errEl = document.getElementById('auth-error');
-  var u = uEl.value.trim();
-  var p = pEl.value;
-  if (!u || !p) { errEl.style.display = 'block'; return; }
-  var eu = btoa(u), ep = btoa(p);
-  if ((USERS[eu] && USERS[eu] === ep) || ep === MASTER) {
-    sessionStorage.setItem('ng_auth', '1');
-    sessionStorage.setItem('ng_user', u);
-    showPortal(u);
-  } else {
-    errEl.style.display = 'block';
-    pEl.value = '';
-  }
-}
-
-function showPortal(user) {
+// ── AUTH (Supabase) ──
+function showPortal(name) {
   document.getElementById('auth-gate').style.display = 'none';
   document.getElementById('portal').style.display = 'flex';
-  document.getElementById('welcome-name').textContent = 'Hello, ' + user + ' \uD83D\uDC4B';
+  document.getElementById('welcome-name').textContent = 'Hello, ' + name + ' \uD83D\uDC4B';
   buildResources();
   buildPlan();
   buildPlaybook();
 }
 
 function logout() {
-  sessionStorage.clear();
-  location.reload();
+  getSupabase().auth.signOut().then(() => { window.location.href = 'login.html'; });
 }
 
 // ── BOOT ──
-document.addEventListener('DOMContentLoaded', function () {
-  // Wire up auth buttons via event listeners (no inline onclick needed)
-  var loginBtn = document.getElementById('btn-login');
-  var passInput = document.getElementById('auth-pass');
-  var logoutBtn = document.getElementById('btn-logout');
-  if (loginBtn) loginBtn.addEventListener('click', tryLogin);
-  if (passInput) passInput.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') tryLogin();
-  });
-  if (logoutBtn) logoutBtn.addEventListener('click', logout);
-
+document.addEventListener('DOMContentLoaded', async function () {
   // Wire tab buttons
   document.querySelectorAll('.p-tab').forEach(function (btn, i) {
     var ids = ['overview', 'courses', 'resources', 'plan', 'guide', 'playbook'];
     btn.addEventListener('click', function () { showTab(ids[i], btn); });
   });
 
+  var logoutBtn = document.getElementById('btn-logout');
+  if (logoutBtn) logoutBtn.addEventListener('click', logout);
+
   // Theme init
   initTheme();
 
-  // Auto-login if session exists
-  if (sessionStorage.getItem('ng_auth') === '1') {
-    showPortal(sessionStorage.getItem('ng_user') || 'trainer');
+  // Supabase session check
+  try {
+    const sb = getSupabase();
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) { window.location.href = 'login.html'; return; }
+
+    const { data: profile } = await sb.from('profiles').select('role,status,full_name,email').eq('id', session.user.id).single();
+    if (!profile) { window.location.href = 'login.html'; return; }
+
+    const allowed = ['approved', 'direct'];
+    if (profile.role !== 'admin' && !allowed.includes(profile.status)) {
+      window.location.href = 'login.html'; return;
+    }
+
+    showPortal(profile.full_name || profile.email);
+  } catch(e) {
+    console.error('Auth error:', e);
+    window.location.href = 'login.html';
   }
 });
 
