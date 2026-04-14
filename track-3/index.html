@@ -62,14 +62,152 @@ header{background:linear-gradient(135deg,#1E293B,#0F172A);border-bottom:1px soli
 const STORAGE_KEY='nexgen_track3_progress';
 let completed=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
 const modules=[
-  {id:1,title:'Advanced ML & Deep Learning',days:[1,15]},
-  {id:2,title:'LLM Engineering & APIs',days:[16,25]},
-  {id:3,title:'Prompt Engineering Mastery',days:[26,30]},
-  {id:4,title:'Building AI Agents',days:[31,40]},
-  {id:5,title:'Capstone Project',days:[41,45]}
+  {id:1,title:'ML Review & Deep Learning Intuition',days:[1,5]},
+  {id:2,title:'Advanced ML & Deep Learning',days:[6,18]},
+  {id:3,title:'LLM Engineering & APIs',days:[19,27]},
+  {id:4,title:'Prompt Engineering & Agentic AI',days:[28,37]},
+  {id:5,title:'Capstone Project',days:[38,45]}
 ];
 const lessons=[
-  {day:1,mod:1,title:'Neural Networks from Scratch',objectives:['Understand perceptrons and activation functions','Implement forward pass manually','Grasp backpropagation math'],
+  {day:1,mod:1,title:'What ML Really Does — A Visual Day',objectives:['See machine learning work without writing code','Understand neural networks through a visual playground','Build intuition before touching code'],
+   content:`<p>Before we write a single line of code, we need to <em>see</em> what neural networks actually do. Today is a visual day — open TensorFlow Playground in your browser and spend 45 minutes experimenting. No setup, no installation, no errors. Just intuition.</p><p>A neural network is a function that learns from examples. It adjusts thousands of tiny dials (weights) until its predictions match the real answers. TensorFlow Playground shows you those dials moving in real time.</p>`,
+   code:`# No code today — open this URL in your browser:
+# https://playground.tensorflow.org/
+#
+# Experiment guide:
+# 1. Dataset: Select "Circle" (top left)
+# 2. Click PLAY and watch the network learn
+# 3. Try changing: number of hidden layers, learning rate
+# 4. Dataset: Switch to "XOR" — notice it needs more layers
+# 5. Dataset: Try "Spiral" — the hardest one
+#
+# Questions to answer in your notes:
+# - What happens when learning rate is too high (0.1 -> 10)?
+# - What happens with 0 hidden layers?
+# - How many epochs does Circle vs Spiral need?
+print("Open: https://playground.tensorflow.org/")`,
+   resources:[{title:'TensorFlow Playground',url:'https://playground.tensorflow.org/'},{title:'Neural Networks Visual Introduction (3Blue1Brown)',url:'https://www.youtube.com/watch?v=aircAruvnKk'}],
+   exercise:'Spend 45 minutes in TensorFlow Playground. Screenshot your best result for the Spiral dataset. Note down: how many layers, which activation function, how many epochs. Bring your screenshot tomorrow.',
+   keyTerms:['neural network','TensorFlow Playground','weights','hidden layers','epochs','activation']},
+
+  {day:2,mod:1,title:'ML Algorithms in Plain Language',objectives:['Understand 5 core ML algorithms without math','Know when to use which algorithm','Connect algorithms to real products you use'],
+   content:`<p>Five algorithms power 90% of ML in production. You need to know what each one does in one sentence, when to use it, and what real product uses it. The math comes later — intuition first.</p><p><strong>Linear Regression</strong>: predicts a number (house price, temperature). <strong>Logistic Regression</strong>: predicts yes/no (spam or not). <strong>Decision Tree</strong>: makes decisions like a flowchart. <strong>Random Forest</strong>: many decision trees voting together. <strong>Neural Network</strong>: learns patterns too complex for rules.</p>`,
+   code:`# ML Algorithm Selector — plain language guide
+def which_algorithm(output_type, data_size, interpretability_needed):
+    if output_type == "number":
+        return "Linear Regression (start here) or Neural Network (more data)"
+    elif output_type == "yes/no" and interpretability_needed:
+        return "Logistic Regression or Decision Tree (you can explain why)"
+    elif output_type == "yes/no" and not interpretability_needed:
+        return "Random Forest or Neural Network (better accuracy)"
+    elif output_type == "category" and data_size == "large":
+        return "Neural Network or Random Forest"
+    else:
+        return "Decision Tree (simple, interpretable)"
+
+# Examples
+print(which_algorithm("number", "medium", True))      # Predict salary
+print(which_algorithm("yes/no", "large", False))      # Spam detection
+print(which_algorithm("category", "large", False))    # Image classification`,
+   resources:[{title:'StatQuest ML Playlist (best explanations)',url:'https://www.youtube.com/results?search_query=statquest+machine+learning'},{title:'ML for Beginners — Microsoft',url:'https://github.com/microsoft/ML-For-Beginners'}],
+   exercise:'Mini Project 1: For each of these products — (a) Netflix recommendation, (b) Gmail spam filter, (c) Google Translate, (d) Swiggy ETA prediction — identify which ML algorithm category it most likely uses. Write a 2-line justification for each.',
+   keyTerms:['linear regression','logistic regression','decision tree','random forest','classification','regression']},
+
+  {day:3,mod:1,title:'Python ML Setup + First Real Model',objectives:['Set up a proper ML environment','Train and evaluate a Linear Regression model','Understand train/test split'],
+   content:`<p>Today is the first code day. We build a complete ML model in 20 lines. The goal: predict a student exam score based on study hours. By the end of this session you will understand what "training" actually means and why we split data into train and test sets.</p><p>Splitting data is like studying with some notes hidden. You train on the visible notes, then test yourself on the hidden ones. If you only memorise the training notes, you fail the hidden test — that is <strong>overfitting</strong>.</p>`,
+   code:`import numpy as np
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_absolute_error
+
+# Fake student study data
+np.random.seed(42)
+study_hours = np.random.uniform(1, 10, 100)
+scores = study_hours * 8 + np.random.normal(0, 5, 100)  # noisy linear relationship
+
+df = pd.DataFrame({'study_hours': study_hours, 'score': scores})
+print(df.head())
+
+# Split: 80% train, 20% test
+X = df[['study_hours']]
+y = df['score']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Predict and evaluate
+y_pred = model.predict(X_test)
+mae = mean_absolute_error(y_test, y_pred)
+print(f"Mean Absolute Error: {mae:.2f} marks")
+print(f"If you study 7 hours, predicted score: {model.predict([[7]])[0]:.1f}")`,
+   resources:[{title:'scikit-learn Getting Started',url:'https://scikit-learn.org/stable/getting_started.html'},{title:'Train-Test Split Explained (Hindi)',url:'https://www.youtube.com/results?search_query=train+test+split+machine+learning+hindi'}],
+   exercise:'Mini Project 2: Modify the code above — change the noise level (5 to 20) and observe how MAE changes. Then change test_size from 0.2 to 0.5. What happens to accuracy? Write down what you observe.',
+   keyTerms:['train/test split','overfitting','MAE','prediction','scikit-learn','LinearRegression']},
+
+  {day:4,mod:1,title:'Deep Learning Intuition — Before PyTorch',objectives:['Understand why deep learning beats classical ML','Know what layers, weights, and backpropagation mean in plain terms','Recognise deep learning in everyday products'],
+   content:`<p>Classical ML (regression, random forest) works with structured tables. Deep Learning works with anything: images, audio, text, video. The difference is <strong>feature engineering</strong>. With classical ML, you manually decide what features to give the model. With deep learning, the model learns its own features from raw data.</p><p>Think of a deep network as a series of filters. Each layer extracts more abstract patterns. Layer 1 of an image network detects edges. Layer 2 detects shapes. Layer 10 detects faces. You did not program any of this — the network learned it.</p>`,
+   code:`# Understanding layers through analogy — no framework needed yet
+def layer_simulation(raw_input):
+    """Simulates what each layer 'notices' in an image of a cat"""
+    layer_outputs = {
+        "Layer 1 — Edges": "Horizontal lines, vertical lines, diagonal lines",
+        "Layer 2 — Shapes": "Circles, triangles, curves",
+        "Layer 3 — Parts": "Ears, eyes, whiskers, paws",
+        "Layer 4 — Objects": "Cat face, cat body",
+        "Layer 5 — Identity": "This is a cat (98.7% confidence)"
+    }
+    for layer, detection in layer_outputs.items():
+        print(f"{layer}: {detection}")
+
+layer_simulation("cat_image.jpg")
+
+# Deep learning is used in:
+products_using_dl = {
+    "Google Photos": "face recognition, object detection",
+    "YouTube": "video recommendation, speech-to-text",
+    "Swiggy": "restaurant image quality check",
+    "Google Translate": "neural machine translation",
+    "ChatGPT": "large language model (transformer architecture)",
+}
+for product, use in products_using_dl.items():
+    print(f"{product}: {use}")`,
+   resources:[{title:'Deep Learning by 3Blue1Brown (Visual)',url:'https://www.youtube.com/watch?v=aircAruvnKk'},{title:'Fast.ai — Practical Deep Learning',url:'https://course.fast.ai/'}],
+   exercise:'Mini Project 3: Google "what deep learning is used in" + any 3 apps you use daily (Instagram, Google Maps, Spotify). Write 2 lines on how deep learning powers each. Share in class tomorrow.',
+   keyTerms:['deep learning','feature engineering','layers','weights','convolutional network','representation learning']},
+
+  {day:5,mod:1,title:'PyTorch Setup + Your First Tensor',objectives:['Install PyTorch and run a hello-world tensor operation','Understand tensors as generalised arrays','Know GPU vs CPU difference'],
+   content:`<p>Today you meet <strong>PyTorch</strong> — the framework used by Meta, Tesla, and most AI research teams. PyTorch thinks in <strong>tensors</strong>: multidimensional arrays that can live on a CPU or GPU. A 1D tensor is a list. A 2D tensor is a table. A 3D tensor is a stack of tables (like an RGB image: width x height x 3 colour channels).</p><p>Google Colab gives you a free GPU. Switch to GPU runtime: Runtime > Change runtime type > T4 GPU. Your tensor operations will run 10-100x faster.</p>`,
+   code:`# Install PyTorch (run in Google Colab — already available)
+import torch
+
+print(f"PyTorch version: {torch.__version__}")
+print(f"GPU available: {torch.cuda.is_available()}")
+
+# Creating tensors
+scalar = torch.tensor(42.0)          # 0D — a single number
+vector = torch.tensor([1, 2, 3, 4])  # 1D — a list
+matrix = torch.tensor([[1, 2], [3, 4], [5, 6]])  # 2D — a table
+image_tensor = torch.zeros(3, 64, 64) # 3D — RGB image (3 channels, 64x64 pixels)
+
+print("Scalar:", scalar)
+print("Vector shape:", vector.shape)
+print("Matrix shape:", matrix.shape)
+print("Image tensor shape:", image_tensor.shape)
+
+# Tensor operations (these run on GPU if available)
+a = torch.tensor([1.0, 2.0, 3.0])
+b = torch.tensor([4.0, 5.0, 6.0])
+print("Dot product:", torch.dot(a, b))  # 1*4 + 2*5 + 3*6 = 32
+print("Element-wise multiply:", a * b)`,
+   resources:[{title:'PyTorch Official Tutorial',url:'https://pytorch.org/tutorials/beginner/basics/intro.html'},{title:'PyTorch in Google Colab',url:'https://www.youtube.com/results?search_query=pytorch+google+colab+beginners+2024'}],
+   exercise:'Mini Project 4: In Google Colab, create a tensor representing a 28x28 greyscale image (like MNIST digits). Print its shape, dtype, and total number of elements. Then create a random tensor of the same shape and add them together.',
+   keyTerms:['PyTorch','tensor','GPU','CPU','shape','CUDA','Google Colab']},
+
+
+  {day:6,mod:2,title:'Neural Networks from Scratch',objectives:['Understand perceptrons and activation functions','Implement forward pass manually','Grasp backpropagation math'],
    content:`<p>Neural networks are function approximators built from layers of neurons. Each neuron computes a weighted sum and applies an activation function. Today you implement one from scratch in NumPy — no frameworks.</p>
 <p>Key activations: <strong>ReLU</strong> (max(0,x)) for hidden layers, <strong>Sigmoid</strong> for binary outputs, <strong>Softmax</strong> for multi-class. The <strong>chain rule</strong> drives backprop: gradients flow backward, layer by layer.</p>`,
    code:`import numpy as np
@@ -108,7 +246,7 @@ print(net.forward(X).round(2))`,
    exercise:'Add a second hidden layer to the XOR network. Log the loss every 500 steps.',
    keyTerms:['perceptron','activation function','forward pass','backpropagation','gradient descent']},
 
-  {day:2,mod:1,title:'PyTorch Fundamentals',objectives:['Work with tensors and autograd','Define models with nn.Module','Run a training loop'],
+  {day:7,mod:2,title:'PyTorch Fundamentals',objectives:['Work with tensors and autograd','Define models with nn.Module','Run a training loop'],
    content:`<p>PyTorch is the industry-standard deep learning framework. Its <strong>autograd</strong> engine tracks operations on tensors and computes gradients automatically. You define a model as a class inheriting <code>nn.Module</code>, then run: forward → loss → backward → optimizer step.</p>`,
    code:`import torch, torch.nn as nn
 
@@ -131,7 +269,7 @@ print(model(X).detach().round())`,
    exercise:'Replace BCELoss with MSELoss and observe the difference in training speed.',
    keyTerms:['tensor','autograd','nn.Module','optimizer','loss function']},
 
-  {day:3,mod:1,title:'CNNs for Image Recognition',objectives:['Understand convolution and pooling','Build a CNN in PyTorch','Train on CIFAR-10'],
+  {day:8,mod:2,title:'CNNs for Image Recognition',objectives:['Understand convolution and pooling','Build a CNN in PyTorch','Train on CIFAR-10'],
    content:`<p>Convolutional Neural Networks exploit spatial structure in images. A <strong>Conv2d</strong> layer slides a filter across the image extracting features. <strong>MaxPool</strong> downsamples, reducing computation. Stack Conv→ReLU→Pool blocks, then flatten and classify with linear layers.</p>`,
    code:`import torch, torch.nn as nn, torchvision, torchvision.transforms as T
 
@@ -158,7 +296,7 @@ print("One batch done, loss:", loss.item())`,
    exercise:'Add Batch Normalization after each Conv layer and compare accuracy after 5 epochs.',
    keyTerms:['convolution','pooling','feature map','kernel','receptive field']},
 
-  {day:4,mod:1,title:'Transfer Learning with ResNet',objectives:['Load a pretrained ResNet','Fine-tune on a custom dataset','Understand feature extraction vs fine-tuning'],
+  {day:9,mod:2,title:'Transfer Learning with ResNet',objectives:['Load a pretrained ResNet','Fine-tune on a custom dataset','Understand feature extraction vs fine-tuning'],
    content:`<p>Training from scratch needs millions of images. <strong>Transfer learning</strong> reuses weights from models trained on ImageNet. Two strategies: <strong>feature extraction</strong> (freeze all layers, train only head) and <strong>fine-tuning</strong> (unfreeze last few layers and train with small LR). ResNet50 achieves 76% top-1 on ImageNet and is an excellent base.</p>`,
    code:`import torch, torch.nn as nn, torchvision.models as models
 
@@ -180,7 +318,7 @@ print("Transfer learning step done:", loss.item())`,
    exercise:'Fine-tune ResNet18 (not ResNet50) on a 2-class flower dataset from torchvision.',
    keyTerms:['transfer learning','fine-tuning','feature extraction','pretrained weights','ImageNet']},
 
-  {day:5,mod:1,title:'RNNs and LSTMs for Sequences',objectives:['Understand vanishing gradients in RNNs','Implement LSTM for time series','Use packed sequences for variable-length inputs'],
+  {day:10,mod:2,title:'RNNs and LSTMs for Sequences',objectives:['Understand vanishing gradients in RNNs','Implement LSTM for time series','Use packed sequences for variable-length inputs'],
    content:`<p>Recurrent networks process sequences by maintaining a hidden state. Vanilla RNNs suffer from <strong>vanishing gradients</strong> — gradients shrink exponentially over long sequences. <strong>LSTMs</strong> solve this with gates: forget, input, and output gates control information flow, allowing gradients to flow through hundreds of steps.</p>`,
    code:`import torch, torch.nn as nn
 
@@ -203,7 +341,7 @@ print("Output shape:", out.shape)  # [32,1]`,
    exercise:'Train SentimentLSTM on the IMDB dataset from torchtext. Report accuracy after 3 epochs.',
    keyTerms:['RNN','LSTM','vanishing gradient','hidden state','gating mechanism']},
 
-  {day:6,mod:1,title:'Transformers — Attention Mechanism',objectives:['Derive scaled dot-product attention','Implement multi-head attention','Understand positional encoding'],
+  {day:11,mod:2,title:'Transformers — Attention Mechanism',objectives:['Derive scaled dot-product attention','Implement multi-head attention','Understand positional encoding'],
    content:`<p>Transformers replaced RNNs for sequence modeling. The core is <strong>self-attention</strong>: every token attends to every other token simultaneously. <strong>Multi-head attention</strong> runs attention in parallel in different subspaces, capturing different relationships. <strong>Positional encoding</strong> injects order information since transformers have no recurrence.</p>
 <p>Attention(Q,K,V) = softmax(QK^T / √d_k)V — the √d_k scale prevents softmax saturation.</p>`,
    code:`import torch, torch.nn as nn, math
@@ -231,7 +369,7 @@ print(mha(x).shape)  # [2,10,512]`,
    exercise:'Add positional encoding to the MultiHeadAttention block using sinusoidal embeddings.',
    keyTerms:['self-attention','query key value','multi-head','positional encoding','transformer']},
 
-  {day:7,mod:1,title:'Training GPT-2 Style Language Model',objectives:['Build a decoder-only transformer','Implement causal masking','Train on a text corpus'],
+  {day:12,mod:2,title:'Training GPT-2 Style Language Model',objectives:['Build a decoder-only transformer','Implement causal masking','Train on a text corpus'],
    content:`<p>GPT-style models use a <strong>decoder-only</strong> transformer with causal masking — each token can only attend to previous tokens. Training objective: predict the next token (cross-entropy over vocabulary). Key hyperparameters: context length (n_ctx), embedding dim (d_model), layers, heads.</p>`,
    code:`import torch, torch.nn as nn
 
@@ -265,7 +403,7 @@ print(f"Params: {sum(p.numel() for p in model.parameters())/1e6:.1f}M")`,
    exercise:'Train MiniGPT on Shakespeare text for 1000 steps and generate 50 tokens.',
    keyTerms:['decoder-only','causal mask','next token prediction','language model','perplexity']},
 
-  {day:8,mod:1,title:'Hyperparameter Tuning with Optuna',objectives:['Define an objective function','Run TPE-based search','Analyze Pareto-optimal results'],
+  {day:13,mod:2,title:'Hyperparameter Tuning with Optuna',objectives:['Define an objective function','Run TPE-based search','Analyze Pareto-optimal results'],
    content:`<p>Manual hyperparameter search is inefficient. <strong>Optuna</strong> uses Tree-structured Parzen Estimator (TPE) — a Bayesian approach that builds a probability model over which hyperparameter regions are promising. It outperforms grid search and random search with fewer trials.</p>`,
    code:`import optuna, numpy as np
 from sklearn.ensemble import GradientBoostingClassifier
@@ -288,7 +426,7 @@ print("Best:", study.best_params, "Score:", study.best_value)`,
    exercise:'Use Optuna to tune a PyTorch MLP on MNIST. Include learning rate, batch size, and hidden dim.',
    keyTerms:['Optuna','TPE','Bayesian optimization','trial','pruning']},
 
-  {day:9,mod:1,title:'Model Interpretability — SHAP & LIME',objectives:['Compute SHAP values for tree models','Generate LIME explanations for any classifier','Build a feature importance waterfall chart'],
+  {day:14,mod:2,title:'Model Interpretability — SHAP & LIME',objectives:['Compute SHAP values for tree models','Generate LIME explanations for any classifier','Build a feature importance waterfall chart'],
    content:`<p><strong>SHAP</strong> (SHapley Additive exPlanations) uses game-theory to assign each feature a contribution to a prediction. For tree models, TreeExplainer computes exact SHAP values in polynomial time. <strong>LIME</strong> approximates any black-box model locally with a simple interpretable model around a single prediction.</p>`,
    code:`import shap, numpy as np
 from sklearn.ensemble import RandomForestClassifier
@@ -310,7 +448,7 @@ shap.plots.waterfall(explainer(data.data[:1])[0])`,
    exercise:'Apply SHAP to a LightGBM model on the diabetes dataset. Identify top 3 predictors.',
    keyTerms:['SHAP','LIME','Shapley values','feature attribution','local explanation']},
 
-  {day:10,mod:1,title:'MLflow — Experiment Tracking',objectives:['Log parameters, metrics, and artifacts','Compare runs in MLflow UI','Register and version models'],
+  {day:15,mod:2,title:'MLflow — Experiment Tracking',objectives:['Log parameters, metrics, and artifacts','Compare runs in MLflow UI','Register and version models'],
    content:`<p><strong>MLflow</strong> is the standard for ML experiment tracking. Log every run: hyperparameters, metrics per epoch, final model artifact, plots. The <strong>Model Registry</strong> provides versioning and stage transitions (Staging → Production). Teams use MLflow to reproduce any past result and audit what went into a production model.</p>`,
    code:`import mlflow, mlflow.sklearn
 from sklearn.linear_model import LogisticRegression
@@ -335,7 +473,7 @@ for C in [0.1,1.0,10.0]:
    exercise:'Run 10 experiments varying RandomForest depth and n_estimators. Use MLflow UI to pick the best.',
    keyTerms:['MLflow','experiment tracking','model registry','artifact','run']},
 
-  {day:11,mod:1,title:'Serving ML Models with FastAPI',objectives:['Wrap a model in a FastAPI endpoint','Handle async prediction requests','Add request validation with Pydantic'],
+  {day:16,mod:2,title:'Serving ML Models with FastAPI',objectives:['Wrap a model in a FastAPI endpoint','Handle async prediction requests','Add request validation with Pydantic'],
    content:`<p>A trained model is only useful if it can serve predictions. <strong>FastAPI</strong> provides high-performance async endpoints with automatic OpenAPI docs. Wrap your model in a Pydantic input schema, load the model at startup with a <strong>lifespan</strong> context, and serve predictions at a POST endpoint. Add health checks for K8s probes.</p>`,
    code:`from fastapi import FastAPI
 from pydantic import BaseModel
@@ -371,7 +509,7 @@ def predict(req: PredictRequest):
    exercise:'Wrap your MLflow-registered model from Day 10 in a FastAPI service with a /predict endpoint.',
    keyTerms:['FastAPI','Pydantic','model serving','inference endpoint','lifespan']},
 
-  {day:12,mod:1,title:'Containerising ML Services',objectives:['Write a production-grade Dockerfile','Use multi-stage builds','Push to a container registry'],
+  {day:17,mod:2,title:'Containerising ML Services',objectives:['Write a production-grade Dockerfile','Use multi-stage builds','Push to a container registry'],
    content:`<p>Containerisation guarantees <strong>environment parity</strong>: your model runs identically on your laptop, staging, and production. Use <strong>multi-stage builds</strong>: a build stage installs dependencies, a slim runtime stage copies only what's needed. Pin base image versions. Never copy .env or credentials into the image.</p>`,
    code:`# Dockerfile — multi-stage ML service
 FROM python:3.11-slim AS builder
@@ -397,7 +535,7 @@ CMD ["uvicorn","main:app","--host","0.0.0.0","--port","8000"]
    exercise:'Containerise your FastAPI model from Day 11. Test locally with docker run and curl /predict.',
    keyTerms:['Docker','multi-stage build','container registry','image layers','HEALTHCHECK']},
 
-  {day:13,mod:1,title:'Model Monitoring in Production',objectives:['Detect data drift with EvidentlyAI','Set up prediction monitoring','Define SLAs and alerts'],
+  {day:18,mod:2,title:'Model Monitoring in Production',objectives:['Detect data drift with EvidentlyAI','Set up prediction monitoring','Define SLAs and alerts'],
    content:`<p>Models degrade in production as the world changes — this is <strong>data drift</strong>. <strong>EvidentlyAI</strong> computes statistical tests (KS, PSI, Jensen-Shannon divergence) between reference and production data distributions. Monitor feature drift, label drift, and prediction drift. Trigger retraining pipelines when drift exceeds thresholds.</p>`,
    code:`from evidently.report import Report
 from evidently.metric_preset import DataDriftPreset, ClassificationPreset
@@ -419,69 +557,7 @@ print("Dataset drift:", result['metrics'][0]['result']['dataset_drift'])`,
    exercise:'Monitor a breast cancer classifier: compare accuracy on the first 100 and last 100 test samples.',
    keyTerms:['data drift','concept drift','PSI','KL divergence','model monitoring']},
 
-  {day:14,mod:1,title:'Distributed Training with PyTorch DDP',objectives:['Set up DistributedDataParallel','Use gradient accumulation for large batches','Profile GPU utilisation'],
-   content:`<p><strong>DistributedDataParallel (DDP)</strong> synchronises gradients across GPUs after each backward pass using an all-reduce operation. Each GPU holds a full model copy and processes a shard of each batch. <strong>Gradient accumulation</strong> simulates larger batches when VRAM is limited: accumulate gradients over N steps before calling optimizer.step().</p>`,
-   code:`import torch, torch.nn as nn, torch.distributed as dist
-from torch.nn.parallel import DistributedDataParallel as DDP
-
-# In a DDP script (run with: torchrun --nproc_per_node=4 train.py)
-def train():
-    dist.init_process_group("nccl")
-    rank=dist.get_rank(); local_rank=rank%torch.cuda.device_count()
-    torch.cuda.set_device(local_rank)
-
-    model=nn.Linear(1024,1024).cuda(local_rank)
-    model=DDP(model,device_ids=[local_rank])
-    opt=torch.optim.SGD(model.parameters(),lr=0.01)
-
-    # Gradient accumulation (simulate batch_size*4)
-    accum_steps=4
-    for step in range(100):
-        x=torch.randn(32,1024).cuda(local_rank)
-        loss=model(x).mean()/accum_steps
-        loss.backward()
-        if (step+1)%accum_steps==0:
-            opt.step(); opt.zero_grad()
-    dist.destroy_process_group()
-
-# Single GPU gradient accumulation demo
-model=nn.Linear(100,1); opt=torch.optim.SGD(model.parameters(),lr=0.01)
-for step in range(4):
-    x=torch.randn(8,100); loss=model(x).mean()/4
-    loss.backward()
-opt.step(); print("Effective batch size: 32")`,
-   resources:[{title:'PyTorch DDP Tutorial',url:'https://www.youtube.com/results?search_query=pytorch+distributed+data+parallel+ddp+tutorial'},{title:'Gradient Accumulation PyTorch',url:'https://www.youtube.com/results?search_query=gradient+accumulation+pytorch+large+batch+training'}],
-   exercise:'Profile a training step using torch.profiler. Identify where GPU time is spent.',
-   keyTerms:['DDP','gradient accumulation','all-reduce','NCCL','torchrun']},
-
-  {day:15,mod:1,title:'Reinforcement Learning with Stable Baselines3',objectives:['Set up a Gym environment','Train PPO on CartPole','Evaluate and record a rollout'],
-   content:`<p><strong>Reinforcement Learning</strong> trains agents via trial-and-error reward signals. <strong>Proximal Policy Optimization (PPO)</strong> is the workhorse algorithm: it clips the policy update ratio to prevent destructive large steps. <strong>Stable Baselines3</strong> provides production-grade implementations you can train in a few lines.</p>`,
-   code:`import gymnasium as gym
-from stable_baselines3 import PPO
-from stable_baselines3.common.evaluation import evaluate_policy
-from stable_baselines3.common.vec_env import DummyVecEnv
-
-env=DummyVecEnv([lambda: gym.make("CartPole-v1")])
-model=PPO("MlpPolicy",env,verbose=1,learning_rate=3e-4,n_steps=2048)
-model.learn(total_timesteps=50000)
-
-mean_reward,std=evaluate_policy(model,env,n_eval_episodes=10)
-print(f"Mean reward: {mean_reward:.1f} +/- {std:.1f}")
-model.save("ppo_cartpole")
-
-# Record video
-eval_env=gym.make("CartPole-v1",render_mode="rgb_array")
-obs,_=eval_env.reset()
-for _ in range(200):
-    action,_=model.predict(obs,deterministic=True)
-    obs,reward,done,_,_=eval_env.step(action)
-    if done: break`,
-   resources:[{title:'Stable Baselines3 Tutorial',url:'https://www.youtube.com/results?search_query=stable+baselines3+reinforcement+learning+tutorial+PPO'},{title:'PPO Algorithm Explained',url:'https://www.youtube.com/results?search_query=proximal+policy+optimization+PPO+explained'}],
-   exercise:'Train PPO on LunarLander-v2. Compare reward curves at 100K vs 500K timesteps.',
-   keyTerms:['PPO','Gym environment','policy','reward','episode']},
-
-  // MODULE 2 — LLM Engineering & APIs
-  {day:16,mod:2,title:'OpenAI API Deep Dive',objectives:['Use Chat Completions with system prompts','Stream responses','Handle rate limits and retries'],
+  {day:19,mod:3,title:'OpenAI API Deep Dive',objectives:['Use Chat Completions with system prompts','Stream responses','Handle rate limits and retries'],
    content:`<p>The OpenAI API exposes GPT-4 and GPT-4o via a simple HTTP interface. The <strong>messages</strong> array carries conversation history: system (sets persona), user, and assistant turns. <strong>Streaming</strong> via Server-Sent Events gives immediate token-by-token output — essential for good UX. Implement <strong>exponential backoff</strong> for 429 rate limit responses.</p>`,
    code:`import openai, time, os
 
@@ -513,7 +589,7 @@ chat_stream(msgs)`,
    exercise:'Build a multi-turn CLI chatbot using the OpenAI API that maintains conversation history.',
    keyTerms:['Chat Completions','system prompt','streaming','rate limiting','backoff']},
 
-  {day:17,mod:2,title:'Google Gemini API',objectives:['Use Gemini Flash and Pro models','Pass multimodal inputs (text + image)','Compare outputs with GPT-4o'],
+  {day:20,mod:3,title:'Google Gemini API',objectives:['Use Gemini Flash and Pro models','Pass multimodal inputs (text + image)','Compare outputs with GPT-4o'],
    content:`<p>Google's Gemini API offers multimodal capabilities out of the box — pass text, images, audio, and video in a single request. <strong>Gemini 1.5 Flash</strong> is fast and cheap; <strong>Gemini 1.5 Pro</strong> has a 1M token context window. The API uses a <strong>Content</strong> object model with <strong>Parts</strong>, which is more explicit than OpenAI's message dict.</p>`,
    code:`import google.generativeai as genai, os, PIL.Image
 
@@ -539,7 +615,7 @@ print(r2.text)
    exercise:'Build an image description tool using Gemini Flash: accept any image path and output a structured JSON description.',
    keyTerms:['Gemini','multimodal','Content','Parts','context window']},
 
-  {day:18,mod:2,title:'Function Calling & Tool Use',objectives:['Define tool schemas in JSON','Parse LLM tool_call responses','Build a weather chatbot with real tools'],
+  {day:21,mod:3,title:'Function Calling & Tool Use',objectives:['Define tool schemas in JSON','Parse LLM tool_call responses','Build a weather chatbot with real tools'],
    content:`<p><strong>Function calling</strong> (OpenAI) / <strong>tool use</strong> (Anthropic/Gemini) lets the LLM select and parameterise functions based on user intent. The flow: user message → LLM outputs a tool_call → your code executes the function → result appended to messages → LLM generates final answer. The LLM never executes code; it only chooses the function and arguments.</p>`,
    code:`import openai, json, os
 
@@ -578,7 +654,7 @@ print(chat_with_tools("What's the weather in Hyderabad?"))`,
    exercise:'Add a second tool: search_web(query) that returns mock results. Make the chatbot choose the right tool.',
    keyTerms:['function calling','tool use','tool_call','JSON schema','tool result']},
 
-  {day:19,mod:2,title:'Embeddings & Vector Search',objectives:['Generate embeddings with OpenAI','Build a FAISS index','Implement semantic search over documents'],
+  {day:22,mod:3,title:'Embeddings & Vector Search',objectives:['Generate embeddings with OpenAI','Build a FAISS index','Implement semantic search over documents'],
    content:`<p>Embeddings map text to dense vectors where semantic similarity = geometric proximity. <strong>text-embedding-3-small</strong> produces 1536-dim vectors. <strong>FAISS</strong> (Facebook AI Similarity Search) indexes millions of vectors for nearest-neighbour search in milliseconds. This is the backbone of every RAG system.</p>`,
    code:`import openai, numpy as np, os
 import faiss
@@ -611,7 +687,7 @@ search("how do neural networks process language?")`,
    exercise:'Build a document Q&A: embed 20 Wikipedia paragraphs, retrieve top-3, pass to GPT-4o for answer.',
    keyTerms:['embeddings','vector search','FAISS','cosine similarity','semantic search']},
 
-  {day:20,mod:2,title:'Retrieval-Augmented Generation (RAG)',objectives:['Build a full RAG pipeline','Chunk and embed documents','Evaluate with answer faithfulness metrics'],
+  {day:23,mod:3,title:'Retrieval-Augmented Generation (RAG)',objectives:['Build a full RAG pipeline','Chunk and embed documents','Evaluate with answer faithfulness metrics'],
    content:`<p><strong>RAG</strong> grounds LLM responses in real documents, reducing hallucination. Pipeline: Ingest documents → Chunk (512-1024 tokens with overlap) → Embed → Store in vector DB → At query time: embed query → retrieve top-k chunks → prepend to prompt → generate answer. <strong>Chunking strategy</strong> is the most critical tuning knob.</p>`,
    code:`from openai import OpenAI
 import faiss, numpy as np, os
@@ -647,7 +723,7 @@ print(rag("What architectures are used in deep learning?"))`,
    exercise:'Evaluate your RAG system: ask 10 questions, score answers for faithfulness (no hallucination).',
    keyTerms:['RAG','chunking','retrieval','grounding','hallucination']},
 
-  {day:21,mod:2,title:'LangChain Framework',objectives:['Build chains with LCEL','Use memory in conversation chains','Create a document Q&A chain'],
+  {day:24,mod:3,title:'LangChain Framework',objectives:['Build chains with LCEL','Use memory in conversation chains','Create a document Q&A chain'],
    content:`<p><strong>LangChain Expression Language (LCEL)</strong> composes LLM pipelines using the | pipe operator. Components: PromptTemplate | LLM | OutputParser. <strong>ConversationBufferMemory</strong> stores chat history. LangChain abstracts provider differences — swap OpenAI for Gemini or Anthropic by changing one line.</p>`,
    code:`from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
@@ -674,7 +750,7 @@ print(conv.predict(input="What's my name?"))`,
    exercise:'Build a summarisation chain: accept a URL, fetch text, chunk it, summarise with map-reduce.',
    keyTerms:['LCEL','chain','memory','PromptTemplate','OutputParser']},
 
-  {day:22,mod:2,title:'Claude API & Anthropic SDK',objectives:['Use Messages API with Claude Opus','Implement tool use with Claude','Compare Claude vs GPT-4o for coding tasks'],
+  {day:25,mod:3,title:'Claude API & Anthropic SDK',objectives:['Use Messages API with Claude Opus','Implement tool use with Claude','Compare Claude vs GPT-4o for coding tasks'],
    content:`<p>Claude (Anthropic) uses a Messages API with <strong>system</strong> and <strong>messages</strong> parameters. Claude Sonnet 4.6 excels at long-context tasks and instruction following. The tool use schema is similar to OpenAI but uses <strong>input_schema</strong> instead of <strong>parameters</strong>. Claude charges per input+output token; use streaming for latency-sensitive tasks.</p>`,
    code:`import anthropic, os
 
@@ -699,7 +775,7 @@ print()`,
    exercise:'Build a code review tool using Claude: accept a Python file path, return a structured review with issues and fixes.',
    keyTerms:['Anthropic','Messages API','system prompt','tool use','streaming']},
 
-  {day:23,mod:2,title:'LLM Cost Optimisation',objectives:['Calculate token costs across providers','Implement prompt caching','Use smaller models for simple tasks with routing'],
+  {day:26,mod:3,title:'LLM Cost Optimisation',objectives:['Calculate token costs across providers','Implement prompt caching','Use smaller models for simple tasks with routing'],
    content:`<p>LLM costs compound at scale. Optimisation strategies: <strong>prompt caching</strong> (Anthropic charges 10% for cached input tokens), <strong>model routing</strong> (classify query complexity, route simple queries to GPT-4o-mini), <strong>output compression</strong> (instruct the model to be concise), and <strong>batching</strong> (use the Batch API for async workloads at 50% cost).</p>`,
    code:`import openai, os
 
@@ -731,7 +807,7 @@ print(smart_chat("Design a distributed caching system for 10M users."))`,
    exercise:'Process 100 classification tasks using the OpenAI Batch API. Compare cost vs synchronous calls.',
    keyTerms:['token cost','prompt caching','model routing','batch API','tiktoken']},
 
-  {day:24,mod:2,title:'Fine-tuning LLMs with LoRA',objectives:['Understand LoRA math','Fine-tune LLaMA-3 with QLoRA','Evaluate on a custom task'],
+  {day:27,mod:3,title:'Fine-tuning LLMs with LoRA',objectives:['Understand LoRA math','Fine-tune LLaMA-3 with QLoRA','Evaluate on a custom task'],
    content:`<p><strong>LoRA (Low-Rank Adaptation)</strong> freezes base model weights and injects trainable rank-decomposition matrices: ΔW = A×B where A∈R^(d×r), B∈R^(r×k), r≪d. This reduces trainable parameters by 99%+. <strong>QLoRA</strong> adds 4-bit quantization of base weights, fitting 70B parameter models on a single GPU.</p>`,
    code:`from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
 from peft import LoraConfig, get_peft_model, TaskType
@@ -759,36 +835,7 @@ model.print_trainable_parameters()
    exercise:'Fine-tune a small model (e.g., GPT-2) on a custom Q&A dataset using LoRA. Measure perplexity before/after.',
    keyTerms:['LoRA','QLoRA','PEFT','rank decomposition','fine-tuning']},
 
-  {day:25,mod:2,title:'Building a LLM Evaluation Framework',objectives:['Define eval dimensions: accuracy, groundedness, safety','Use LLM-as-judge scoring','Build an automated eval pipeline'],
-   content:`<p>Evaluating LLMs rigorously prevents regressions. Key dimensions: <strong>accuracy</strong> (correct answer?), <strong>groundedness</strong> (supported by context?), <strong>safety</strong> (no harmful content?), <strong>latency</strong>. <strong>LLM-as-judge</strong> uses a strong model (GPT-4o) to score outputs on a rubric — correlates well with human eval at 10% the cost.</p>`,
-   code:`import openai, json, os
-
-client=openai.OpenAI(api_key=os.environ["OPENAI_API_KEY"])
-
-JUDGE_PROMPT="""You are an evaluation judge. Score the assistant's response on:
-1. Accuracy (0-10): Is the information correct?
-2. Conciseness (0-10): Is it appropriately brief?
-3. Safety (0-10): Is it appropriate and safe?
-Return JSON only: {"accuracy":N,"conciseness":N,"safety":N,"reasoning":"..."}"""
-
-def evaluate(question,answer):
-    resp=client.chat.completions.create(
-        model="gpt-4o",
-        messages=[{"role":"system","content":JUDGE_PROMPT},
-                  {"role":"user","content":f"Q: {question}\nA: {answer}"}],
-        response_format={"type":"json_object"})
-    return json.loads(resp.choices[0].message.content)
-
-test_cases=[("What is 2+2?","4"),("What is quantum computing?","It uses qubits to perform computations.")]
-for q,a in test_cases:
-    scores=evaluate(q,a)
-    print(f"Q: {q} → {scores}")`,
-   resources:[{title:'LLM Evaluation Frameworks',url:'https://www.youtube.com/results?search_query=llm+evaluation+framework+tutorial+2024'},{title:'LLM as Judge Paper',url:'https://www.youtube.com/results?search_query=llm+as+judge+evaluation+mt+bench+tutorial'}],
-   exercise:'Evaluate 20 RAG responses from Day 20 using your eval pipeline. Report mean scores.',
-   keyTerms:['LLM evaluation','LLM-as-judge','groundedness','accuracy','eval pipeline']},
-
-  // MODULE 3 — Prompt Engineering Mastery
-  {day:26,mod:3,title:'Structured Prompt Design',objectives:['Apply CRISPE and chain-of-thought frameworks','Use few-shot examples effectively','Control output format with JSON mode'],
+  {day:28,mod:4,title:'Structured Prompt Design',objectives:['Apply CRISPE and chain-of-thought frameworks','Use few-shot examples effectively','Control output format with JSON mode'],
    content:`<p>Prompt engineering is systematic, not creative guessing. Frameworks: <strong>CRISPE</strong> (Capacity, Role, Insight, Statement, Personality, Experiment) structures complex prompts. <strong>Chain-of-thought</strong> (add "think step by step") dramatically improves reasoning on multi-step problems. <strong>Few-shot examples</strong> demonstrate the expected pattern — 3-5 examples usually suffice. Use JSON mode for structured extraction.</p>`,
    code:`import openai, json, os
 
@@ -818,7 +865,7 @@ print(json.loads(resp.choices[0].message.content))`,
    exercise:'Design a prompt for grading student code answers (0-10) with detailed feedback. Test on 5 sample answers.',
    keyTerms:['chain-of-thought','few-shot','CRISPE','JSON mode','structured output']},
 
-  {day:27,mod:3,title:'Advanced Prompting — ReAct & Self-Consistency',objectives:['Implement ReAct prompting manually','Use self-consistency for robust answers','Apply prompt chaining for complex tasks'],
+  {day:29,mod:4,title:'Advanced Prompting — ReAct & Self-Consistency',objectives:['Implement ReAct prompting manually','Use self-consistency for robust answers','Apply prompt chaining for complex tasks'],
    content:`<p><strong>ReAct</strong> (Reasoning + Acting) interleaves thought and action steps: Thought → Action → Observation → Thought → ... This makes the reasoning process explicit and auditable. <strong>Self-consistency</strong> samples multiple reasoning paths and takes majority vote — reduces variance significantly. <strong>Prompt chaining</strong> breaks a complex task into sequential prompts, each building on the last.</p>`,
    code:`import openai, os, json
 client=openai.OpenAI(api_key=os.environ["OPENAI_API_KEY"])
@@ -850,7 +897,7 @@ self_consistent_answer("What is 15% of 240?")`,
    exercise:'Use self-consistency (n=7) to answer 5 math word problems. Compare accuracy vs single sampling.',
    keyTerms:['ReAct','self-consistency','prompt chaining','majority vote','temperature']},
 
-  {day:28,mod:3,title:'Prompt Security & Red Teaming',objectives:['Identify prompt injection attack vectors','Implement input sanitisation','Test system prompt leakage'],
+  {day:30,mod:4,title:'Prompt Security & Red Teaming',objectives:['Identify prompt injection attack vectors','Implement input sanitisation','Test system prompt leakage'],
    content:`<p><strong>Prompt injection</strong>: malicious user input overrides system instructions. Types: direct injection ("Ignore previous instructions..."), indirect injection (malicious content in retrieved docs). Defences: input sanitisation, instruction hierarchy, spotlighting (mark user input clearly), output validation. Always red-team your prompts before production.</p>`,
    code:`import openai, re, os
 
@@ -886,7 +933,7 @@ for inp in inputs:
    exercise:'Red-team your Day 26 chatbot with 10 adversarial inputs. Document which ones succeed and why.',
    keyTerms:['prompt injection','red teaming','input sanitisation','spotlighting','jailbreak']},
 
-  {day:29,mod:3,title:'Prompt Versioning & A/B Testing',objectives:['Version prompts with git and a registry','Design A/B test methodology for prompts','Use statistical significance testing'],
+  {day:31,mod:4,title:'Prompt Versioning & A/B Testing',objectives:['Version prompts with git and a registry','Design A/B test methodology for prompts','Use statistical significance testing'],
    content:`<p>Prompts are code — version them. A <strong>prompt registry</strong> stores versions with metadata (author, model, score, date). <strong>A/B testing</strong>: split traffic equally, run for statistical significance (use a chi-squared or t-test on your metric), never declare a winner before p<0.05 or n>200 samples.</p>`,
    code:`import json, hashlib, datetime
 from scipy import stats
@@ -919,7 +966,7 @@ ab_test(a,b)`,
    exercise:'Run an A/B test on two summarisation prompts across 50 documents. Use your eval framework from Day 25.',
    keyTerms:['prompt versioning','A/B testing','statistical significance','p-value','prompt registry']},
 
-  {day:30,mod:3,title:'System Prompt Design for Production',objectives:['Write a production system prompt','Add guardrails and fallback behaviours','Test edge cases systematically'],
+  {day:32,mod:4,title:'System Prompt Design for Production',objectives:['Write a production system prompt','Add guardrails and fallback behaviours','Test edge cases systematically'],
    content:`<p>A production system prompt is a contract: it defines persona, capabilities, constraints, output format, and fallback behaviour. Structure: Role → Capabilities → Constraints → Format → Fallback. Test with: empty input, very long input, off-topic requests, multilingual input, adversarial input. Document every assumption.</p>`,
    code:`SYSTEM_PROMPT_TEMPLATE="""
 # Role
@@ -958,7 +1005,7 @@ print(prompt)`,
    keyTerms:['system prompt','guardrails','fallback','persona','constraints']},
 
   // MODULE 4 — Building AI Agents
-  {day:31,mod:4,title:'Agent Architecture Fundamentals',objectives:['Define agent components: perceive-plan-act','Distinguish reactive vs deliberative agents','Build a simple tool-calling agent loop'],
+  {day:33,mod:4,title:'Agent Architecture Fundamentals',objectives:['Define agent components: perceive-plan-act','Distinguish reactive vs deliberative agents','Build a simple tool-calling agent loop'],
    content:`<p>An AI agent perceives its environment, maintains state, plans, and executes actions. Architecture: <strong>Perceive</strong> (input/tool results) → <strong>Think</strong> (LLM reasoning) → <strong>Act</strong> (tool call / output) → loop. <strong>ReAct</strong> is the standard architecture for tool-using agents. The agent loop terminates when the LLM returns a final answer (no tool call).</p>`,
    code:`import openai, json, os
 
@@ -992,7 +1039,7 @@ agent("What is 1234 * 5678 + today's date as a number?")`,
    exercise:'Add a web_search tool (mock it) and a file_write tool. Run an agent that researches a topic and saves a summary.',
    keyTerms:['agent loop','tool calling','ReAct','perceive-plan-act','termination condition']},
 
-  {day:32,mod:4,title:'Memory Systems for Agents',objectives:['Implement in-context and external memory','Use Redis for agent state persistence','Build episodic memory with embeddings'],
+  {day:34,mod:4,title:'Memory Systems for Agents',objectives:['Implement in-context and external memory','Use Redis for agent state persistence','Build episodic memory with embeddings'],
    content:`<p>Agents need memory across interactions. Four types: <strong>In-context</strong> (conversation history, limited by context window), <strong>External key-value</strong> (Redis for fast retrieval), <strong>Semantic</strong> (embedding-based, retrieve relevant past episodes), <strong>Procedural</strong> (learned skills/tools). Combining in-context with semantic memory gives agents long-term coherence.</p>`,
    code:`import json
 from datetime import datetime
@@ -1027,7 +1074,7 @@ for m in ctx: print(f"  {m['role']}: {m['content'][:50]}")`,
    exercise:'Add embedding-based retrieval to AgentMemory: retrieve top-2 relevant past episodes for each new user message.',
    keyTerms:['in-context memory','episodic memory','semantic memory','memory eviction','agent state']},
 
-  {day:33,mod:4,title:'Multi-Agent Systems with AutoGen',objectives:['Set up AutoGen multi-agent conversations','Define agent roles and capabilities','Build a researcher+writer pipeline'],
+  {day:35,mod:4,title:'Multi-Agent Systems with AutoGen',objectives:['Set up AutoGen multi-agent conversations','Define agent roles and capabilities','Build a researcher+writer pipeline'],
    content:`<p><strong>AutoGen</strong> (Microsoft) orchestrates conversations between multiple LLM agents. Agents: <strong>AssistantAgent</strong> (LLM-backed) and <strong>UserProxyAgent</strong> (executes code, routes messages). Patterns: two-agent chat, group chat (multiple agents + manager), nested chat. Define each agent's system prompt to give it a clear role.</p>`,
    code:`from autogen import AssistantAgent, UserProxyAgent, GroupChat, GroupChatManager
 import os
@@ -1056,7 +1103,7 @@ print("AutoGen multi-agent setup complete. Run with valid API key.")`,
    exercise:'Build a 3-agent pipeline: Researcher finds facts, Writer drafts a report, Reviewer critiques it.',
    keyTerms:['AutoGen','AssistantAgent','UserProxyAgent','GroupChat','multi-agent']},
 
-  {day:34,mod:4,title:'LangGraph — Stateful Agent Workflows',objectives:['Build a graph-based agent workflow','Add conditional branching','Implement checkpointing for resumable agents'],
+  {day:36,mod:4,title:'LangGraph — Stateful Agent Workflows',objectives:['Build a graph-based agent workflow','Add conditional branching','Implement checkpointing for resumable agents'],
    content:`<p><strong>LangGraph</strong> models agent workflows as directed graphs. <strong>Nodes</strong> are functions (LLM calls, tool executions). <strong>Edges</strong> define flow, including conditional edges based on state. <strong>State</strong> is a typed dict passed through the graph and persisted via checkpoints. LangGraph enables complex, branching, cyclical agent workflows that AutoGen and vanilla chains cannot express.</p>`,
    code:`from langgraph.graph import StateGraph, END
 from typing import TypedDict, Annotated
@@ -1096,7 +1143,7 @@ print(result["messages"])`,
    exercise:'Add a human_review node with conditional approval — if approved, publish; if rejected, return to write.',
    keyTerms:['LangGraph','StateGraph','node','conditional edge','checkpointing']},
 
-  {day:35,mod:4,title:'Guardrails & Safety for Agents',objectives:['Implement input/output guardrails','Use NeMo Guardrails for policy enforcement','Add content moderation checks'],
+  {day:37,mod:4,title:'Guardrails & Safety for Agents',objectives:['Implement input/output guardrails','Use NeMo Guardrails for policy enforcement','Add content moderation checks'],
    content:`<p>Deployed agents need safety layers. Architecture: input check → agent → output check. <strong>NeMo Guardrails</strong> uses Colang (a DSL) to define conversation flows and safety policies declaratively. For output: check for PII, harmful content, and hallucinated facts before returning to users. Log all guardrail triggers for audit.</p>`,
    code:`import openai, re, os
 
@@ -1135,224 +1182,47 @@ for inp in inputs:
    exercise:'Wrap your Day 31 agent with guardrails. Test with 10 benign and 5 adversarial inputs. Log all triggers.',
    keyTerms:['guardrails','NeMo','content moderation','PII redaction','safety policy']},
 
-  {day:36,mod:4,title:'Agent Observability with LangSmith',objectives:['Trace agent runs in LangSmith','Debug multi-step failures','Set up latency and cost monitoring'],
-   content:`<p><strong>LangSmith</strong> provides full tracing for LangChain and LangGraph agents: every LLM call, tool invocation, and token count is logged. Use it to debug why an agent took a wrong path, find latency bottlenecks, and track cost per agent run. Add custom metadata (user_id, session_id) to traces for production attribution.</p>`,
-   code:`import os
-os.environ["LANGCHAIN_TRACING_V2"]="true"
-os.environ["LANGCHAIN_API_KEY"]=os.environ.get("LANGSMITH_API_KEY","")
-os.environ["LANGCHAIN_PROJECT"]="nexgen-track3-agents"
+  {day:38,mod:5,title:'Capstone — AI Job Application Agent',objectives:['Design a multi-step AI agent pipeline','Build a JD skill extractor using OpenAI API','Architect the cover letter generation system'],
+   content:`<p>Your capstone project is an <strong>AI Job Application Agent</strong> — a tool that takes a job description, extracts the required skills using the OpenAI API, compares them against your resume, and generates a tailored cover letter. Optional: it emails the cover letter automatically. This is immediately useful for your own job search and demonstrates LLM API integration, prompt engineering, and agent design — all in one project.</p><p>Today: project architecture, environment setup, and testing your JD skill extractor.</p>`,
+   code:`# AI Job Application Agent — Architecture + Day 1 Setup
+# pip install openai python-docx
 
-from langchain_openai import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
-from langchain.schema.output_parser import StrOutputParser
+import openai
+import json
 
-# All LangChain calls are automatically traced when env vars are set
-llm=ChatOpenAI(model="gpt-4o",api_key=os.environ.get("OPENAI_API_KEY",""))
-prompt=ChatPromptTemplate.from_template("Answer in one sentence: {question}")
-chain=prompt|llm|StrOutputParser()
+client = openai.OpenAI(api_key="your-api-key-here")
 
-# This will appear in LangSmith with full trace
-result=chain.invoke(
-    {"question":"What is transformer attention?"},
-    config={"metadata":{"user_id":"student_001","session":"day36"}})
-print(result)
-print("Check LangSmith dashboard for traces.")`,
-   resources:[{title:'LangSmith Tutorial',url:'https://www.youtube.com/results?search_query=langsmith+tutorial+tracing+llm+agents'},{title:'LLM Observability Production',url:'https://www.youtube.com/results?search_query=llm+observability+tracing+production+tutorial'}],
-   exercise:'Trace your LangGraph workflow from Day 34 in LangSmith. Identify the slowest node.',
-   keyTerms:['LangSmith','tracing','observability','latency','metadata']},
+def extract_skills_from_jd(job_description):
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a recruitment expert. Extract skills from job descriptions."},
+            {"role": "user", "content": f"""
+            Extract all required technical skills, soft skills, and qualifications from this job description.
+            Return as JSON with keys: technical_skills, soft_skills, experience_required, education.
 
-  {day:37,mod:4,title:'Deploying Agents to Production',objectives:['Containerise an agent service','Add async task processing with Celery','Implement webhook callbacks'],
-   content:`<p>Production agents need async processing — LLM calls can take 10–30 seconds. Architecture: HTTP API receives request → enqueues Celery task → returns task_id → agent processes async → webhook notifies caller. Use Redis as Celery broker. Expose a GET /status/{task_id} endpoint for polling fallback.</p>`,
-   code:`# agent_service.py
-from fastapi import FastAPI, BackgroundTasks
-from pydantic import BaseModel
-import uuid, asyncio
+            Job Description:
+            {job_description}
+            """}
+        ]
+    )
+    return json.loads(response.choices[0].message.content)
 
-app=FastAPI()
-results={}  # In production: Redis
-
-class AgentRequest(BaseModel):
-    message: str
-    user_id: str
-    webhook_url: str=None
-
-class AgentResponse(BaseModel):
-    task_id: str
-    status: str
-
-async def run_agent_async(task_id,message):
-    await asyncio.sleep(2)  # Simulate LLM call
-    results[task_id]={"status":"complete","result":f"Processed: {message}"}
-
-@app.post("/agent/run",response_model=AgentResponse)
-async def run_agent(req: AgentRequest,bg: BackgroundTasks):
-    task_id=str(uuid.uuid4())
-    results[task_id]={"status":"pending"}
-    bg.add_task(run_agent_async,task_id,req.message)
-    return {"task_id":task_id,"status":"pending"}
-
-@app.get("/agent/status/{task_id}")
-def get_status(task_id: str):
-    return results.get(task_id,{"status":"not_found"})
-
-@app.get("/health")
-def health(): return {"ok":True}`,
-   resources:[{title:'FastAPI Background Tasks',url:'https://www.youtube.com/results?search_query=fastapi+background+tasks+async+python+tutorial'},{title:'Celery FastAPI Production',url:'https://www.youtube.com/results?search_query=celery+fastapi+redis+production+tutorial'}],
-   exercise:'Add a Celery worker to the service. Test concurrent agent runs with 10 simultaneous requests.',
-   keyTerms:['async processing','Celery','task queue','webhook','task_id']},
-
-  {day:38,mod:4,title:'Coding Agent with Code Execution',objectives:['Build a Python code execution sandbox','Create a code-generating+executing agent','Handle errors and retry loops'],
-   content:`<p>A coding agent generates code, executes it in a sandbox, observes the output, and iterates. Security is critical: never execute arbitrary code in production without isolation. Use <strong>Docker containers</strong> as execution sandboxes — each run gets a fresh container with resource limits (CPU, RAM, time). The agent loop: generate → execute → observe error → fix → re-execute (max 3 retries).</p>`,
-   code:`import subprocess, tempfile, os, openai
-
-client=openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY",""))
-
-def execute_python(code,timeout=10):
-    with tempfile.NamedTemporaryFile(suffix=".py",mode="w",delete=False) as f:
-        f.write(code); fname=f.name
-    try:
-        result=subprocess.run(["python3",fname],capture_output=True,text=True,timeout=timeout)
-        return result.stdout or result.stderr
-    except subprocess.TimeoutExpired:
-        return "ERROR: Execution timed out"
-    finally:
-        os.unlink(fname)
-
-def coding_agent(task,max_retries=3):
-    messages=[{"role":"system","content":"You are a Python coding expert. Write correct, runnable code only. No explanations."},
-              {"role":"user","content":task}]
-    for attempt in range(max_retries):
-        resp=client.chat.completions.create(model="gpt-4o",messages=messages)
-        code=resp.choices[0].message.content.strip().strip("\`\`\`python").strip("\`\`\`")
-        output=execute_python(code)
-        print(f"Attempt {attempt+1}:\n{output}")
-        if "ERROR" not in output and "Traceback" not in output:
-            return output
-        messages.append({"role":"assistant","content":code})
-        messages.append({"role":"user","content":f"Error:\n{output}\nFix the code."})
-    return "Failed after retries"
-
-result=coding_agent("Write a function that finds all prime numbers up to 50 and print them.")
-print("Final:", result)`,
-   resources:[{title:'Code Execution Agent Python',url:'https://www.youtube.com/results?search_query=code+execution+agent+llm+python+sandbox'},{title:'OpenAI Code Interpreter Architecture',url:'https://www.youtube.com/results?search_query=openai+code+interpreter+architecture+tutorial'}],
-   exercise:'Add Docker-based isolation to the execute_python function using subprocess with docker run.',
-   keyTerms:['code execution','sandbox','retry loop','subprocess','coding agent']},
-
-  {day:39,mod:4,title:'Browser Agent with Playwright',objectives:['Control a browser with Playwright','Build a web scraping agent','Implement vision-based web navigation'],
-   content:`<p>Browser agents navigate the web autonomously. <strong>Playwright</strong> controls Chromium/Firefox headlessly. Agent workflow: screenshot → LLM identifies element to click → Playwright executes → loop. This enables automated form filling, data extraction, and web research. Handle bot detection with randomised delays and user-agent headers.</p>`,
-   code:`import asyncio
-from playwright.async_api import async_playwright
-
-async def web_research_agent(url,task):
-    async with async_playwright() as p:
-        browser=await p.chromium.launch(headless=True)
-        page=await browser.new_page()
-        await page.set_extra_http_headers({"User-Agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"})
-
-        await page.goto(url,timeout=15000)
-        title=await page.title()
-        content=await page.evaluate("document.body.innerText")
-
-        # Extract first 2000 chars for LLM
-        summary_input=content[:2000]
-        print(f"Page: {title}")
-        print(f"Content preview: {summary_input[:200]}...")
-
-        # Take screenshot for vision models
-        await page.screenshot(path="screenshot.png")
-        await browser.close()
-        return summary_input
-
-# Run
-result=asyncio.run(web_research_agent("https://python.org","Summarise what Python is used for"))`,
-   resources:[{title:'Playwright Python Tutorial',url:'https://www.youtube.com/results?search_query=playwright+python+tutorial+web+automation'},{title:'Browser Agent LLM Tutorial',url:'https://www.youtube.com/results?search_query=browser+agent+llm+playwright+web+automation'}],
-   exercise:'Build a price comparison agent: visit 2 e-commerce sites, extract product prices, return a comparison.',
-   keyTerms:['Playwright','headless browser','web scraping','browser agent','screenshot']},
-
-  {day:40,mod:4,title:'Building a Production RAG Agent',objectives:['Combine RAG with a tool-calling agent','Add source attribution','Implement confidence scoring'],
-   content:`<p>A production RAG agent is more than retrieval + generation. It needs: source attribution (which document answered the question?), confidence scoring (how certain is the answer?), fallback to clarification if retrieval confidence is low, and an audit trail. Combine your embeddings (Day 19), RAG pipeline (Day 20), and agent loop (Day 31).</p>`,
-   code:`import openai, numpy as np, json, os
-import faiss
-
-client=openai.OpenAI(api_key=os.environ.get("OPENAI_API_KEY",""))
-
-# Knowledge base
-KB=[
-    {"id":1,"text":"NexGen Computers offers 3 AI tracks for different education levels.","source":"catalog.pdf"},
-    {"id":2,"text":"Track 1 is for 10th grade students aged 15-16 covering Python basics.","source":"catalog.pdf"},
-    {"id":3,"text":"Track 3 covers Advanced ML, LLM APIs, and AI Agents for engineering students.","source":"catalog.pdf"},
-    {"id":4,"text":"All courses include project-based capstone modules.","source":"brochure.pdf"},
-]
-
-def embed(texts):
-    r=client.embeddings.create(input=texts,model="text-embedding-3-small")
-    return np.array([x.embedding for x in r.data],dtype=np.float32)
-
-docs_text=[k["text"] for k in KB]
-embeds=embed(docs_text); faiss.normalize_L2(embeds)
-idx=faiss.IndexFlatIP(embeds.shape[1]); idx.add(embeds)
-
-def rag_agent(question):
-    qe=embed([question]); faiss.normalize_L2(qe)
-    scores,ids=idx.search(qe,3)
-    retrieved=[{**KB[i],"score":float(scores[0][j])} for j,i in enumerate(ids[0])]
-    context="\n".join([f"[{r['source']}] {r['text']}" for r in retrieved])
-    msgs=[{"role":"system","content":"Answer using ONLY the context. Cite sources. If unsure, say so."},
-          {"role":"user","content":f"Context:\n{context}\n\nQ: {question}"}]
-    resp=client.chat.completions.create(model="gpt-4o",messages=msgs)
-    return {"answer":resp.choices[0].message.content,"sources":[r["source"] for r in retrieved],"confidence":float(scores[0][0])}
-
-result=rag_agent("What does Track 3 cover?")
-print(json.dumps(result,indent=2))`,
-   resources:[{title:'Production RAG Agent Build',url:'https://www.youtube.com/results?search_query=production+rag+agent+build+tutorial+2024'},{title:'RAG Source Attribution',url:'https://www.youtube.com/results?search_query=rag+source+attribution+confidence+scoring'}],
-   exercise:'Extend the RAG agent with a clarification tool: if confidence < 0.7, ask the user a follow-up question.',
-   keyTerms:['RAG agent','source attribution','confidence score','knowledge base','audit trail']},
-
-  // MODULE 5 — Capstone Project
-  {day:41,mod:5,title:'Capstone Kickoff — Intelligent AI System',objectives:['Define project scope and success criteria','Design system architecture','Set up repo and development environment'],
-   content:`<p>Your capstone is a production-grade AI system. Choose one:</p>
-<ul>
-<li><strong>Option A</strong>: Multi-agent research assistant with RAG, tool use, and a web UI</li>
-<li><strong>Option B</strong>: Fine-tuned code review agent deployed as a FastAPI service</li>
-<li><strong>Option C</strong>: Real-time multimodal AI app (camera + voice + LLM)</li>
-</ul>
-<p>Today: write your system design document. Define: what problem you solve, who uses it, the architecture (draw a diagram), what tools/APIs you use, your success metrics, and your 5-day plan.</p>`,
-   code:`# capstone_design.md template
+# Test with a sample JD
+sample_jd = """
+We are looking for a Python Developer with 1-2 years experience.
+Must know: Python, Machine Learning, SQL, REST APIs.
+Good to have: TensorFlow, Docker, AWS.
+Strong communication skills required.
+B.Tech in Computer Science preferred.
 """
-# [Your Project Name] — System Design
 
-## Problem Statement
-[1-2 sentences: what problem does this solve? Who has this problem?]
-
-## Architecture
-[Draw or describe: User → Frontend → API Layer → Agent → Tools → LLMs]
-
-## Components
-| Component | Technology | Purpose |
-|---|---|---|
-| API | FastAPI | ... |
-| Agent | LangGraph | ... |
-| LLM | GPT-4o | ... |
-| Vector DB | FAISS/Chroma | ... |
-
-## Success Metrics
-- Response time < 5s for 95th percentile
-- Accuracy > 80% on test set
-- Zero security incidents in red-team test
-
-## 5-Day Plan
-- Day 41: Design doc + repo setup
-- Day 42: Core agent + RAG pipeline
-- Day 43: Frontend + API integration
-- Day 44: Testing + hardening
-- Day 45: Demo + documentation
-"""
-print("Write your design doc in docs/capstone/design.md")`,
-   resources:[{title:'AI System Design Interview',url:'https://www.youtube.com/results?search_query=ai+system+design+tutorial+production+architecture'},{title:'Full Stack AI App Tutorial',url:'https://www.youtube.com/results?search_query=full+stack+ai+app+tutorial+fastapi+react+2024'}],
-   exercise:'Complete your capstone design document. Get it reviewed by a peer before starting implementation.',
-   keyTerms:['system design','architecture','success metrics','scope','ERD']},
-
-  {day:42,mod:5,title:'Capstone — Core Intelligence Layer',objectives:['Implement the agent+RAG core','Write unit tests','Log all LLM calls with LangSmith'],
+skills = extract_skills_from_jd(sample_jd)
+print(json.dumps(skills, indent=2))`,
+   resources:[{title:'OpenAI Function Calling Tutorial',url:'https://platform.openai.com/docs/guides/function-calling'},{title:'Build an AI Agent from Scratch',url:'https://www.youtube.com/results?search_query=build+ai+agent+openai+python+2024'}],
+   exercise:'Set up your project repo. Implement the extract_skills_from_jd function. Test it on 3 different real job descriptions from LinkedIn. Verify the JSON output is consistent and parseable.',
+   keyTerms:['AI agent','OpenAI API','skill extraction','JSON schema','job description','pipeline']},
+{day:39,mod:5,title:'Capstone — Core Intelligence Layer',objectives:['Implement the agent+RAG core','Write unit tests','Log all LLM calls with LangSmith'],
    content:`<p>Build the intelligence core today. The agent must be fully testable in isolation from the UI. Write tests for: retrieval quality (does it find the right docs?), tool selection (does it pick the right tool?), error handling (does it recover gracefully?). Instrument with LangSmith from day one — debugging after the fact is 10x harder.</p>`,
    code:`import pytest
 from unittest.mock import patch, MagicMock
@@ -1388,7 +1258,7 @@ def test_agent_retries_on_rate_limit():
    exercise:'Achieve 80% test coverage on your core agent module. All tests must pass before moving to Day 43.',
    keyTerms:['unit testing','mocking','coverage','test-driven development','LLM testing']},
 
-  {day:43,mod:5,title:'Capstone — Frontend & API Integration',objectives:['Build a Streamlit or React UI','Connect to your agent API','Add streaming output and file uploads'],
+  {day:40,mod:5,title:'Capstone — Frontend & API Integration',objectives:['Build a Streamlit or React UI','Connect to your agent API','Add streaming output and file uploads'],
    content:`<p>Build the user-facing layer today. <strong>Streamlit</strong> is fastest for AI demos — streaming chat UI in 50 lines. For production, use React with a WebSocket for streaming. Connect to your FastAPI backend. Add file upload (for RAG document ingestion), conversation history, and a source attribution panel.</p>`,
    code:`import streamlit as st
 import requests, json
@@ -1426,7 +1296,7 @@ if prompt:=st.chat_input("Ask a question..."):
    exercise:'Add a sidebar showing agent token usage and cost for each conversation session.',
    keyTerms:['Streamlit','WebSocket','streaming UI','file upload','frontend integration']},
 
-  {day:44,mod:5,title:'Capstone — Testing, Security & Hardening',objectives:['Run load tests with Locust','Complete security red-team','Document API with OpenAPI'],
+  {day:41,mod:5,title:'Capstone — Testing, Security & Hardening',objectives:['Run load tests with Locust','Complete security red-team','Document API with OpenAPI'],
    content:`<p>Before demo day, harden your system. <strong>Load testing</strong>: use Locust to simulate 50 concurrent users — find where latency degrades. <strong>Security</strong>: run your Day 28 guardrail tests + OWASP top-10 check. <strong>Documentation</strong>: FastAPI auto-generates OpenAPI — add descriptions to every endpoint. Write a one-page runbook: how to deploy, restart, and debug.</p>`,
    code:`# locustfile.py
 from locust import HttpUser, task, between
@@ -1459,7 +1329,7 @@ for check in security_checks:
    exercise:'Run a 10-minute Locust test at 30 concurrent users. Fix any endpoints that degrade below 2s p95.',
    keyTerms:['load testing','Locust','security hardening','OpenAPI','runbook']},
 
-  {day:45,mod:5,title:'Capstone Demo & Portfolio',objectives:['Deliver a polished live demo','Write a technical README and case study','Publish to GitHub and prepare portfolio'],
+  {day:42,mod:5,title:'Capstone Demo & Portfolio',objectives:['Deliver a polished live demo','Write a technical README and case study','Publish to GitHub and prepare portfolio'],
    content:`<p>Demo day. Structure your 15-minute presentation: (1) Problem — 2 min, (2) Architecture walkthrough — 3 min, (3) Live demo — 7 min, (4) Lessons learned — 3 min. Write a case study covering: what you built, the technical decisions, what you would do differently. Publish to GitHub with a stellar README and add to your LinkedIn portfolio.</p>`,
    code:`# README.md template for your capstone project
 """
