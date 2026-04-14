@@ -35,7 +35,8 @@ h2{font-size:1.2rem;font-weight:700;text-align:center;margin-bottom:6px}
 </style>
 </head>
 <body>
-<div class="card">
+<!-- Normal sign-in card -->
+<div class="card" id="card-signin">
   <div class="logo">Nex<span>Gen</span> AI</div>
   <div class="sub">Trainer Portal · Srikakulam</div>
   <h2>Sign In</h2>
@@ -62,16 +63,69 @@ h2{font-size:1.2rem;font-weight:700;text-align:center;margin-bottom:6px}
   </div>
 </div>
 
+<!-- Password reset card (shown when recovery token in URL) -->
+<div class="card" id="card-reset" style="display:none">
+  <div class="logo">Nex<span>Gen</span> AI</div>
+  <div class="sub">Trainer Portal · Srikakulam</div>
+  <h2>Set New Password</h2>
+  <p class="hint">Choose a strong password for your account.</p>
+
+  <div class="field">
+    <label>New Password</label>
+    <input type="password" id="new-password" placeholder="Min 8 characters" />
+  </div>
+  <div class="field">
+    <label>Confirm Password</label>
+    <input type="password" id="confirm-password" placeholder="Repeat password"
+           onkeydown="if(event.key==='Enter') updatePassword()" />
+  </div>
+  <button class="btn" id="reset-btn" onclick="updatePassword()">Set Password →</button>
+
+  <div class="msg error"   id="reset-error"></div>
+  <div class="msg success" id="reset-success"></div>
+</div>
+
 <script>
 function sb() { return getSupabase(); }
 
-// If already logged in, redirect
+// Check for password recovery token in URL hash
 document.addEventListener('DOMContentLoaded', async () => {
+  const hash = window.location.hash;
+  if (hash.includes('type=recovery') || hash.includes('access_token')) {
+    // Recovery flow — show reset form, not signin
+    document.getElementById('card-signin').style.display = 'none';
+    document.getElementById('card-reset').style.display  = 'block';
+    return;
+  }
   try {
     const { data: { session } } = await sb().auth.getSession();
     if (session) checkAndRedirect(session.user.id);
   } catch(e) { console.warn('Session check failed:', e); }
 });
+
+async function updatePassword() {
+  const p1  = document.getElementById('new-password').value;
+  const p2  = document.getElementById('confirm-password').value;
+  const btn = document.getElementById('reset-btn');
+  const err = document.getElementById('reset-error');
+  const ok  = document.getElementById('reset-success');
+  err.style.display = 'none'; ok.style.display = 'none';
+
+  if (!p1 || p1.length < 8) { err.textContent = 'Password must be at least 8 characters.'; err.style.display = 'block'; return; }
+  if (p1 !== p2) { err.textContent = 'Passwords do not match.'; err.style.display = 'block'; return; }
+
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Updating\u2026';
+  try {
+    const { error } = await sb().auth.updateUser({ password: p1 });
+    if (error) { err.textContent = error.message; err.style.display = 'block'; btn.disabled = false; btn.textContent = 'Set Password \u2192'; return; }
+    ok.textContent = '\u2705 Password updated! Redirecting to login\u2026'; ok.style.display = 'block';
+    await sb().auth.signOut();
+    setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+  } catch(e) {
+    err.textContent = 'Something went wrong. Try again.'; err.style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Set Password \u2192';
+  }
+}
 
 async function signIn() {
   const email    = document.getElementById('email').value.trim();
