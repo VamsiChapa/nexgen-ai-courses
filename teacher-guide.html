@@ -4,6 +4,8 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NexGen Teacher Preparation Guide — 15 Days</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:#F8FAFC;color:#1E293B;line-height:1.6}
@@ -142,13 +144,9 @@ tr:hover td{background:var(--light)}
     <div class="tg-logo">Nex<span>Gen</span> AI</div>
     <div class="tg-sub">School of Computers, Srikakulam</div>
     <div class="tg-badge">🔒 TRAINER GUIDE — RESTRICTED ACCESS</div>
-    <h2>Sign In to Continue</h2>
-    <p class="hint">This guide is for authorised NexGen trainers only.</p>
-    <div class="tg-field"><label>Username</label><input type="text" id="tg-user" placeholder="Enter username" autocomplete="username" /></div>
-    <div class="tg-field"><label>Password / Access Code</label><input type="password" id="tg-pass" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter') tgLogin()" /></div>
-    <button class="tg-btn" onclick="tgLogin()">Sign In →</button>
-    <div id="tg-err">Incorrect credentials. Contact Vamsi Chapa for access.</div>
-    <div class="tg-contact">Don't have access? Contact<br><strong>Vamsi Chapa</strong> — <a href="mailto:chapavamsi1731@gmail.com">chapavamsi1731@gmail.com</a></div>
+    <h2>Checking Access…</h2>
+    <p class="hint">Please wait while we verify your session.</p>
+    <div id="tg-err" style="display:none">Not authorised. Redirecting to login…</div>
   </div>
 </div>
 
@@ -1481,44 +1479,30 @@ print(f"Your grade: {grade}")</div>
 </div><!-- /#tg-content -->
 
 <script>
-// CI-injected credentials (%%PLACEHOLDERS%% replaced by inject_creds.py).
-// Fallback to hardcoded credentials when injection has not run.
-var TG_USERS = (function () {
-  var ub = '%%USERS_B64%%';
-  if (ub.indexOf('%%') === -1) {
-    try { return JSON.parse(atob(ub)); } catch (e) {}
-  }
-  var u = {};
-  u[btoa('nexgen')]   = btoa('Train@2024');
-  u[btoa('trainer1')] = btoa('NexGen@001');
-  u[btoa('vamsi')]    = btoa('Admin@NexGen2024');
-  return u;
-})();
-var TG_MASTER = (function () {
-  var mb = '%%MASTER_B64%%';
-  return mb.indexOf('%%') === -1 ? mb : btoa('NXGN@Master24');
-})();
+(async () => {
+  try {
+    const sb = getSupabase();
+    const { data: { session } } = await sb.auth.getSession();
+    if (!session) { window.location.href = 'login.html'; return; }
 
-function tgLogin() {
-  const u = document.getElementById('tg-user').value.trim();
-  const p = document.getElementById('tg-pass').value;
-  if (!u || !p) { document.getElementById('tg-err').style.display = 'block'; return; }
-  const eu = btoa(u), ep = btoa(p);
-  if ((TG_USERS[eu] && TG_USERS[eu] === ep) || ep === TG_MASTER) {
-    sessionStorage.setItem('ng_auth', '1');
-    sessionStorage.setItem('ng_user', u);
+    const { data: profile } = await sb.from('profiles').select('role,status').eq('id', session.user.id).single();
+    if (!profile) { window.location.href = 'login.html'; return; }
+
+    const allowed = ['approved', 'direct'];
+    if (profile.role !== 'admin' && !allowed.includes(profile.status)) {
+      document.getElementById('tg-err').style.display = 'block';
+      document.getElementById('tg-err').textContent = 'Access not yet approved. Redirecting…';
+      setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+      return;
+    }
+
     document.getElementById('tg-auth-gate').style.display = 'none';
     document.getElementById('tg-content').style.display = 'block';
-  } else {
-    document.getElementById('tg-err').style.display = 'block';
-    document.getElementById('tg-pass').value = '';
+  } catch(e) {
+    console.error('Auth check failed:', e);
+    window.location.href = 'login.html';
   }
-}
-
-if (sessionStorage.getItem('ng_auth') === '1') {
-  document.getElementById('tg-auth-gate').style.display = 'none';
-  document.getElementById('tg-content').style.display = 'block';
-}
+})();
 </script>
 </body>
 </html>
