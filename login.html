@@ -134,7 +134,7 @@ async function forgotPassword() {
   const email = document.getElementById('email').value.trim();
   if (!email) { showMsg('error', 'Enter your email address first.'); return; }
   const { error } = await sb().auth.resetPasswordForEmail(email, {
-    redirectTo: window.location.origin + '/login.html'
+    redirectTo: 'https://vamsichapa.github.io/nexgen-ai-courses/login.html'
   });
   showMsg(error ? 'error' : 'success',
     error ? error.message : '\ud83d\udce7 Password reset link sent to ' + email);
