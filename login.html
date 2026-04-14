@@ -109,7 +109,7 @@ async function checkAndRedirect(uid) {
     return;
   }
 
-  await sb().rpc('touch_last_seen', { uid }).catch(() => {});
+  try { await sb().rpc('touch_last_seen', { uid }); } catch(e) {}
 
   if (profile.role === 'admin') {
     window.location.href = 'admin.html'; return;
