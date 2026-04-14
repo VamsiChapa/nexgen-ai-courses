@@ -63,13 +63,15 @@ h2{font-size:1.2rem;font-weight:700;text-align:center;margin-bottom:6px}
 </div>
 
 <script>
-const sb = getSupabase();
+function sb() { return getSupabase(); }
 
 // If already logged in, redirect
-(async () => {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session) checkAndRedirect(session.user.id);
-})();
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const { data: { session } } = await sb().auth.getSession();
+    if (session) checkAndRedirect(session.user.id);
+  } catch(e) { console.warn('Session check failed:', e); }
+});
 
 async function signIn() {
   const email    = document.getElementById('email').value.trim();
@@ -80,31 +82,34 @@ async function signIn() {
   if (!email || !password) { showMsg('error', 'Please fill in all fields.'); return; }
 
   btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>Signing in…';
+  btn.innerHTML = '<span class="spinner"></span>Signing in\u2026';
 
-  const { data, error } = await sb.auth.signInWithPassword({ email, password });
-
-  if (error) {
-    btn.disabled = false; btn.textContent = 'Sign In →';
-    showMsg('error', error.message === 'Invalid login credentials'
-      ? 'Incorrect email or password.' : error.message);
-    return;
+  try {
+    const { data, error } = await sb().auth.signInWithPassword({ email, password });
+    if (error) {
+      btn.disabled = false; btn.textContent = 'Sign In \u2192';
+      showMsg('error', error.message === 'Invalid login credentials'
+        ? 'Incorrect email or password.' : error.message);
+      return;
+    }
+    await checkAndRedirect(data.user.id);
+  } catch(e) {
+    btn.disabled = false; btn.textContent = 'Sign In \u2192';
+    showMsg('error', 'Connection error. Please try again.');
   }
-
-  await checkAndRedirect(data.user.id);
 }
 
 async function checkAndRedirect(uid) {
-  const { data: profile, error } = await sb.from('profiles').select('*').eq('id', uid).single();
+  const { data: profile, error } = await sb().from('profiles').select('*').eq('id', uid).single();
 
   if (error || !profile) {
     showMsg('error', 'Profile not found. Contact Vamsi Chapa.');
     document.getElementById('signin-btn').disabled = false;
-    document.getElementById('signin-btn').textContent = 'Sign In →';
+    document.getElementById('signin-btn').textContent = 'Sign In \u2192';
     return;
   }
 
-  await sb.rpc('touch_last_seen', { uid }).catch(() => {});
+  await sb().rpc('touch_last_seen', { uid }).catch(() => {});
 
   if (profile.role === 'admin') {
     window.location.href = 'admin.html'; return;
@@ -113,26 +118,26 @@ async function checkAndRedirect(uid) {
     window.location.href = 'dashboard.html'; return;
   }
   if (profile.status === 'pending') {
-    showMsg('warn', '⏳ Your account is pending admin approval. You'll receive an email once approved. Contact chapavamsi1731@gmail.com if urgent.');
+    showMsg('warn', '\u23f3 Your account is pending admin approval. You will receive an email once approved. Contact chapavamsi1731@gmail.com if urgent.');
     document.getElementById('signin-btn').disabled = false;
-    document.getElementById('signin-btn').textContent = 'Sign In →';
+    document.getElementById('signin-btn').textContent = 'Sign In \u2192';
     return;
   }
   if (profile.status === 'rejected') {
-    showMsg('error', '❌ Your application was not approved. Contact chapavamsi1731@gmail.com for more information.');
+    showMsg('error', '\u274c Your application was not approved. Contact chapavamsi1731@gmail.com for more information.');
     document.getElementById('signin-btn').disabled = false;
-    document.getElementById('signin-btn').textContent = 'Sign In →';
+    document.getElementById('signin-btn').textContent = 'Sign In \u2192';
   }
 }
 
 async function forgotPassword() {
   const email = document.getElementById('email').value.trim();
   if (!email) { showMsg('error', 'Enter your email address first.'); return; }
-  const { error } = await sb.auth.resetPasswordForEmail(email, {
+  const { error } = await sb().auth.resetPasswordForEmail(email, {
     redirectTo: window.location.origin + '/login.html'
   });
   showMsg(error ? 'error' : 'success',
-    error ? error.message : '📧 Password reset link sent to ' + email);
+    error ? error.message : '\ud83d\udce7 Password reset link sent to ' + email);
 }
 
 function showMsg(type, text) {
