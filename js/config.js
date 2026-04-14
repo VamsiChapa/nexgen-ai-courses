@@ -71,12 +71,17 @@ async function logout() {
 }
 
 // ── EmailJS helpers ───────────────────────────────────────────────────
+// Initialize EmailJS once when config loads
+if (window.emailjs && EMAILJS_PUBLIC_KEY !== 'YOUR_EMAILJS_PUBLIC_KEY') {
+  emailjs.init(EMAILJS_PUBLIC_KEY);
+}
+
 function sendEmail(templateId, params) {
   if (!window.emailjs || EMAILJS_PUBLIC_KEY === 'YOUR_EMAILJS_PUBLIC_KEY') {
     console.warn('EmailJS not configured — skipping email:', templateId, params);
     return Promise.resolve();
   }
-  return emailjs.send(EMAILJS_SERVICE_ID, templateId, params, EMAILJS_PUBLIC_KEY)
+  return emailjs.send(EMAILJS_SERVICE_ID, templateId, params)
     .catch(e => console.warn('EmailJS error:', e));
 }
 
