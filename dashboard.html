@@ -144,7 +144,7 @@ async function init() {
   }
 
   document.getElementById('welcome-txt').textContent = 'Hello, ' + (profile.full_name || profile.email) + ' 👋';
-  await sb.rpc('touch_last_seen', { uid: currentUser.id }).catch(() => {});
+  try { await sb.rpc('touch_last_seen', { uid: currentUser.id }); } catch(e) {}
 
   // Load progress
   const { data: prog } = await sb.from('day_progress').select('*').eq('user_id', currentUser.id);
