@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NexGen AI — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="js/config.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0F172A;--card:#1E293B;--border:#334155;--accent:#6366F1;--text:#F1F5F9;--muted:#94A3B8;--green:#22C55E;--red:#DC2626;--amber:#F59E0B}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* Header */
+.hdr{background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.hdr-left{display:flex;align-items:center;gap:12px}
+.logo{font-size:1.1rem;font-weight:800}.logo span{color:var(--accent)}
+.admin-badge{background:rgba(220,38,38,.15);color:#FCA5A5;border:1px solid rgba(220,38,38,.3);border-radius:12px;padding:3px 10px;font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.hdr-right{display:flex;align-items:center;gap:10px}
+.btn-sm{background:transparent;border:1px solid var(--border);border-radius:6px;padding:6px 14px;color:var(--muted);font-family:'Poppins',sans-serif;font-size:.75rem;cursor:pointer;transition:all .2s}
+.btn-sm:hover{border-color:var(--accent);color:var(--text)}
+.btn-primary{background:var(--accent);color:#fff;border:none}
+.btn-primary:hover{opacity:.85;border-color:transparent}
+
+/* Layout */
+main{max-width:1200px;margin:0 auto;padding:32px 24px}
+
+/* Section */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-title{font-size:.65rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;display:flex;align-items:center;gap:8px}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border);min-width:20px}
+
+/* Stats */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:32px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px 20px;border-left:3px solid}
+.stat-num{font-size:2rem;font-weight:900}
+.stat-lbl{font-size:.73rem;color:var(--muted);margin-top:2px}
+.stat-sub{font-size:.65rem;color:var(--muted);margin-top:6px}
+
+/* Pending approvals */
+.pending-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px;margin-bottom:28px}
+.pending-card{background:var(--card);border:1px solid rgba(245,158,11,.25);border-radius:12px;padding:20px;position:relative}
+.pending-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--amber);border-radius:12px 12px 0 0}
+.pc-name{font-size:.95rem;font-weight:700;margin-bottom:2px}
+.pc-email{font-size:.78rem;color:var(--muted);margin-bottom:8px}
+.pc-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.pc-tag{font-size:.68rem;padding:3px 9px;border-radius:10px;font-weight:600}
+.pc-actions{display:flex;gap:8px}
+.btn-approve{background:rgba(34,197,94,.15);color:#4ADE80;border:1px solid rgba(34,197,94,.3);border-radius:7px;padding:7px 16px;font-family:'Poppins',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-approve:hover{background:rgba(34,197,94,.3)}
+.btn-reject{background:rgba(220,38,38,.1);color:#FCA5A5;border:1px solid rgba(220,38,38,.2);border-radius:7px;padding:7px 16px;font-family:'Poppins',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-reject:hover{background:rgba(220,38,38,.2)}
+.btn-notes{background:transparent;color:var(--muted);border:1px solid var(--border);border-radius:7px;padding:7px 12px;font-family:'Poppins',sans-serif;font-size:.78rem;cursor:pointer;transition:all .2s}
+.btn-notes:hover{border-color:var(--accent);color:var(--text)}
+
+/* Trainers table */
+.tbl-wrap{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:28px}
+.tbl-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.search-input{background:#0F172A;border:1px solid var(--border);border-radius:7px;padding:8px 12px;color:var(--text);font-family:'Poppins',sans-serif;font-size:.8rem;outline:none;width:220px;transition:border-color .2s}
+.search-input:focus{border-color:var(--accent)}
+.filter-btns{display:flex;gap:6px}
+.f-btn{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:5px 12px;color:var(--muted);font-family:'Poppins',sans-serif;font-size:.72rem;cursor:pointer;transition:all .2s}
+.f-btn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+table{width:100%;border-collapse:collapse}
+thead th{padding:10px 16px;text-align:left;font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;background:#0F172A;border-bottom:1px solid var(--border)}
+tbody td{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.8rem;vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:rgba(255,255,255,.02)}
+.status-badge{display:inline-block;padding:3px 9px;border-radius:10px;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.s-approved{background:rgba(34,197,94,.12);color:#4ADE80;border:1px solid rgba(34,197,94,.25)}
+.s-pending{background:rgba(245,158,11,.12);color:#FCD34D;border:1px solid rgba(245,158,11,.25)}
+.s-rejected{background:rgba(220,38,38,.1);color:#FCA5A5;border:1px solid rgba(220,38,38,.2)}
+.s-direct{background:rgba(99,102,241,.12);color:#A5B4FC;border:1px solid rgba(99,102,241,.25)}
+.prog-mini{width:80px;height:5px;background:#0F172A;border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle}
+.prog-mini-fill{height:100%;background:#6366F1;border-radius:3px}
+.tbl-action{background:none;border:none;color:var(--muted);cursor:pointer;padding:4px 6px;border-radius:5px;transition:all .2s;font-size:.85rem}
+.tbl-action:hover{background:rgba(255,255,255,.06);color:var(--text)}
+
+/* Charts row */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.chart-title{font-size:.82rem;font-weight:700;margin-bottom:16px}
+
+/* Backfill modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:200;padding:16px}
+.modal-bg.open{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;width:100%;max-width:420px}
+.modal h3{font-size:1rem;font-weight:700;margin-bottom:6px}
+.modal p{font-size:.8rem;color:var(--muted);margin-bottom:20px;line-height:1.6}
+.field label{display:block;font-size:.7rem;font-weight:700;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
+.field{margin-bottom:14px}
+.field input,.field textarea{width:100%;background:#0F172A;border:1px solid var(--border);border-radius:7px;padding:10px 12px;color:var(--text);font-family:'Poppins',sans-serif;font-size:.85rem;outline:none;transition:border-color .2s}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.modal-btns{display:flex;gap:10px;margin-top:4px}
+.btn{padding:11px 20px;border-radius:8px;font-family:'Poppins',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;border:none;transition:opacity .2s}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.sec{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.btn:hover{opacity:.8}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+
+/* Trainer detail modal */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.detail-stat{background:#0F172A;border:1px solid var(--border);border-radius:8px;padding:12px}
+.ds-num{font-size:1.4rem;font-weight:800}
+.ds-lbl{font-size:.7rem;color:var(--muted)}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:#1E293B;border:1px solid var(--border);border-radius:10px;padding:12px 20px;font-size:.82rem;max-width:360px;z-index:999;transform:translateY(100px);opacity:0;transition:all .3s;display:flex;align-items:center;gap:10px}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.ok{border-color:rgba(34,197,94,.4);color:#4ADE80}
+.toast.err{border-color:rgba(220,38,38,.35);color:#FCA5A5}
+
+/* Spinner */
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-row td{text-align:center;padding:32px;color:var(--muted);font-size:.82rem}
+.empty-state{text-align:center;padding:40px 20px;color:var(--muted);font-size:.82rem}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-left">
+    <div class="logo">Nex<span>Gen</span> AI</div>
+    <div class="admin-badge">Admin</div>
+  </div>
+  <div class="hdr-right">
+    <button class="btn-sm" onclick="window.location.href='dashboard.html'">My Dashboard</button>
+    <button class="btn-sm btn-primary" onclick="openBackfillModal()">+ Add Trainer</button>
+    <button class="btn-sm" onclick="logout()">Sign Out</button>
+  </div>
+</header>
+
+<main>
+  <!-- Stats -->
+  <div class="sec-hdr" style="margin-bottom:14px">
+    <div style="font-size:1.3rem;font-weight:800">Trainer Overview</div>
+    <button class="btn-sm" onclick="loadAll()">↻ Refresh</button>
+  </div>
+
+  <div class="stats-grid" id="stats-grid">
+    <div class="stat" style="border-color:#6366F1"><div class="stat-num" style="color:#6366F1" id="s-total">—</div><div class="stat-lbl">Total Trainers</div></div>
+    <div class="stat" style="border-color:#F59E0B"><div class="stat-num" style="color:#F59E0B" id="s-pending">—</div><div class="stat-lbl">Pending Approval</div></div>
+    <div class="stat" style="border-color:#22C55E"><div class="stat-num" style="color:#22C55E" id="s-approved">—</div><div class="stat-lbl">Approved</div></div>
+    <div class="stat" style="border-color:#DC2626"><div class="stat-num" style="color:#DC2626" id="s-rejected">—</div><div class="stat-lbl">Rejected</div></div>
+    <div class="stat" style="border-color:#22D3EE"><div class="stat-num" style="color:#22D3EE" id="s-active">—</div><div class="stat-lbl">Active (7 days)</div></div>
+    <div class="stat" style="border-color:#A78BFA"><div class="stat-num" style="color:#A78BFA" id="s-avgquiz">—</div><div class="stat-lbl">Avg Quiz Score</div></div>
+  </div>
+
+  <!-- Pending Approvals -->
+  <div class="sec-hdr">
+    <div class="sec-title" style="flex:1">Pending Approvals <span id="pending-count" style="background:rgba(245,158,11,.2);color:#FCD34D;border-radius:10px;padding:2px 8px;font-size:.65rem;margin-left:8px"></span></div>
+  </div>
+  <div id="pending-grid" style="margin-bottom:28px">
+    <div class="empty-state">Loading…</div>
+  </div>
+
+  <!-- Charts -->
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-title">Signups by Week</div>
+      <canvas id="chart-signups" height="200"></canvas>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Progress Distribution (Prep Days)</div>
+      <canvas id="chart-progress" height="200"></canvas>
+    </div>
+  </div>
+
+  <!-- All Trainers -->
+  <div class="sec-hdr">
+    <div class="sec-title" style="flex:1">All Trainers</div>
+  </div>
+  <div class="tbl-wrap">
+    <div class="tbl-head">
+      <input class="search-input" id="search" placeholder="Search name or email…" oninput="filterTable()" />
+      <div class="filter-btns">
+        <button class="f-btn active" id="fb-all"      onclick="setFilter('all',this)">All</button>
+        <button class="f-btn"        id="fb-pending"  onclick="setFilter('pending',this)">Pending</button>
+        <button class="f-btn"        id="fb-approved" onclick="setFilter('approved',this)">Approved</button>
+        <button class="f-btn"        id="fb-direct"   onclick="setFilter('direct',this)">Direct</button>
+        <button class="f-btn"        id="fb-rejected" onclick="setFilter('rejected',this)">Rejected</button>
+      </div>
+    </div>
+    <table id="trainers-table">
+      <thead>
+        <tr>
+          <th>Name</th><th>Email</th><th>Status</th><th>Quiz</th>
+          <th>Prep Days</th><th>Total Progress</th><th>Last Active</th><th>Joined</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="trainers-body">
+        <tr class="loading-row"><td colspan="9"><span class="spinner"></span> Loading trainers…</td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<!-- Backfill Modal -->
+<div class="modal-bg" id="backfill-modal">
+  <div class="modal">
+    <h3>Add Trainer Directly</h3>
+    <p>This trainer will skip the quiz and be auto-approved when they sign up with this email. An invite email will be sent.</p>
+    <div class="field"><label>Full Name</label><input type="text" id="bf-name" placeholder="Trainer Name" /></div>
+    <div class="field"><label>Email *</label><input type="email" id="bf-email" placeholder="trainer@example.com" /></div>
+    <div class="field"><label>Notes (optional)</label><textarea id="bf-notes" rows="2" placeholder="Why direct access?"></textarea></div>
+    <div style="color:#FCA5A5;font-size:.75rem;margin-bottom:14px;display:none" id="bf-error"></div>
+    <div class="modal-btns">
+      <button class="btn primary" id="bf-submit-btn" onclick="submitBackfill()">Add & Send Invite</button>
+      <button class="btn sec" onclick="closeBackfillModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Trainer Detail Modal -->
+<div class="modal-bg" id="detail-modal">
+  <div class="modal" style="max-width:560px" id="detail-content"></div>
+</div>
+
+<!-- Notes Modal -->
+<div class="modal-bg" id="notes-modal">
+  <div class="modal" style="max-width:420px">
+    <h3>Admin Notes</h3>
+    <p>Internal notes about this trainer (not visible to them).</p>
+    <input type="hidden" id="notes-uid" />
+    <div class="field"><label>Notes</label><textarea id="notes-txt" rows="4" placeholder="Enter notes…"></textarea></div>
+    <div class="modal-btns">
+      <button class="btn primary" onclick="saveNotes()">Save Notes</button>
+      <button class="btn sec" onclick="document.getElementById('notes-modal').classList.remove('open')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+const sb = getSupabase();
+let allTrainers = [];
+let currentFilter = 'all';
+let chartSignups = null, chartProgress = null;
+
+// ── Boot ──────────────────────────────────────────────────────────────────
+(async () => {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+  const { data: p } = await sb.from('profiles').select('role').eq('id', session.user.id).single();
+  if (!p || p.role !== 'admin') { window.location.href = 'dashboard.html'; return; }
+  await loadAll();
+  initCharts();
+})();
+
+// ── Load all data ─────────────────────────────────────────────────────────
+async function loadAll() {
+  const { data, error } = await sb.from('trainer_stats').select('*').order('created_at', { ascending: false });
+  if (error) { toast('Failed to load trainers: ' + error.message, 'err'); return; }
+  allTrainers = data || [];
+  updateStats();
+  renderPending();
+  renderTable();
+  updateCharts();
+}
+
+function updateStats() {
+  const total    = allTrainers.length;
+  const pending  = allTrainers.filter(t => t.status === 'pending').length;
+  const approved = allTrainers.filter(t => t.status === 'approved').length;
+  const rejected = allTrainers.filter(t => t.status === 'rejected').length;
+  const active   = allTrainers.filter(t => t.active_last_7d > 0).length;
+  const scores   = allTrainers.filter(t => t.quiz_score != null).map(t => t.quiz_score);
+  const avgQuiz  = scores.length ? (scores.reduce((a,b) => a+b, 0) / scores.length).toFixed(1) : '—';
+
+  document.getElementById('s-total').textContent   = total;
+  document.getElementById('s-pending').textContent = pending;
+  document.getElementById('s-approved').textContent = approved;
+  document.getElementById('s-rejected').textContent = rejected;
+  document.getElementById('s-active').textContent  = active;
+  document.getElementById('s-avgquiz').textContent = avgQuiz;
+
+  const pc = document.getElementById('pending-count');
+  pc.textContent = pending || ''; pc.style.display = pending ? 'inline' : 'none';
+}
+
+// ── Pending approvals ──────────────────────────────────────────────────────
+function renderPending() {
+  const pending = allTrainers.filter(t => t.status === 'pending');
+  const grid = document.getElementById('pending-grid');
+  if (!pending.length) {
+    grid.innerHTML = '<div class="empty-state" style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:28px">No pending approvals ✅</div>';
+    return;
+  }
+  grid.innerHTML = '<div class="pending-grid">' + pending.map(t => `
+    <div class="pending-card" id="pc-${t.id}">
+      <div class="pc-name">${esc(t.full_name || '(No name)')} </div>
+      <div class="pc-email">${esc(t.email)}</div>
+      <div class="pc-meta">
+        ${t.quiz_score != null ? `<span class="pc-tag" style="background:rgba(99,102,241,.12);color:#A5B4FC;border:1px solid rgba(99,102,241,.25)">Quiz: ${t.quiz_score}/10</span>` : '<span class="pc-tag" style="background:rgba(100,116,139,.1);color:#64748B;border:1px solid #334155">No quiz</span>'}
+        ${t.institution ? `<span class="pc-tag" style="background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--border)">${esc(t.institution)}</span>` : ''}
+        <span class="pc-tag" style="background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--border)">${timeAgo(t.created_at)}</span>
+      </div>
+      <div class="pc-actions">
+        <button class="btn-approve" onclick="approveTrainer('${t.id}','${esc(t.email)}','${esc(t.full_name||'')}')">✓ Approve</button>
+        <button class="btn-reject"  onclick="rejectTrainer('${t.id}')">✗ Reject</button>
+        <button class="btn-notes"   onclick="openNotes('${t.id}','${esc(t.notes||'')}')">Notes</button>
+      </div>
+    </div>
+  `).join('') + '</div>';
+}
+
+// ── Trainers table ─────────────────────────────────────────────────────────
+function renderTable() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const rows = allTrainers.filter(t => {
+    const matchFilter = currentFilter === 'all' || t.status === currentFilter;
+    const matchSearch = !q || (t.full_name||'').toLowerCase().includes(q) || t.email.toLowerCase().includes(q);
+    return matchFilter && matchSearch;
+  });
+
+  const tbody = document.getElementById('trainers-body');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--muted)">No trainers match the current filter.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(t => {
+    const prepPct = Math.round(t.prep_days_done / 15 * 100);
+    const totalPct = Math.round(t.total_days_done / 150 * 100); // 15 prep + 135 track days
+    const lastSeen = t.last_seen ? timeAgo(t.last_seen) : 'Never';
+    return `<tr>
+      <td style="font-weight:600">${esc(t.full_name || '—')}</td>
+      <td style="color:var(--muted);font-size:.75rem">${esc(t.email)}</td>
+      <td><span class="status-badge s-${t.status}">${t.status}</span></td>
+      <td>${t.quiz_score != null ? t.quiz_score + '/10' : '—'}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="prog-mini"><div class="prog-mini-fill" style="width:${prepPct}%"></div></div>
+          <span style="font-size:.72rem;color:var(--muted)">${t.prep_days_done}/15</span>
+        </div>
+      </td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="prog-mini"><div class="prog-mini-fill" style="width:${totalPct}%"></div></div>
+          <span style="font-size:.72rem;color:var(--muted)">${t.total_days_done}</span>
+        </div>
+      </td>
+      <td style="font-size:.74rem;color:var(--muted)">${lastSeen}</td>
+      <td style="font-size:.74rem;color:var(--muted)">${fmtDate(t.created_at)}</td>
+      <td>
+        <button class="tbl-action" onclick="showDetail('${t.id}')" title="View progress">📊</button>
+        ${t.status === 'pending' ? `<button class="tbl-action" onclick="approveTrainer('${t.id}','${esc(t.email)}','${esc(t.full_name||'')}')">✓</button>` : ''}
+        ${t.status === 'approved' || t.status === 'direct' ? `<button class="tbl-action" onclick="rejectTrainer('${t.id}')" title="Revoke access">✗</button>` : ''}
+        <button class="tbl-action" onclick="openNotes('${t.id}','${esc(t.notes||'')}')">📝</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTable();
+}
+function filterTable() { renderTable(); }
+
+// ── Approve / Reject ──────────────────────────────────────────────────────
+async function approveTrainer(uid, email, name) {
+  const { data: { session } } = await sb.auth.getSession();
+  const { error } = await sb.from('profiles').update({
+    status: 'approved',
+    approved_at: new Date().toISOString(),
+    approved_by: session.user.id,
+  }).eq('id', uid);
+  if (error) { toast('Error: ' + error.message, 'err'); return; }
+  await notifyTrainerApproved(email, name);
+  toast('✅ ' + (name || email) + ' approved. Email sent.', 'ok');
+  await loadAll();
+}
+
+async function rejectTrainer(uid) {
+  if (!confirm('Reject this trainer? They will not be able to access the portal.')) return;
+  const { error } = await sb.from('profiles').update({ status: 'rejected' }).eq('id', uid);
+  if (error) { toast('Error: ' + error.message, 'err'); return; }
+  toast('Trainer rejected.', 'ok');
+  await loadAll();
+}
+
+// ── Trainer detail modal ──────────────────────────────────────────────────
+async function showDetail(uid) {
+  const t = allTrainers.find(x => x.id === uid);
+  if (!t) return;
+
+  const { data: progress } = await sb.from('day_progress').select('context,day_number,completed_at').eq('user_id', uid).order('completed_at', { ascending: false });
+  const grouped = { prep:[], track1:[], track2:[], track3:[] };
+  (progress || []).forEach(p => { if (grouped[p.context]) grouped[p.context].push(p); });
+
+  document.getElementById('detail-content').innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div>
+        <div style="font-size:1.1rem;font-weight:800">${esc(t.full_name || 'Trainer')}</div>
+        <div style="font-size:.78rem;color:var(--muted)">${esc(t.email)}</div>
+      </div>
+      <button onclick="document.getElementById('detail-modal').classList.remove('open')" style="background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer">✕</button>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-stat"><div class="ds-num" style="color:#6366F1">${t.quiz_score ?? '—'}</div><div class="ds-lbl">Quiz Score</div></div>
+      <div class="detail-stat"><div class="ds-num" style="color:#22C55E">${t.prep_days_done}</div><div class="ds-lbl">Prep Days Done</div></div>
+      <div class="detail-stat"><div class="ds-num" style="color:#4F46E5">${t.t1_days_done}</div><div class="ds-lbl">Track 1 Days</div></div>
+      <div class="detail-stat"><div class="ds-num" style="color:#7C3AED">${t.t2_days_done}</div><div class="ds-lbl">Track 2 Days</div></div>
+      <div class="detail-stat"><div class="ds-num" style="color:#DC2626">${t.t3_days_done}</div><div class="ds-lbl">Track 3 Days</div></div>
+      <div class="detail-stat"><div class="ds-num" style="color:#F59E0B">${t.active_last_7d}</div><div class="ds-lbl">Active (7 days)</div></div>
+    </div>
+    <div style="font-size:.7rem;color:var(--muted);margin-bottom:8px">Status: <span class="status-badge s-${t.status}">${t.status}</span> · Joined: ${fmtDate(t.created_at)} · Last seen: ${t.last_seen ? timeAgo(t.last_seen) : 'Never'}</div>
+    ${t.notes ? `<div style="background:#0F172A;border:1px solid var(--border);border-radius:7px;padding:10px;font-size:.78rem;color:var(--muted);margin-bottom:12px"><strong style="color:var(--text)">Notes:</strong> ${esc(t.notes)}</div>` : ''}
+    <div style="font-size:.72rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Recent Progress</div>
+    ${Object.entries(grouped).map(([ctx, items]) => items.length ? `
+      <div style="margin-bottom:8px">
+        <div style="font-size:.7rem;color:var(--muted);margin-bottom:4px">${ctx.toUpperCase()} — ${items.length} days</div>
+        <div style="display:flex;flex-wrap:wrap;gap:4px">
+          ${items.slice(0,20).map(p => `<span style="background:#0F172A;border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-size:.65rem;color:var(--muted)">Day ${p.day_number}</span>`).join('')}
+        </div>
+      </div>` : '').join('')}
+    <div class="modal-btns" style="margin-top:16px">
+      ${t.status==='pending' ? `<button class="btn primary" onclick="approveTrainer('${uid}','${esc(t.email)}','${esc(t.full_name||'')}');document.getElementById('detail-modal').classList.remove('open')">✓ Approve</button>` : ''}
+      <button class="btn sec" onclick="document.getElementById('detail-modal').classList.remove('open')">Close</button>
+    </div>
+  `;
+  document.getElementById('detail-modal').classList.add('open');
+}
+
+// ── Backfill ──────────────────────────────────────────────────────────────
+function openBackfillModal() { document.getElementById('backfill-modal').classList.add('open'); }
+function closeBackfillModal() { document.getElementById('backfill-modal').classList.remove('open'); }
+
+async function submitBackfill() {
+  const email = document.getElementById('bf-email').value.trim();
+  const name  = document.getElementById('bf-name').value.trim();
+  const notes = document.getElementById('bf-notes').value.trim();
+  const errEl = document.getElementById('bf-error');
+  const btn   = document.getElementById('bf-submit-btn');
+
+  if (!email || !email.includes('@')) { errEl.textContent = 'Valid email required.'; errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+  btn.disabled = true;
+
+  const { data: { session } } = await sb.auth.getSession();
+  const { error } = await sb.from('direct_invites').insert({
+    email, full_name: name, notes,
+    invited_by: session.user.id,
+  });
+
+  if (error) {
+    errEl.textContent = error.code === '23505' ? 'This email already has a direct invite.' : error.message;
+    errEl.style.display = 'block'; btn.disabled = false; return;
+  }
+
+  await notifyTrainerInvite(email, name);
+  toast('✅ Invite added for ' + email + '. Email sent.', 'ok');
+  closeBackfillModal();
+  document.getElementById('bf-email').value = '';
+  document.getElementById('bf-name').value  = '';
+  document.getElementById('bf-notes').value = '';
+  btn.disabled = false;
+}
+
+// ── Notes ─────────────────────────────────────────────────────────────────
+function openNotes(uid, current) {
+  document.getElementById('notes-uid').value = uid;
+  document.getElementById('notes-txt').value = current || '';
+  document.getElementById('notes-modal').classList.add('open');
+}
+async function saveNotes() {
+  const uid   = document.getElementById('notes-uid').value;
+  const notes = document.getElementById('notes-txt').value;
+  const { error } = await sb.from('profiles').update({ notes }).eq('id', uid);
+  if (error) { toast('Error saving notes.', 'err'); return; }
+  const t = allTrainers.find(x => x.id === uid);
+  if (t) t.notes = notes;
+  document.getElementById('notes-modal').classList.remove('open');
+  toast('Notes saved.', 'ok');
+}
+
+// ── Charts ────────────────────────────────────────────────────────────────
+function initCharts() {
+  const signupCtx  = document.getElementById('chart-signups').getContext('2d');
+  const progressCtx = document.getElementById('chart-progress').getContext('2d');
+
+  chartSignups = new Chart(signupCtx, {
+    type: 'bar',
+    data: { labels: [], datasets: [{ label: 'Signups', data: [], backgroundColor: 'rgba(99,102,241,.6)', borderColor: '#6366F1', borderWidth: 1, borderRadius: 4 }] },
+    options: { responsive: true, plugins: { legend: { display: false } }, scales: {
+      x: { ticks: { color: '#64748B', font: { size: 11 } }, grid: { color: 'rgba(255,255,255,.04)' } },
+      y: { ticks: { color: '#64748B', font: { size: 11 }, stepSize: 1 }, grid: { color: 'rgba(255,255,255,.04)' } },
+    }}
+  });
+
+  chartProgress = new Chart(progressCtx, {
+    type: 'doughnut',
+    data: { labels: ['0 days','1–5 days','6–10 days','11–15 days'], datasets: [{ data: [0,0,0,0], backgroundColor: ['#334155','#6366F1','#7C3AED','#22C55E'], borderWidth: 0 }] },
+    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { color: '#94A3B8', font: { size: 11 }, padding: 12 } } } }
+  });
+}
+
+function updateCharts() {
+  if (!chartSignups || !chartProgress) return;
+
+  // Signups by week (last 8 weeks)
+  const now = new Date();
+  const weeks = Array.from({ length: 8 }, (_, i) => {
+    const d = new Date(now); d.setDate(d.getDate() - (7 * (7 - i)));
+    return d;
+  });
+  const weekLabels = weeks.map(d => d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }));
+  const weekCounts = weeks.map((d, i) => {
+    const next = weeks[i+1] || new Date();
+    return allTrainers.filter(t => {
+      const cd = new Date(t.created_at);
+      return cd >= d && cd < next;
+    }).length;
+  });
+  chartSignups.data.labels   = weekLabels;
+  chartSignups.data.datasets[0].data = weekCounts;
+  chartSignups.update();
+
+  // Progress distribution
+  const bins = [0, 0, 0, 0];
+  allTrainers.forEach(t => {
+    const d = t.prep_days_done;
+    if (d === 0) bins[0]++;
+    else if (d <= 5) bins[1]++;
+    else if (d <= 10) bins[2]++;
+    else bins[3]++;
+  });
+  chartProgress.data.datasets[0].data = bins;
+  chartProgress.update();
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = 'toast ' + (type || 'ok');
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3500);
+}
+function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function timeAgo(iso) {
+  const diff = (Date.now() - new Date(iso)) / 1000;
+  if (diff < 60)    return 'just now';
+  if (diff < 3600)  return Math.floor(diff/60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+  if (diff < 604800)return Math.floor(diff/86400) + 'd ago';
+  return fmtDate(iso);
+}
+function fmtDate(iso) {
+  return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+// Close modals on backdrop click
+document.querySelectorAll('.modal-bg').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+</script>
+</body>
+</html>

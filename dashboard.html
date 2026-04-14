@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NexGen AI — Trainer Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0F172A;--card:#1E293B;--border:#334155;--accent:#6366F1;--text:#F1F5F9;--muted:#94A3B8;--green:#22C55E;--amber:#F59E0B;--t1:#4F46E5;--t2:#7C3AED;--t3:#DC2626}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* Header */
+.hdr{background:var(--card);border-bottom:1px solid var(--border);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.hdr-logo{font-size:1.1rem;font-weight:800}.hdr-logo span{color:var(--accent)}
+.hdr-right{display:flex;align-items:center;gap:14px}
+.welcome{font-size:.8rem;color:var(--muted)}
+.btn-sm{background:transparent;border:1px solid var(--border);border-radius:6px;padding:5px 13px;color:var(--muted);font-family:'Poppins',sans-serif;font-size:.75rem;cursor:pointer;transition:all .2s}
+.btn-sm:hover{border-color:var(--accent);color:var(--text)}
+
+/* Layout */
+main{max-width:1100px;margin:0 auto;padding:32px 24px}
+
+/* Section title */
+.sec{font-size:.65rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sec::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:28px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;display:flex;align-items:center;gap:12px}
+.stat-num{font-size:1.6rem;font-weight:900}
+.stat-lbl{font-size:.72rem;color:var(--muted);line-height:1.3}
+
+/* Progress hero */
+.hero{background:linear-gradient(135deg,rgba(99,102,241,.1) 0%,rgba(34,211,238,.06) 100%);border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:22px 24px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.hero-text h3{font-size:1rem;font-weight:700;margin-bottom:4px}
+.hero-text p{font-size:.82rem;color:var(--muted);line-height:1.6}
+.hero-ring{position:relative;width:90px;height:90px;flex-shrink:0}
+.hero-ring svg{transform:rotate(-90deg)}
+.hero-ring .ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800}
+
+/* 15-day plan */
+.plan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:28px}
+.plan-day{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:14px;cursor:pointer;transition:all .2s;position:relative}
+.plan-day:hover{border-color:var(--accent)}
+.plan-day.done{border-color:var(--green)}
+.pd-phase{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.pd-num{font-size:1.4rem;font-weight:900;color:var(--accent);line-height:1}
+.plan-day.done .pd-num{color:var(--green)}
+.pd-title{font-size:.75rem;font-weight:600;margin:4px 0 5px;line-height:1.3}
+.pd-tasks{font-size:.67rem;color:var(--muted);line-height:1.5;white-space:pre-line}
+.pd-check{position:absolute;top:10px;right:10px;width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.65rem;transition:all .2s}
+.plan-day.done .pd-check{background:var(--green);border-color:var(--green);color:#fff}
+.pd-date{font-size:.62rem;color:var(--muted);margin-top:4px}
+
+/* Track cards */
+.tracks-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:28px}
+.track-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.track-card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.35)}
+.tc-bar{position:absolute;top:0;left:0;right:0;height:3px}
+.tc-badge{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.tc-title{font-size:.95rem;font-weight:700;margin-bottom:4px}
+.tc-audience{font-size:.75rem;color:var(--muted);margin-bottom:12px}
+.tc-progress{background:#0F172A;border-radius:4px;height:5px;margin-bottom:8px;overflow:hidden}
+.tc-fill{height:100%;border-radius:4px;transition:width .4s}
+.tc-stats{font-size:.72rem;color:var(--muted);margin-bottom:14px}
+.tc-links{display:flex;gap:8px;flex-wrap:wrap}
+.tc-link{padding:6px 12px;border-radius:6px;font-size:.75rem;font-weight:700;text-decoration:none;transition:opacity .2s}
+.tc-link:hover{opacity:.8}
+
+/* Activity */
+.activity-list{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:28px}
+.act-item{padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;gap:12px;font-size:.8rem}
+.act-item:last-child{border-bottom:none}
+.act-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.act-text{flex:1;color:var(--text)}
+.act-time{font-size:.7rem;color:var(--muted);flex-shrink:0}
+.empty{padding:24px;text-align:center;color:var(--muted);font-size:.82rem}
+
+/* Spinner */
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading{display:flex;align-items:center;justify-content:center;padding:60px;gap:12px;color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-logo">Nex<span>Gen</span> AI</div>
+  <div class="hdr-right">
+    <span class="welcome" id="welcome-txt"></span>
+    <button class="btn-sm" onclick="window.location.href='admin.html'" id="admin-btn" style="display:none">Admin Panel</button>
+    <button class="btn-sm" onclick="logout()">Sign Out</button>
+  </div>
+</header>
+
+<main id="main-content">
+  <div class="loading"><div class="spinner"></div> Loading your dashboard…</div>
+</main>
+
+<script>
+const sb = getSupabase();
+let currentUser = null;
+let currentProfile = null;
+let progressData = {};
+
+const PREP_DAYS = [
+  { day:1, phase:'P1', phaseColor:'#4F46E5', title:'Python Foundations — Variables & Types', tasks:'• W3Schools Python\n• CS50P Lecture 0\n• Prep: kirana shop examples' },
+  { day:2, phase:'P1', phaseColor:'#4F46E5', title:'Control Flow — If/Else, Loops, Functions', tasks:'• CS50P Lectures 1 & 2\n• Corey Schafer tutorials 4–5\n• Prep: APSRTC bus demo' },
+  { day:3, phase:'P1', phaseColor:'#4F46E5', title:'Data Structures — Lists, Dicts, Sets', tasks:'• Corey Schafer tutorials 6–7\n• Kaggle Intro to Programming\n• Prep: Track 1 Day 4–6 outline' },
+  { day:4, phase:'P2', phaseColor:'#7C3AED', title:'NumPy — Arrays & Operations', tasks:'• Keith Galli NumPy video\n• Practice: 20 array exercises\n• Prep: Track 2 Day 1–5 outline' },
+  { day:5, phase:'P2', phaseColor:'#7C3AED', title:'Pandas — DataFrames & GroupBy', tasks:'• Kaggle Learn Pandas (all 6)\n• Load a real CSV dataset\n• Prep: Track 2 Days 6–10' },
+  { day:6, phase:'P2', phaseColor:'#7C3AED', title:'EDA & Visualisation', tasks:'• Kaggle Data Visualisation\n• Build 3 charts from local data\n• Prep: Capstone project brief' },
+  { day:7, phase:'P3', phaseColor:'#DC2626', title:'ML Algorithms — Decision Trees, kNN', tasks:'• Kaggle Intro to ML (all 7)\n• StatQuest Decision Trees\n• Prep: scikit-learn pipeline demo' },
+  { day:8, phase:'P3', phaseColor:'#DC2626', title:'Ensemble & Clustering — RF, K-Means', tasks:'• StatQuest Random Forests\n• StatQuest K-Means\n• Prep: Track 2 Days 21–30 notes' },
+  { day:9, phase:'P3', phaseColor:'#DC2626', title:'Model Evaluation — CV, Metrics', tasks:'• Kaggle Intermediate ML\n• scikit-learn docs quickstart\n• Prep: Mock quiz for Track 2 M3' },
+  { day:10, phase:'P4', phaseColor:'#D97706', title:'Neural Networks — Perceptron, Backprop', tasks:'• 3Blue1Brown NN series (4 videos)\n• DeepLearning.AI DLS Week 1\n• Prep: micrograd teaching notes' },
+  { day:11, phase:'P4', phaseColor:'#D97706', title:'Deep Learning — PyTorch, Training Loop', tasks:'• Karpathy micrograd (first 90 min)\n• PyTorch Quickstart tutorial\n• Prep: Track 3 Days 1–15 outline' },
+  { day:12, phase:'P4', phaseColor:'#D97706', title:'Transformers & Attention — Intuition', tasks:'• 3Blue1Brown Attention video\n• Karpathy Build GPT (first 45 min)\n• Prep: LLM lesson hook stories' },
+  { day:13, phase:'P5', phaseColor:'#059669', title:'LLMs & Prompt Engineering', tasks:'• DeepLearning.AI Prompt Eng course\n• Build a few-shot prompt demo\n• Prep: Track 3 Days 26–30 slides' },
+  { day:14, phase:'P5', phaseColor:'#059669', title:'AI Agents & API Integration', tasks:'• DeepLearning.AI LangChain course\n• OpenAI API docs quickstart\n• Prep: Cricket agent demo code' },
+  { day:15, phase:'P5', phaseColor:'#059669', title:'Full Dress Rehearsal — All 3 Tracks', tasks:'• Set up Google AI Studio\n• Run Day 1 lesson for each track\n• Prepare offline backups' },
+];
+
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) { window.location.href = 'login.html'; return; }
+
+  currentUser = session.user;
+  const { data: profile, error } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+  if (error || !profile) { window.location.href = 'login.html'; return; }
+  currentProfile = profile;
+
+  // Role / status guards
+  if (profile.status === 'pending') {
+    renderPending(); return;
+  }
+  if (profile.status === 'rejected') {
+    renderRejected(); return;
+  }
+  if (profile.role === 'admin') {
+    document.getElementById('admin-btn').style.display = 'block';
+  }
+
+  document.getElementById('welcome-txt').textContent = 'Hello, ' + (profile.full_name || profile.email) + ' 👋';
+  await sb.rpc('touch_last_seen', { uid: currentUser.id }).catch(() => {});
+
+  // Load progress
+  const { data: prog } = await sb.from('day_progress').select('*').eq('user_id', currentUser.id);
+  if (prog) {
+    prog.forEach(p => {
+      if (!progressData[p.context]) progressData[p.context] = {};
+      progressData[p.context][p.day_number] = p.completed_at;
+    });
+  }
+
+  renderDashboard();
+}
+
+function renderPending() {
+  document.getElementById('main-content').innerHTML = `
+    <div style="max-width:480px;margin:80px auto;text-align:center">
+      <div style="font-size:3rem;margin-bottom:16px">⏳</div>
+      <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:10px">Application Under Review</h2>
+      <p style="color:var(--muted);font-size:.88rem;line-height:1.7;margin-bottom:24px">
+        Your application is pending approval from Vamsi Chapa. You'll receive an email at
+        <strong>${currentProfile.email}</strong> once approved.
+      </p>
+      <p style="font-size:.78rem;color:var(--muted)">
+        Urgent? Contact <a href="mailto:chapavamsi1731@gmail.com" style="color:#818CF8">chapavamsi1731@gmail.com</a>
+      </p>
+      <button onclick="logout()" style="margin-top:28px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:9px 22px;color:var(--muted);cursor:pointer;font-family:Poppins,sans-serif;font-size:.82rem">Sign Out</button>
+    </div>`;
+}
+
+function renderRejected() {
+  document.getElementById('main-content').innerHTML = `
+    <div style="max-width:480px;margin:80px auto;text-align:center">
+      <div style="font-size:3rem;margin-bottom:16px">❌</div>
+      <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:10px">Application Not Approved</h2>
+      <p style="color:var(--muted);font-size:.88rem;line-height:1.7">
+        Contact <a href="mailto:chapavamsi1731@gmail.com" style="color:#818CF8">chapavamsi1731@gmail.com</a> for more information.
+      </p>
+      <button onclick="logout()" style="margin-top:28px;background:transparent;border:1px solid var(--border);border-radius:8px;padding:9px 22px;color:var(--muted);cursor:pointer;font-family:Poppins,sans-serif;font-size:.82rem">Sign Out</button>
+    </div>`;
+}
+
+function renderDashboard() {
+  const prepDone  = Object.keys(progressData['prep']   || {}).length;
+  const t1Done    = Object.keys(progressData['track1'] || {}).length;
+  const t2Done    = Object.keys(progressData['track2'] || {}).length;
+  const t3Done    = Object.keys(progressData['track3'] || {}).length;
+  const totalDone = prepDone + t1Done + t2Done + t3Done;
+  const prepPct   = Math.round(prepDone / 15 * 100);
+
+  document.getElementById('main-content').innerHTML = `
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-text">
+        <h3>15-Day Prep Progress</h3>
+        <p>You've completed <strong>${prepDone} of 15 prep days</strong>. Click any day card below to mark it done.</p>
+        <div style="background:#0F172A;border-radius:6px;height:8px;width:280px;margin-top:10px;overflow:hidden">
+          <div style="background:linear-gradient(90deg,#6366F1,#22D3EE);height:100%;width:${prepPct}%;border-radius:6px;transition:width .4s"></div>
+        </div>
+      </div>
+      <div class="hero-ring">
+        <svg width="90" height="90" viewBox="0 0 90 90">
+          <circle cx="45" cy="45" r="38" fill="none" stroke="#1E293B" stroke-width="8"/>
+          <circle cx="45" cy="45" r="38" fill="none" stroke="#6366F1" stroke-width="8"
+            stroke-dasharray="${Math.round(2*Math.PI*38*prepPct/100)} 999" stroke-linecap="round"/>
+        </svg>
+        <div class="hero-ring-pct" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:800">${prepPct}%</div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="sec">Your Stats</div>
+    <div class="stats-row" style="margin-bottom:28px">
+      <div class="stat"><div class="stat-num" style="color:#6366F1">${currentProfile.quiz_score ?? '—'}</div><div class="stat-lbl">Quiz<br>Score</div></div>
+      <div class="stat"><div class="stat-num" style="color:#22C55E">${prepDone}</div><div class="stat-lbl">Prep Days<br>Complete</div></div>
+      <div class="stat"><div class="stat-num" style="color:#4F46E5">${t1Done}</div><div class="stat-lbl">Track 1<br>Days</div></div>
+      <div class="stat"><div class="stat-num" style="color:#7C3AED">${t2Done}</div><div class="stat-lbl">Track 2<br>Days</div></div>
+      <div class="stat"><div class="stat-num" style="color:#DC2626">${t3Done}</div><div class="stat-lbl">Track 3<br>Days</div></div>
+    </div>
+
+    <!-- 15-day plan -->
+    <div class="sec">15-Day Preparation Plan</div>
+    <div class="plan-grid" id="plan-grid"></div>
+
+    <!-- Track courses -->
+    <div class="sec">Course Access</div>
+    <div class="tracks-grid">
+      ${trackCard('track1','Track 1','Python & AI Basics','10th Grade',t1Done,45,'#4F46E5','track-1/index.html')}
+      ${trackCard('track2','Track 2','Data Science & ML','Intermediate / 12th',t2Done,45,'#7C3AED','track-2/index.html')}
+      ${trackCard('track3','Track 3','Advanced AI Engineering','Engineering / B.Tech',t3Done,45,'#DC2626','track-3/index.html')}
+    </div>
+
+    <!-- Quick links -->
+    <div class="sec">Quick Links</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:28px">
+      ${qLink('🎓','Teacher Guide','Full teaching patterns & analogies','teacher-guide.html','rgba(99,102,241,.08)')}
+      ${qLink('📋','Briefing Card','1-page printable reference card','briefing-card.html','rgba(34,211,238,.08)')}
+      ${qLink('📄','Track 1 PDF','Python & AI Basics course PDF','docs/Track1-Python-AI-Basics.pdf','rgba(79,70,229,.08)')}
+      ${qLink('📄','Track 2 PDF','Data Science & ML course PDF','docs/Track2-Data-Science-ML.pdf','rgba(124,58,237,.08)')}
+      ${qLink('📄','Track 3 PDF','Advanced AI Engineering PDF','docs/Track3-Engineering-AI.pdf','rgba(220,38,38,.08)')}
+    </div>
+  `;
+
+  buildPlanGrid();
+}
+
+function trackCard(ctx, label, title, audience, done, total, color, url) {
+  const pct = Math.round(done / total * 100);
+  return `
+    <div class="track-card">
+      <div class="tc-bar" style="background:${color}"></div>
+      <div class="tc-badge" style="color:${color}">${label}</div>
+      <div class="tc-title">${title}</div>
+      <div class="tc-audience">👨‍🎓 ${audience}</div>
+      <div class="tc-progress"><div class="tc-fill" style="width:${pct}%;background:${color}"></div></div>
+      <div class="tc-stats">${done} / ${total} days marked complete</div>
+      <div class="tc-links">
+        <a href="${url}" target="_blank" class="tc-link" style="background:${color}22;color:${color}">Open Course ↗</a>
+      </div>
+    </div>`;
+}
+
+function qLink(icon, title, desc, url, bg) {
+  return `<a href="${url}" target="_blank" style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-decoration:none;color:var(--text);transition:all .2s" onmouseover="this.style.borderColor='#6366F1'" onmouseout="this.style.borderColor='#334155'">
+    <div style="width:38px;height:38px;border-radius:9px;background:${bg};display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0">${icon}</div>
+    <div><div style="font-size:.8rem;font-weight:700">${title}</div><div style="font-size:.7rem;color:var(--muted)">${desc}</div></div>
+  </a>`;
+}
+
+function buildPlanGrid() {
+  const grid = document.getElementById('plan-grid');
+  if (!grid) return;
+  grid.innerHTML = PREP_DAYS.map(d => {
+    const done = !!(progressData['prep'] && progressData['prep'][d.day]);
+    const doneDate = done ? new Date(progressData['prep'][d.day]).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : '';
+    return `
+      <div class="plan-day ${done ? 'done' : ''}" id="pd-${d.day}" onclick="togglePrepDay(${d.day})">
+        <div class="pd-phase" style="color:${d.phaseColor}">Phase ${d.phase.replace('P','')}</div>
+        <div class="pd-num">Day ${d.day}</div>
+        <div class="pd-title">${d.title}</div>
+        <div class="pd-tasks">${d.tasks}</div>
+        ${done ? `<div class="pd-date">✓ ${doneDate}</div>` : ''}
+        <div class="pd-check">${done ? '✓' : ''}</div>
+      </div>`;
+  }).join('');
+}
+
+async function togglePrepDay(dayNum) {
+  const alreadyDone = !!(progressData['prep'] && progressData['prep'][dayNum]);
+  const el = document.getElementById('pd-' + dayNum);
+  el.style.opacity = '.5';
+
+  if (alreadyDone) {
+    // Remove completion
+    await sb.from('day_progress')
+      .delete()
+      .eq('user_id', currentUser.id)
+      .eq('context', 'prep')
+      .eq('day_number', dayNum);
+    if (progressData['prep']) delete progressData['prep'][dayNum];
+  } else {
+    // Mark complete
+    const now = new Date().toISOString();
+    await sb.from('day_progress').upsert({
+      user_id: currentUser.id, context: 'prep', day_number: dayNum, completed_at: now
+    }, { onConflict: 'user_id,context,day_number' });
+    if (!progressData['prep']) progressData['prep'] = {};
+    progressData['prep'][dayNum] = now;
+  }
+
+  el.style.opacity = '1';
+  // Re-render the hero + plan
+  const prepDone = Object.keys(progressData['prep'] || {}).length;
+  const prepPct  = Math.round(prepDone / 15 * 100);
+  const heroBar  = document.querySelector('.hero .hero-text div div');
+  if (heroBar) heroBar.style.width = prepPct + '%';
+  buildPlanGrid();
+}
+
+init();
+</script>
+</body>
+</html>

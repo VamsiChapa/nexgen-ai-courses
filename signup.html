@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NexGen AI — Apply to Teach</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script src="js/config.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Poppins',sans-serif;background:#0F172A;color:#F1F5F9;min-height:100vh;padding:32px 16px}
+.wrap{max-width:680px;margin:0 auto}
+
+/* Header */
+.logo{font-size:1.5rem;font-weight:800;text-align:center;margin-bottom:4px}
+.logo span{color:#6366F1}
+.sub-logo{text-align:center;font-size:.75rem;color:#64748B;margin-bottom:28px}
+
+/* Step indicator */
+.steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:32px}
+.step-dot{width:32px;height:32px;border-radius:50%;border:2px solid #334155;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#64748B;transition:all .3s;flex-shrink:0}
+.step-dot.active{border-color:#6366F1;background:#6366F1;color:#fff}
+.step-dot.done{border-color:#22C55E;background:#22C55E;color:#fff}
+.step-line{flex:1;height:2px;background:#334155;max-width:80px}
+.step-line.done{background:#22C55E}
+.step-label{font-size:.65rem;color:#64748B;text-align:center;margin-top:4px}
+
+/* Cards */
+.card{background:#1E293B;border:1px solid #334155;border-radius:14px;padding:32px;margin-bottom:16px}
+.card h2{font-size:1.15rem;font-weight:700;margin-bottom:6px}
+.card p.desc{font-size:.83rem;color:#64748B;margin-bottom:24px;line-height:1.6}
+
+/* Fields */
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{margin-bottom:14px}
+.field.full{grid-column:1/-1}
+.field label{display:block;font-size:.7rem;font-weight:700;color:#94A3B8;margin-bottom:5px;text-transform:uppercase;letter-spacing:.07em}
+.field input{width:100%;background:#0F172A;border:1px solid #334155;border-radius:8px;padding:10px 13px;color:#F1F5F9;font-family:'Poppins',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s}
+.field input:focus{border-color:#6366F1}
+.field input.err{border-color:#DC2626}
+
+/* Quiz */
+.quiz-intro{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:10px;padding:14px 18px;margin-bottom:24px;font-size:.83rem;color:#A5B4FC;line-height:1.6}
+.q-block{background:#0F172A;border:1px solid #334155;border-radius:10px;padding:18px;margin-bottom:12px}
+.q-num{font-size:.65rem;font-weight:700;color:#6366F1;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.q-text{font-size:.9rem;font-weight:600;color:#F1F5F9;margin-bottom:14px;line-height:1.5}
+.q-code{background:#1E293B;border:1px solid #334155;border-radius:6px;padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#CBD5E1;margin-bottom:12px;overflow-x:auto}
+.option{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:7px;border:1px solid #334155;margin-bottom:6px;cursor:pointer;transition:all .2s;user-select:none}
+.option:hover{border-color:#6366F1;background:rgba(99,102,241,.08)}
+.option input[type=radio]{accent-color:#6366F1}
+.option.selected{border-color:#6366F1;background:rgba(99,102,241,.1)}
+.option.correct{border-color:#22C55E;background:rgba(34,197,94,.08)!important}
+.option.wrong{border-color:#DC2626;background:rgba(220,38,38,.08)!important}
+.opt-label{font-size:.84rem;color:#E2E8F0}
+
+/* Buttons */
+.btn-row{display:flex;gap:12px;margin-top:20px}
+.btn{flex:1;background:#6366F1;color:#fff;border:none;border-radius:8px;padding:13px;font-family:'Poppins',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.85}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.sec{background:transparent;border:1px solid #334155;color:#94A3B8}
+.btn.sec:hover{border-color:#6366F1;color:#F1F5F9}
+
+/* Result */
+.result-card{text-align:center;padding:40px 32px}
+.result-icon{font-size:3.5rem;margin-bottom:16px}
+.result-score{font-size:2.5rem;font-weight:900;margin-bottom:6px}
+.result-score.pass{color:#22C55E}
+.result-score.fail{color:#DC2626}
+.result-label{font-size:.85rem;color:#64748B;margin-bottom:20px}
+.result-msg{font-size:.9rem;line-height:1.7;color:#94A3B8;margin-bottom:24px;max-width:500px;margin-left:auto;margin-right:auto}
+
+/* Progress bar */
+.prog-bar{background:#0F172A;border-radius:6px;height:6px;margin-bottom:24px;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,#6366F1,#22D3EE);height:100%;border-radius:6px;transition:width .4s}
+
+/* Msgs */
+.msg{border-radius:8px;padding:10px 14px;font-size:.82rem;margin-top:12px;display:none}
+.msg.error{background:rgba(220,38,38,.1);border:1px solid rgba(220,38,38,.3);color:#FCA5A5}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:6px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.back-link{display:block;text-align:center;margin-top:16px;font-size:.78rem;color:#64748B}
+.back-link a{color:#818CF8;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo" style="margin-top:8px">Nex<span>Gen</span> AI</div>
+  <div class="sub-logo">Trainer Application · NExGen School of Computers, Srikakulam</div>
+
+  <!-- Step indicators -->
+  <div>
+    <div class="steps">
+      <div class="step-dot active" id="sd1">1</div>
+      <div class="step-line" id="sl1"></div>
+      <div class="step-dot" id="sd2">2</div>
+      <div class="step-line" id="sl2"></div>
+      <div class="step-dot" id="sd3">3</div>
+    </div>
+    <div style="display:flex;justify-content:space-between;max-width:250px;margin:0 auto">
+      <div class="step-label">Your Info</div>
+      <div class="step-label">Python Quiz</div>
+      <div class="step-label">Result</div>
+    </div>
+  </div>
+
+  <!-- STEP 1: Personal Info -->
+  <div id="step1" class="card" style="margin-top:24px">
+    <h2>Tell us about yourself</h2>
+    <p class="desc">Fill in your details. Then you'll take a short Python aptitude test. Score 6/10 or higher to submit your application for approval.</p>
+    <div class="field-grid">
+      <div class="field">
+        <label>Full Name *</label>
+        <input type="text" id="f-name" placeholder="Ravi Kumar" />
+      </div>
+      <div class="field">
+        <label>Email Address *</label>
+        <input type="email" id="f-email" placeholder="ravi@example.com" />
+      </div>
+      <div class="field">
+        <label>Phone Number</label>
+        <input type="tel" id="f-phone" placeholder="+91 98765 43210" />
+      </div>
+      <div class="field">
+        <label>Institution / College</label>
+        <input type="text" id="f-institution" placeholder="NExGen School, Srikakulam" />
+      </div>
+      <div class="field">
+        <label>Password *</label>
+        <input type="password" id="f-password" placeholder="Minimum 8 characters" />
+      </div>
+      <div class="field">
+        <label>Confirm Password *</label>
+        <input type="password" id="f-confirm" placeholder="Repeat password" />
+      </div>
+    </div>
+    <div class="msg error" id="s1-error"></div>
+    <div class="btn-row">
+      <button class="btn" onclick="goToQuiz()">Next: Take Quiz →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: Quiz (hidden) -->
+  <div id="step2" style="display:none;margin-top:24px">
+    <div class="card">
+      <h2>Python Aptitude Quiz</h2>
+      <p class="desc">10 questions. Answer all, then submit. You need at least 6 correct to proceed.</p>
+      <div class="quiz-intro">
+        💡 These questions test basic Python knowledge — variables, loops, functions, data types. No tricks. Think through each one.
+      </div>
+      <div class="prog-bar"><div class="prog-fill" id="quiz-prog" style="width:0%"></div></div>
+      <div id="questions-container"></div>
+      <div class="msg error" id="s2-error"></div>
+      <div class="btn-row">
+        <button class="btn sec" onclick="backToInfo()">← Back</button>
+        <button class="btn" id="submit-quiz-btn" onclick="submitQuiz()">Submit Quiz →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: Result (hidden) -->
+  <div id="step3" style="display:none;margin-top:24px">
+    <div class="card result-card" id="result-content"></div>
+  </div>
+
+  <div class="back-link">Already have an account? <a href="login.html">Sign In</a></div>
+</div>
+
+<script>
+// ── Quiz Data ──────────────────────────────────────────────────────────
+const QUESTIONS = [
+  {
+    q: 'What is the output of this code?',
+    code: 'print(type(42))',
+    opts: ["<class 'str'>", "<class 'int'>", "<class 'float'>", "<class 'number'>"],
+    ans: 1
+  },
+  {
+    q: 'Which of these creates a list in Python?',
+    opts: ['list = (1, 2, 3)', 'list = {1, 2, 3}', 'list = [1, 2, 3]', 'list = <1, 2, 3>'],
+    ans: 2
+  },
+  {
+    q: 'What does len("Srikakulam") return?',
+    opts: ['9', '10', '11', 'Error'],
+    ans: 1
+  },
+  {
+    q: 'What is the output of this code?',
+    code: 'print(10 // 3)',
+    opts: ['3.33', '3', '4', '1'],
+    ans: 1
+  },
+  {
+    q: 'How do you define a function in Python?',
+    opts: ['function myFunc():', 'def myFunc():', 'func myFunc():', 'define myFunc():'],
+    ans: 1
+  },
+  {
+    q: 'What does this code print?',
+    code: 'x = 5\nprint(x > 3 and x < 10)',
+    opts: ['5', 'True', 'False', 'Error'],
+    ans: 1
+  },
+  {
+    q: 'What is the correct way to write a comment in Python?',
+    opts: ['// This is a comment', '/* This is a comment */', '# This is a comment', '-- This is a comment'],
+    ans: 2
+  },
+  {
+    q: 'What does this return?',
+    code: '[10, 20, 30, 40, 50][2]',
+    opts: ['20', '30', '[30, 40, 50]', 'Error'],
+    ans: 1
+  },
+  {
+    q: 'Which keyword handles errors in Python?',
+    opts: ['catch', 'rescue', 'except', 'handle'],
+    ans: 2
+  },
+  {
+    q: 'What is the output of this code?',
+    code: 'marks = [72, 85, 60]\nprint(sum(marks) / len(marks))',
+    opts: ['72.0', '72.33...', '217', 'Error'],
+    ans: 1
+  },
+];
+
+let formData = {};
+let userAnswers = new Array(QUESTIONS.length).fill(null);
+
+// Build quiz HTML
+function buildQuiz() {
+  const c = document.getElementById('questions-container');
+  c.innerHTML = QUESTIONS.map((q, i) => `
+    <div class="q-block">
+      <div class="q-num">Question ${i+1} of ${QUESTIONS.length}</div>
+      <div class="q-text">${q.q}</div>
+      ${q.code ? `<div class="q-code"><pre>${q.code}</pre></div>` : ''}
+      ${q.opts.map((o, j) => `
+        <label class="option" id="opt-${i}-${j}" onclick="selectOpt(${i},${j})">
+          <input type="radio" name="q${i}" value="${j}" style="display:none">
+          <div style="width:20px;height:20px;border-radius:50%;border:2px solid #334155;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.65rem;font-weight:700;color:#64748B" id="rb-${i}-${j}">${String.fromCharCode(65+j)}</div>
+          <span class="opt-label">${o}</span>
+        </label>`).join('')}
+    </div>`).join('');
+}
+
+function selectOpt(qi, oi) {
+  userAnswers[qi] = oi;
+  // Deselect all in question
+  QUESTIONS[qi].opts.forEach((_, j) => {
+    document.getElementById('opt-' + qi + '-' + j).classList.remove('selected');
+    document.getElementById('rb-' + qi + '-' + j).style.background = '';
+  });
+  document.getElementById('opt-' + qi + '-' + oi).classList.add('selected');
+  const rb = document.getElementById('rb-' + qi + '-' + oi);
+  rb.style.background = '#6366F1'; rb.style.borderColor = '#6366F1'; rb.style.color = '#fff';
+
+  // Update progress bar
+  const done = userAnswers.filter(a => a !== null).length;
+  document.getElementById('quiz-prog').style.width = (done / QUESTIONS.length * 100) + '%';
+}
+
+function validateInfo() {
+  const name  = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const pass  = document.getElementById('f-password').value;
+  const conf  = document.getElementById('f-confirm').value;
+  const errEl = document.getElementById('s1-error');
+
+  if (!name) { showS1Err('Full name is required.'); return false; }
+  if (!email || !email.includes('@')) { showS1Err('Valid email is required.'); return false; }
+  if (pass.length < 8) { showS1Err('Password must be at least 8 characters.'); return false; }
+  if (pass !== conf) { showS1Err('Passwords do not match.'); return false; }
+  return true;
+}
+
+function showS1Err(msg) {
+  const el = document.getElementById('s1-error');
+  el.textContent = msg; el.style.display = 'block';
+}
+
+async function goToQuiz() {
+  if (!validateInfo()) return;
+  document.getElementById('s1-error').style.display = 'none';
+  formData = {
+    name:        document.getElementById('f-name').value.trim(),
+    email:       document.getElementById('f-email').value.trim(),
+    phone:       document.getElementById('f-phone').value.trim(),
+    institution: document.getElementById('f-institution').value.trim(),
+    password:    document.getElementById('f-password').value,
+  };
+
+  // Check if email already exists
+  const sb = getSupabase();
+  const { data } = await sb.from('profiles').select('id').eq('email', formData.email).single();
+  if (data) { showS1Err('An account with this email already exists. Sign in instead.'); return; }
+
+  setStep(2);
+  buildQuiz();
+}
+
+function backToInfo() { setStep(1); }
+
+async function submitQuiz() {
+  const unanswered = userAnswers.filter(a => a === null).length;
+  if (unanswered > 0) {
+    document.getElementById('s2-error').textContent = `Please answer all questions. ${unanswered} remaining.`;
+    document.getElementById('s2-error').style.display = 'block';
+    return;
+  }
+  document.getElementById('s2-error').style.display = 'none';
+
+  const btn = document.getElementById('submit-quiz-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Grading…';
+
+  // Grade
+  let score = 0;
+  QUESTIONS.forEach((q, i) => { if (userAnswers[i] === q.ans) score++; });
+  const passed = score >= QUIZ_PASS_SCORE;
+
+  // Show correct/wrong
+  QUESTIONS.forEach((q, i) => {
+    document.getElementById('opt-' + i + '-' + q.ans).classList.add('correct');
+    if (userAnswers[i] !== q.ans && userAnswers[i] !== null) {
+      document.getElementById('opt-' + i + '-' + userAnswers[i]).classList.add('wrong');
+    }
+  });
+
+  if (passed) {
+    await createAccount(score);
+  } else {
+    setStep(3);
+    showFailResult(score);
+    btn.disabled = false;
+    btn.textContent = 'Submit Quiz →';
+  }
+}
+
+async function createAccount(score) {
+  const sb = getSupabase();
+  const btn = document.getElementById('submit-quiz-btn');
+  btn.innerHTML = '<span class="spinner"></span>Creating account…';
+
+  const { data, error } = await sb.auth.signUp({
+    email:    formData.email,
+    password: formData.password,
+    options: { data: { full_name: formData.name } }
+  });
+
+  if (error) {
+    btn.disabled = false;
+    btn.textContent = 'Submit Quiz →';
+    document.getElementById('s2-error').textContent = error.message;
+    document.getElementById('s2-error').style.display = 'block';
+    return;
+  }
+
+  // Update profile with extra info + quiz score
+  if (data.user) {
+    await sb.from('profiles').update({
+      full_name:   formData.name,
+      phone:       formData.phone,
+      institution: formData.institution,
+      quiz_score:  score,
+      quiz_passed: true,
+    }).eq('id', data.user.id);
+
+    // Store quiz attempt
+    await sb.from('quiz_attempts').insert({
+      user_id: data.user.id,
+      email:   formData.email,
+      answers: userAnswers,
+      score,
+      passed:  true,
+    });
+  }
+
+  // Notify admin
+  await notifyAdminSignup(formData.name, formData.email, score);
+
+  setStep(3);
+  showPassResult(score);
+}
+
+function showPassResult(score) {
+  document.getElementById('result-content').innerHTML = `
+    <div class="result-icon">🎉</div>
+    <div class="result-score pass">${score} / ${QUIZ_TOTAL}</div>
+    <div class="result-label">Quiz Passed</div>
+    <div class="result-msg">
+      Your application has been submitted. <strong>Vamsi Chapa</strong> will review it and
+      you'll receive an email at <strong>${formData.email}</strong> once approved.<br><br>
+      This typically takes 1–2 business days. Reach out at
+      <a href="mailto:chapavamsi1731@gmail.com" style="color:#818CF8">chapavamsi1731@gmail.com</a> if urgent.
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center">
+      <a href="login.html" style="background:#6366F1;color:#fff;text-decoration:none;border-radius:8px;padding:11px 28px;font-weight:700;font-size:.88rem">Go to Sign In</a>
+    </div>`;
+}
+
+function showFailResult(score) {
+  document.getElementById('result-content').innerHTML = `
+    <div class="result-icon">😔</div>
+    <div class="result-score fail">${score} / ${QUIZ_TOTAL}</div>
+    <div class="result-label">Quiz Not Passed — Need 6/10</div>
+    <div class="result-msg">
+      You scored ${score} out of ${QUIZ_TOTAL}. You need at least ${QUIZ_PASS_SCORE} correct to apply.
+      Review Python basics and try again — there's no limit on retries.
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center">
+      <button onclick="retryQuiz()" style="background:#6366F1;color:#fff;border:none;border-radius:8px;padding:11px 28px;font-weight:700;font-size:.88rem;cursor:pointer">Retry Quiz</button>
+    </div>`;
+}
+
+function retryQuiz() {
+  userAnswers = new Array(QUESTIONS.length).fill(null);
+  setStep(2);
+  buildQuiz();
+  document.getElementById('quiz-prog').style.width = '0%';
+  document.getElementById('submit-quiz-btn').disabled = false;
+  document.getElementById('submit-quiz-btn').textContent = 'Submit Quiz →';
+}
+
+function setStep(n) {
+  ['step1','step2','step3'].forEach((id, i) => {
+    document.getElementById(id).style.display = (i === n-1) ? 'block' : 'none';
+  });
+  // Update dots
+  [1,2,3].forEach(i => {
+    const dot  = document.getElementById('sd' + i);
+    const line = document.getElementById('sl' + i);
+    dot.classList.toggle('active', i === n);
+    dot.classList.toggle('done', i < n);
+    if (line) line.classList.toggle('done', i < n);
+  });
+}
+</script>
+</body>
+</html>
