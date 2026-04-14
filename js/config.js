@@ -14,11 +14,11 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 // Create 2 email templates:
 //   1. template_signup_notify → sent to admin when trainer signs up
 //   2. template_approved      → sent to trainer when approved
-const EMAILJS_PUBLIC_KEY          = 'YOUR_EMAILJS_PUBLIC_KEY';
-const EMAILJS_SERVICE_ID          = 'YOUR_EMAILJS_SERVICE_ID';
-const EMAILJS_TEMPLATE_NOTIFY     = 'template_signup_notify';
-const EMAILJS_TEMPLATE_APPROVED   = 'template_approved';
-const EMAILJS_TEMPLATE_INVITE     = 'template_invite';
+const EMAILJS_PUBLIC_KEY          = 'W9hJc9DwMxTh4yIumiF96';
+const EMAILJS_SERVICE_ID          = 'service_l0a74sj';
+const EMAILJS_TEMPLATE_NOTIFY     = 'template_8huhdlo';
+const EMAILJS_TEMPLATE_APPROVED   = 'template_t51xhh7';
+const EMAILJS_TEMPLATE_INVITE     = 'template_t51xhh7';
 
 // ── App constants ─────────────────────────────────────────────────────
 const ADMIN_EMAIL      = 'chapavamsi1731@gmail.com';
